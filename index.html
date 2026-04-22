@@ -20,17 +20,15 @@ header{position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.95);backdrop
 .nav-links a,.nav-btn{font-size:0.77rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;cursor:pointer;transition:color .2s;background:none;border:none;font-family:var(--font-body);}
 .nav-links a:hover,.nav-btn:hover{color:var(--indigo-light);}
 .nav-btn-login{padding:.35rem 1rem;border:1px solid var(--border-hover);border-radius:20px;color:var(--indigo-light)!important;}
-.nav-btn-login:hover{background:rgba(61,59,142,0.15);}
 .nav-user-area{display:flex;align-items:center;gap:.8rem;}
 .nav-user-name{font-size:0.77rem;color:var(--indigo-light);font-weight:500;}
 .btn{padding:.6rem 1.6rem;border-radius:8px;font-family:var(--font-body);font-size:0.82rem;font-weight:500;letter-spacing:.06em;cursor:pointer;text-transform:uppercase;transition:all .2s;border:none;text-decoration:none;display:inline-block;}
-.btn-primary{background:var(--indigo);color:#fff;}.btn-primary:hover{background:var(--indigo-light);transform:translateY(-1px);}
-.btn-outline{background:transparent;border:1px solid var(--border-hover);color:var(--text-muted);}.btn-outline:hover{border-color:var(--indigo-light);color:var(--indigo-light);}
+.btn-primary{background:var(--indigo);color:#fff;}.btn-primary:hover{background:var(--indigo-light);}
+.btn-outline{background:transparent;border:1px solid var(--border-hover);color:var(--text-muted);}
 .btn-sm{padding:.32rem .85rem;font-size:0.74rem;}
-.btn-ghost{background:none;border:1px solid var(--border);color:var(--text-dim);padding:.28rem .75rem;border-radius:6px;font-size:0.74rem;cursor:pointer;font-family:var(--font-body);letter-spacing:.05em;text-transform:uppercase;transition:all .2s;}
+.btn-ghost{background:none;border:1px solid var(--border);color:var(--text-dim);padding:.28rem .75rem;border-radius:6px;font-size:0.74rem;cursor:pointer;font-family:var(--font-body);text-transform:uppercase;transition:all .2s;}
 .btn-ghost:hover{border-color:var(--indigo-light);color:var(--indigo-light);}
-.btn-dl{display:inline-flex;align-items:center;gap:.4rem;padding:.28rem .7rem;border-radius:6px;font-size:0.73rem;background:rgba(61,59,142,0.15);border:1px solid var(--border);color:var(--indigo-light);cursor:pointer;font-family:var(--font-body);text-decoration:none;transition:all .15s;flex-shrink:0;}
-.btn-dl:hover{background:rgba(61,59,142,0.3);}
+.btn-dl{display:inline-flex;align-items:center;gap:.4rem;padding:.28rem .7rem;border-radius:6px;font-size:0.73rem;background:rgba(61,59,142,0.15);border:1px solid var(--border);color:var(--indigo-light);text-decoration:none;transition:all .15s;flex-shrink:0;}
 .hero{min-height:88vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4rem 2rem;position:relative;overflow:hidden;}
 .hero-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 55% at 50% 45%,rgba(61,59,142,0.13) 0%,transparent 65%);}
 .hero-ring{position:absolute;width:500px;height:500px;border-radius:50%;border:1px solid rgba(61,59,142,0.1);top:50%;left:50%;transform:translate(-50%,-50%);}
@@ -67,12 +65,12 @@ header{position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.95);backdrop
 .afisha-poster-ph{text-align:center;color:var(--indigo-light);padding:1rem;}
 .afisha-poster-ph .ev-icon{font-size:2.8rem;margin-bottom:.6rem;}
 .afisha-poster-ph .ev-name{font-family:var(--font-head);font-size:1.05rem;font-style:italic;line-height:1.3;}
-.afisha-date-badge{position:absolute;top:10px;right:10px;background:var(--rust);color:#fff;font-size:0.67rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:.22rem .55rem;border-radius:4px;}
+.afisha-date-badge{position:absolute;top:10px;right:10px;background:var(--rust);color:#fff;font-size:0.67rem;font-weight:600;text-transform:uppercase;padding:.22rem .55rem;border-radius:4px;}
 .afisha-body{padding:1rem 1.1rem;}
 .afisha-body h3{font-family:var(--font-head);font-size:.95rem;color:var(--text);margin-bottom:.3rem;font-weight:600;}
 .afisha-meta{font-size:0.72rem;color:var(--text-muted);display:flex;flex-direction:column;gap:.15rem;margin-bottom:.3rem;}
 .afisha-body p{font-size:0.77rem;color:var(--text-dim);font-weight:300;}
-.afisha-del{background:none;border:none;cursor:pointer;color:var(--text-dim);font-size:0.72rem;margin-top:.4rem;font-family:var(--font-body);transition:color .15s;}
+.afisha-del{background:none;border:none;cursor:pointer;color:var(--text-dim);font-size:0.72rem;margin-top:.4rem;font-family:var(--font-body);}
 .afisha-del:hover{color:#e55;}
 .add-dashed{width:100%;padding:.65rem;background:rgba(61,59,142,0.06);border:1px dashed var(--border);border-radius:var(--radius-lg);color:var(--text-dim);cursor:pointer;font-family:var(--font-body);font-size:0.83rem;transition:all .2s;text-align:center;}
 .add-dashed:hover{border-color:var(--indigo-light);color:var(--indigo-light);}
@@ -95,7 +93,7 @@ footer span{color:var(--indigo-light);}
 .profile-photo:hover .ph-overlay{opacity:1;}
 .profile-info h1{font-family:var(--font-head);font-size:2rem;font-weight:600;color:var(--text);}
 .profile-info p{font-size:0.86rem;color:var(--text-muted);margin-top:.25rem;}
-.admin-badge{display:inline-block;font-size:0.65rem;padding:.1rem .5rem;border-radius:10px;background:rgba(61,59,142,0.2);color:var(--indigo-light);border:1px solid rgba(61,59,142,0.4);margin-left:.6rem;letter-spacing:.06em;text-transform:uppercase;vertical-align:middle;}
+.admin-badge{display:inline-block;font-size:0.65rem;padding:.1rem .5rem;border-radius:10px;background:rgba(61,59,142,0.2);color:var(--indigo-light);border:1px solid rgba(61,59,142,0.4);margin-left:.6rem;text-transform:uppercase;vertical-align:middle;}
 .cols2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;align-items:start;}
 .block{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.4rem;margin-bottom:1.2rem;}
 .block-title{font-family:var(--font-head);font-size:1.02rem;color:var(--indigo-light);margin-bottom:1rem;display:flex;align-items:center;gap:.4rem;}
@@ -103,8 +101,7 @@ footer span{color:var(--indigo-light);}
 .t-btn{padding:.23rem .58rem;background:rgba(61,59,142,0.1);border:1px solid var(--border);border-radius:5px;color:var(--text-muted);font-size:0.75rem;cursor:pointer;font-family:var(--font-body);transition:all .15s;}
 .t-btn:hover{border-color:var(--indigo-light);color:var(--indigo-light);}
 .theory-c{outline:none;min-height:90px;font-size:0.87rem;color:var(--text-muted);line-height:1.8;}
-.theory-c[contenteditable="true"]{border:1px dashed var(--border);border-radius:var(--radius);padding:.4rem;transition:border-color .2s;}
-.theory-c[contenteditable="true"]:focus{border-color:var(--border-hover);}
+.theory-c[contenteditable="true"]{border:1px dashed var(--border);border-radius:var(--radius);padding:.4rem;}
 .theory-c img{max-width:100%;border-radius:8px;margin:.4rem 0;}
 .save-ind{font-size:0.7rem;color:var(--indigo-light);margin-top:.3rem;opacity:0;transition:opacity .3s;}
 .save-ind.show{opacity:1;}
@@ -139,9 +136,9 @@ footer span{color:var(--indigo-light);}
 .song-arrow{color:var(--text-dim);font-size:.82rem;}
 .news-item{background:rgba(61,59,142,0.06);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;margin-bottom:.7rem;}
 .news-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;margin-bottom:.5rem;}
-.news-title{font-weight:500;font-size:.9rem;color:var(--text);}
-.news-date{font-size:0.7rem;color:var(--text-dim);flex-shrink:0;}
-.news-text{font-size:.83rem;color:var(--text-muted);line-height:1.7;}
+.news-title-el{font-weight:500;font-size:.9rem;color:var(--text);}
+.news-date-el{font-size:0.7rem;color:var(--text-dim);flex-shrink:0;}
+.news-text-el{font-size:.83rem;color:var(--text-muted);line-height:1.7;}
 .news-item img{max-width:100%;border-radius:8px;margin-top:.6rem;}
 .tab-row{display:flex;gap:.38rem;margin-bottom:1.4rem;flex-wrap:wrap;}
 .tab-btn{padding:.32rem .85rem;border-radius:20px;font-size:0.76rem;font-weight:500;cursor:pointer;background:transparent;border:1px solid var(--border);color:var(--text-muted);font-family:var(--font-body);transition:all .15s;}
@@ -167,7 +164,7 @@ footer span{color:var(--indigo-light);}
 .al-item{display:flex;justify-content:space-between;align-items:center;padding:.52rem 0;border-bottom:1px solid var(--border);font-size:0.86rem;}
 .al-item:last-child{border-bottom:none;}
 .al-link{cursor:pointer;color:var(--indigo-light);}
-.al-del{background:none;border:none;cursor:pointer;color:var(--text-dim);font-size:.83rem;transition:color .15s;}
+.al-del{background:none;border:none;cursor:pointer;color:var(--text-dim);font-size:.83rem;}
 .al-del:hover{color:#e55;}
 .loading-ov{position:fixed;inset:0;background:rgba(10,10,15,.85);display:flex;align-items:center;justify-content:center;z-index:500;flex-direction:column;gap:1rem;}
 .spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--indigo-light);border-radius:50%;animation:spin .7s linear infinite;}
@@ -278,7 +275,7 @@ footer span{color:var(--indigo-light);}
   <div class="inner-page">
     <button class="page-back" onclick="goHome()">← На главную</button>
     <h1 style="font-family:var(--font-head);font-size:2rem;font-weight:600;color:var(--text);margin-bottom:.4rem">Панель управления <span class="admin-badge">ADMIN</span></h1>
-    <p style="color:var(--text-muted);margin-bottom:2rem;font-size:.84rem">Студия «Виваче» — управление учениками, ансамблями и афишей</p>
+    <p style="color:var(--text-muted);margin-bottom:2rem;font-size:.84rem">Студия «Виваче»</p>
     <div class="admin-actions">
       <button class="btn btn-primary btn-sm" onclick="openM('modal-student')">+ Ученик</button>
       <button class="btn btn-outline btn-sm" onclick="openM('modal-ensemble')">+ Ансамбль</button>
@@ -493,7 +490,7 @@ footer span{color:var(--indigo-light);}
 </div></div>
 <div class="modal-ov" id="modal-ensemble"><div class="modal">
   <button class="modal-x" onclick="closeM('modal-ensemble')">×</button><h2>Новый ансамбль</h2>
-  <div class="form-g"><label class="form-label">Название</label><input class="form-input" id="ne-n" placeholder="«Мелодия»"></div>
+  <div class="form-g"><label class="form-label">Название</label><input class="form-input" id="ne-n" placeholder="Мелодия"></div>
   <div class="form-g"><label class="form-label">Описание</label><input class="form-input" id="ne-d" placeholder="Вокальный ансамбль"></div>
   <div class="form-row">
     <div class="form-g"><label class="form-label">Логин</label><input class="form-input" id="ne-l" placeholder="melodia"></div>
@@ -508,10 +505,13 @@ footer span{color:var(--indigo-light);}
     <div class="form-g"><label class="form-label">Дата</label><input class="form-input" id="af-d" type="date"></div>
     <div class="form-g"><label class="form-label">Время</label><input class="form-input" id="af-tm" type="time" value="18:00"></div>
   </div>
-  <div class="form-g"><label class="form-label">Место</label><input class="form-input" id="af-pl" placeholder="ДК «Звёздный»"></div>
+  <div class="form-g"><label class="form-label">Место</label><input class="form-input" id="af-pl" placeholder="ДК Звёздный"></div>
   <div class="form-g"><label class="form-label">Описание</label><input class="form-input" id="af-ds" placeholder="Краткое описание"></div>
   <div class="form-g"><label class="form-label">Иконка</label>
-    <select class="form-input" id="af-ic"><option value="🎤">🎤 Концерт</option><option value="🏆">🏆 Конкурс</option><option value="🎵">🎵 Выступление</option><option value="💿">💿 Запись</option><option value="🎶">🎶 Мастер-класс</option></select>
+    <select class="form-input" id="af-ic">
+      <option value="🎤">🎤 Концерт</option><option value="🏆">🏆 Конкурс</option>
+      <option value="🎵">🎵 Выступление</option><option value="💿">💿 Запись</option><option value="🎶">🎶 Мастер-класс</option>
+    </select>
   </div>
   <div class="form-g">
     <label class="form-label">Афиша (вертикальная картинка)</label>
@@ -546,278 +546,451 @@ footer span{color:var(--indigo-light);}
 </div></div>
 <div class="toast" id="toast"></div>
 <script>
-const SB='https://rlmmyydpgiggzqihpjxt.supabase.co',SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsbW15eWRwZ2lnZ3pxaWhwanh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4MDUzMzMsImV4cCI6MjA5MjM4MTMzM30.rD7W-_4v3tNVCS1l7L2cYPq3DZ-JVPUBR3h1PbdXDiI';
-const ADM_L='admin',ADM_P='vivace2024';
-async function q(table,method,body,filter){
-  const url=SB+'/rest/v1/'+table+(filter?'?'+filter:'');
-  const h={'apikey':SK,'Authorization':'Bearer '+SK,'Content-Type':'application/json'};
-  if(method==='POST')h['Prefer']='return=representation';
-  const r=await fetch(url,{method,headers:h,body:body?JSON.stringify(body):null});
-  if(!r.ok){console.error(await r.text());return null;}
-  if(method==='DELETE'||r.status===204)return true;
+
+const SB = "https://rlmmyydpgiggzqihpjxt.supabase.co";
+const SK = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsbW15eWRwZ2lnZ3pxaWhwanh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4MDUzMzMsImV4cCI6MjA5MjM4MTMzM30.rD7W-_4v3tNVCS1l7L2cYPq3DZ-JVPUBR3h1PbdXDiI";
+const ADM_L = "admin", ADM_P = "vivace2024";
+
+async function q(table, method, body, filter) {
+  const url = SB + "/rest/v1/" + table + (filter ? "?" + filter : "");
+  const h = {"apikey": SK, "Authorization": "Bearer " + SK, "Content-Type": "application/json"};
+  if (method === "POST") h["Prefer"] = "return=representation";
+  const r = await fetch(url, {method, headers: h, body: body ? JSON.stringify(body) : null});
+  if (!r.ok) { console.error(await r.text()); return null; }
+  if (method === "DELETE" || r.status === 204) return true;
   return r.json();
 }
-const get=(t,f)=>q(t,'GET',null,f);
-const post=(t,b)=>q(t,'POST',b);
-const patch=(t,f,b)=>q(t,'PATCH',b,f);
-const del=(t,f)=>q(t,'DELETE',null,f);
-let CU=null,curSt=null,curEn=null,curSng=null,curSngCtx=null,prevSngPage=null,pendAfImg=null,pendNewsImg=null,addSngCtx=null;
-function sp(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
-function load(v){document.getElementById('loading-ov').style.display=v?'flex':'none';}
-function openM(id){document.getElementById(id).classList.add('open');}
-function closeM(id){document.getElementById(id).classList.remove('open');}
-function toast(m){const e=document.getElementById('toast');e.textContent=m;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2800);}
-function showInd(id){const e=document.getElementById(id);e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2000);}
-function eCmd(c){document.execCommand(c,false,null);}
-function switchTab(n,b){document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('act'));document.querySelectorAll('.tab-p').forEach(x=>x.classList.remove('act'));if(b)b.classList.add('act');else document.querySelector('.tab-row .tab-btn').classList.add('act');document.getElementById('tab-'+n).classList.add('act');}
-function insertPhotoTheory(event,id){const f=event.target.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{document.getElementById(id).focus();document.execCommand('insertImage',false,e.target.result);};r.readAsDataURL(f);event.target.value='';}
-function updateNav(){
-  const g=document.getElementById('nav-guest'),u=document.getElementById('nav-user'),n=document.getElementById('nav-uname');
-  if(CU){g.style.display='none';u.style.display='flex';n.textContent=CU==='admin'?'Администратор':(CU.name||'');}
-  else{g.style.display='block';u.style.display='none';}
+const dbGet = (t, f) => q(t, "GET", null, f);
+const dbPost = (t, b) => q(t, "POST", b);
+const dbPatch = (t, f, b) => q(t, "PATCH", b, f);
+const dbDel = (t, f) => q(t, "DELETE", null, f);
+
+let CU = null, curSt = null, curEn = null, curSng = null, curSngCtx = null, prevSngPage = null;
+let pendAfImg = null, pendNewsImg = null, addSngCtx = null;
+
+function sp(id) { document.querySelectorAll(".page").forEach(p => p.classList.remove("active")); document.getElementById(id).classList.add("active"); window.scrollTo(0,0); }
+function load(v) { document.getElementById("loading-ov").style.display = v ? "flex" : "none"; }
+function openM(id) { document.getElementById(id).classList.add("open"); }
+function closeM(id) { document.getElementById(id).classList.remove("open"); }
+function toast(m) { const e = document.getElementById("toast"); e.textContent = m; e.classList.add("show"); setTimeout(() => e.classList.remove("show"), 2800); }
+function showInd(id) { const e = document.getElementById(id); e.classList.add("show"); setTimeout(() => e.classList.remove("show"), 2000); }
+function eCmd(c) { document.execCommand(c, false, null); }
+function switchTab(n, b) {
+  document.querySelectorAll(".tab-btn").forEach(x => x.classList.remove("act"));
+  document.querySelectorAll(".tab-p").forEach(x => x.classList.remove("act"));
+  if (b) b.classList.add("act"); else document.querySelector(".tab-row .tab-btn").classList.add("act");
+  document.getElementById("tab-" + n).classList.add("act");
 }
-function goCabinet(){
-  if(!CU)return;
-  if(CU==='admin'){sp('page-admin');renderAdm();}
-  else if(CU.type==='student')openSt(CU.id);
-  else if(CU.type==='ensemble')openEn(CU.id);
+function insertPhotoTheory(event, id) {
+  const f = event.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = e => { document.getElementById(id).focus(); document.execCommand("insertImage", false, e.target.result); };
+  r.readAsDataURL(f); event.target.value = "";
 }
-async function goHome(){
-  sp('page-home');await renderAfisha();
-  document.getElementById('afisha-admin-zone').style.display=CU==='admin'?'block':'none';
-  if(CU==='admin')renderAdm();
+
+function updateNav() {
+  const g = document.getElementById("nav-guest"), u = document.getElementById("nav-user"), n = document.getElementById("nav-uname");
+  if (CU) { g.style.display = "none"; u.style.display = "flex"; n.textContent = CU === "admin" ? "Администратор" : (CU.name || ""); }
+  else { g.style.display = "block"; u.style.display = "none"; }
 }
-function backInner(){if(CU==='admin'){sp('page-admin');renderAdm();}else goHome();}
-function backSong(){if(prevSngPage==='student')sp('page-student');else if(prevSngPage==='ensemble')sp('page-ensemble');else goHome();}
-async function renderAfisha(){
-  const g=document.getElementById('afisha-grid');g.innerHTML='<div class="empty-s">Загрузка...</div>';
-  const rows=await get('events','order=date.asc');
-  if(!rows||!rows.length){g.innerHTML='<div class="empty-s">Мероприятий пока нет</div>';return;}
-  g.innerHTML=rows.map(ev=>{
-    const d=new Date(ev.date+'T00:00:00'),ds=d.toLocaleDateString('ru',{day:'numeric',month:'long'});
-    const poster=ev.img?'<img src="'+ev.img+'" alt="">':'<div class="afisha-poster-ph"><div class="ev-icon">'+ev.icon+'</div><div class="ev-name">'+ev.title+'</div></div>';
-    const dl=CU==='admin'?'<button class="afisha-del" onclick="delAfisha(''+ev.id+'')">✕ Удалить</button>':'';
-    return '<div class="afisha-card"><div class="afisha-poster">'+poster+'<div class="afisha-date-badge">'+ds+'</div></div><div class="afisha-body"><h3>'+ev.title+'</h3><div class="afisha-meta"><span>📅 '+ds+'</span><span>🕕 '+(ev.time||'')+'</span><span>📍 '+(ev.place||'')+'</span></div><p>'+(ev.descr||'')+'</p>'+dl+'</div></div>';
-  }).join('');
+function goCabinet() {
+  if (!CU) return;
+  if (CU === "admin") { sp("page-admin"); renderAdm(); }
+  else if (CU.type === "student") openSt(CU.id);
+  else if (CU.type === "ensemble") openEn(CU.id);
 }
-async function renderAdm(){
-  const [ss,es,evs]=await Promise.all([get('students','order=created_at.asc'),get('ensembles','order=created_at.asc'),get('events','order=date.asc')]);
-  document.getElementById('adm-students').innerHTML=(ss&&ss.length)?ss.map(s=>'<div class="al-item"><span class="al-link" onclick="openSt(''+s.id+'')">'+s.name+'</span><div style="display:flex;gap:.7rem;align-items:center"><span style="font-size:.7rem;color:var(--text-dim)">'+s.login+'</span><button class="al-del" onclick="delSt(''+s.id+'')">✕</button></div></div>').join(''):'<p style="color:var(--text-dim);font-size:.82rem">Нет учеников</p>';
-  document.getElementById('adm-ensembles').innerHTML=(es&&es.length)?es.map(e=>'<div class="al-item"><span class="al-link" onclick="openEn(''+e.id+'')">'+e.name+'</span><div style="display:flex;gap:.7rem;align-items:center"><span style="font-size:.7rem;color:var(--text-dim)">'+e.login+'</span><button class="al-del" onclick="delEn(''+e.id+'')">✕</button></div></div>').join(''):'<p style="color:var(--text-dim);font-size:.82rem">Нет ансамблей</p>';
-  document.getElementById('adm-afisha').innerHTML=(evs&&evs.length)?evs.map(a=>'<div class="al-item"><span style="color:var(--text-muted)">'+a.icon+' '+a.title+' — '+a.date+'</span><button class="al-del" onclick="delAfisha(''+a.id+'')">✕</button></div>').join(''):'<p style="color:var(--text-dim);font-size:.82rem">Нет мероприятий</p>';
+async function goHome() {
+  sp("page-home"); await renderAfisha();
+  document.getElementById("afisha-admin-zone").style.display = CU === "admin" ? "block" : "none";
+  if (CU === "admin") renderAdm();
 }
-async function openSt(id){
-  if(CU!=='admin'&&!(CU&&CU.type==='student'&&CU.id===id)){openM('modal-login');return;}
-  load(true);const rows=await get('students','id=eq.'+id);load(false);
-  if(!rows||!rows.length){toast('Ученик не найден');return;}
-  const s=rows[0];curSt=id;const isA=CU==='admin';
-  document.getElementById('st-name').textContent=s.name;
-  document.getElementById('st-role').textContent=s.role||'Эстрадный вокал';
-  const init=s.name.split(' ').map(n=>n[0]).join('').slice(0,2);
-  document.getElementById('st-init').textContent=init;
-  if(s.photo){document.getElementById('st-img').src=s.photo;document.getElementById('st-img').style.display='block';document.getElementById('st-init').style.display='none';}
-  else{document.getElementById('st-img').style.display='none';document.getElementById('st-init').style.display='block';}
-  const th=document.getElementById('st-theory');th.innerHTML=s.theory||'<p>Теория появится здесь...</p>';
-  if(isA){th.contentEditable='true';th.style.pointerEvents='auto';document.getElementById('st-theory-tb').style.display='flex';}
-  else{th.contentEditable='false';th.style.pointerEvents='none';document.getElementById('st-theory-tb').style.display='none';}
-  document.getElementById('st-studio-up').style.display=isA?'block':'none';
-  renderMediaList('st-media-list',Array.isArray(s.media)?s.media:[],'student');
-  renderStudio('st-studio-list',Array.isArray(s.studio)?s.studio:[],'st-stu-empty','stu_student');
-  renderSongs('st-songs',Array.isArray(s.songs)?s.songs:[],'student');
-  document.getElementById('st-song-add').style.display=isA?'block':'none';
-  sp('page-student');
+function backInner() { if (CU === "admin") { sp("page-admin"); renderAdm(); } else goHome(); }
+function backSong() { if (prevSngPage === "student") sp("page-student"); else if (prevSngPage === "ensemble") sp("page-ensemble"); else goHome(); }
+
+async function renderAfisha() {
+  const g = document.getElementById("afisha-grid");
+  g.innerHTML = '<div class="empty-s">Загрузка...</div>';
+  const rows = await dbGet("events", "order=date.asc");
+  if (!rows || !rows.length) { g.innerHTML = '<div class="empty-s">Мероприятий пока нет</div>'; return; }
+  g.innerHTML = rows.map(ev => {
+    const d = new Date(ev.date + "T00:00:00"), ds = d.toLocaleDateString("ru", {day: "numeric", month: "long"});
+    const poster = ev.img
+      ? `<img src="${ev.img}" alt="">`
+      : `<div class="afisha-poster-ph"><div class="ev-icon">${ev.icon}</div><div class="ev-name">${ev.title}</div></div>`;
+    const delBtn = CU === "admin" ? `<button class="afisha-del" onclick="delAfisha('${ev.id}')">✕ Удалить</button>` : "";
+    return `<div class="afisha-card"><div class="afisha-poster">${poster}<div class="afisha-date-badge">${ds}</div></div><div class="afisha-body"><h3>${ev.title}</h3><div class="afisha-meta"><span>📅 ${ds}</span><span>🕕 ${ev.time||""}</span><span>📍 ${ev.place||""}</span></div><p>${ev.descr||""}</p>${delBtn}</div></div>`;
+  }).join("");
 }
-async function openEn(id){
-  if(CU!=='admin'&&!(CU&&CU.type==='ensemble'&&CU.id===id)){openM('modal-login');return;}
-  load(true);const rows=await get('ensembles','id=eq.'+id);load(false);
-  if(!rows||!rows.length){toast('Ансамбль не найден');return;}
-  const e=rows[0];curEn=id;const isA=CU==='admin';
-  document.getElementById('en-name').textContent=e.name;
-  document.getElementById('en-role').textContent=e.descr||'Вокальный ансамбль';
-  document.getElementById('en-init').textContent='♪';
-  if(e.photo){document.getElementById('en-img').src=e.photo;document.getElementById('en-img').style.display='block';document.getElementById('en-init').style.display='none';}
-  else{document.getElementById('en-img').style.display='none';document.getElementById('en-init').style.display='block';}
-  document.getElementById('en-studio-up').style.display=isA?'block':'none';
-  renderMediaList('en-media-list',Array.isArray(e.media)?e.media:[],'ensemble');
-  renderStudio('en-studio-list',Array.isArray(e.studio)?e.studio:[],'en-stu-empty','stu_ensemble');
-  renderSongs('en-songs',Array.isArray(e.songs)?e.songs:[],'ensemble');
-  renderNews('en-news-list',Array.isArray(e.news)?e.news:[]);
-  document.getElementById('en-song-add').style.display=isA?'block':'none';
-  document.getElementById('en-news-add').style.display=isA?'block':'none';
-  sp('page-ensemble');
+
+async function renderAdm() {
+  const [ss, es, evs] = await Promise.all([dbGet("students","order=created_at.asc"), dbGet("ensembles","order=created_at.asc"), dbGet("events","order=date.asc")]);
+  document.getElementById("adm-students").innerHTML = (ss && ss.length)
+    ? ss.map(s => `<div class="al-item"><span class="al-link" onclick="openSt('${s.id}')">${s.name}</span><div style="display:flex;gap:.7rem;align-items:center"><span style="font-size:.7rem;color:var(--text-dim)">${s.login}</span><button class="al-del" onclick="delSt('${s.id}')">✕</button></div></div>`).join("")
+    : '<p style="color:var(--text-dim);font-size:.82rem">Нет учеников</p>';
+  document.getElementById("adm-ensembles").innerHTML = (es && es.length)
+    ? es.map(e => `<div class="al-item"><span class="al-link" onclick="openEn('${e.id}')">${e.name}</span><div style="display:flex;gap:.7rem;align-items:center"><span style="font-size:.7rem;color:var(--text-dim)">${e.login}</span><button class="al-del" onclick="delEn('${e.id}')">✕</button></div></div>`).join("")
+    : '<p style="color:var(--text-dim);font-size:.82rem">Нет ансамблей</p>';
+  document.getElementById("adm-afisha").innerHTML = (evs && evs.length)
+    ? evs.map(a => `<div class="al-item"><span style="color:var(--text-muted)">${a.icon} ${a.title} — ${a.date}</span><button class="al-del" onclick="delAfisha('${a.id}')">✕</button></div>`).join("")
+    : '<p style="color:var(--text-dim);font-size:.82rem">Нет мероприятий</p>';
 }
-function renderNews(listId,news){
-  const el=document.getElementById(listId);
-  if(!news||!news.length){el.innerHTML='<div class="empty-s">Новостей пока нет</div>';return;}
-  el.innerHTML=[...news].reverse().map((n,ri)=>{
-    const i=news.length-1-ri;
-    const d=CU==='admin'?'<button class="media-del" onclick="delNews('+i+')">✕</button>':'';
-    return '<div class="news-item"><div class="news-hdr"><span class="news-title">'+n.title+'</span><div style="display:flex;align-items:center;gap:.5rem"><span class="news-date">'+n.date+'</span>'+d+'</div></div><div class="news-text">'+n.text+'</div>'+(n.img?'<img src="'+n.img+'" alt="">':'')+'</div>';
-  }).join('');
+
+async function openSt(id) {
+  if (CU !== "admin" && !(CU && CU.type === "student" && CU.id === id)) { openM("modal-login"); return; }
+  load(true); const rows = await dbGet("students", "id=eq." + id); load(false);
+  if (!rows || !rows.length) { toast("Ученик не найден"); return; }
+  const s = rows[0]; curSt = id; const isA = CU === "admin";
+  document.getElementById("st-name").textContent = s.name;
+  document.getElementById("st-role").textContent = s.role || "Эстрадный вокал";
+  const init = s.name.split(" ").map(n => n[0]).join("").slice(0,2);
+  document.getElementById("st-init").textContent = init;
+  if (s.photo) { document.getElementById("st-img").src = s.photo; document.getElementById("st-img").style.display = "block"; document.getElementById("st-init").style.display = "none"; }
+  else { document.getElementById("st-img").style.display = "none"; document.getElementById("st-init").style.display = "block"; }
+  const th = document.getElementById("st-theory"); th.innerHTML = s.theory || "<p>Теория появится здесь...</p>";
+  if (isA) { th.contentEditable = "true"; th.style.pointerEvents = "auto"; document.getElementById("st-theory-tb").style.display = "flex"; }
+  else { th.contentEditable = "false"; th.style.pointerEvents = "none"; document.getElementById("st-theory-tb").style.display = "none"; }
+  document.getElementById("st-studio-up").style.display = isA ? "block" : "none";
+  renderMediaList("st-media-list", Array.isArray(s.media) ? s.media : [], "student");
+  renderStudio("st-studio-list", Array.isArray(s.studio) ? s.studio : [], "st-stu-empty", "stu_student");
+  renderSongs("st-songs", Array.isArray(s.songs) ? s.songs : [], "student");
+  document.getElementById("st-song-add").style.display = isA ? "block" : "none";
+  sp("page-student");
 }
-function handleNewsImg(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=x=>{pendNewsImg=x.target.result;document.getElementById('news-img-prev').innerHTML='<img src="'+pendNewsImg+'" style="width:100%;max-height:120px;object-fit:cover;border-radius:8px;margin-top:.4rem">';};r.readAsDataURL(f);}
-async function createNews(){
-  const title=document.getElementById('news-title').value.trim(),text=document.getElementById('news-text').value.trim();
-  if(!title){toast('Введите заголовок');return;}
-  load(true);const rows=await get('ensembles','id=eq.'+curEn);if(!rows||!rows.length){load(false);return;}
-  const news=Array.isArray(rows[0].news)?rows[0].news:[];
-  news.push({id:'n'+Date.now(),title,text,img:pendNewsImg||null,date:new Date().toLocaleDateString('ru')});
-  await patch('ensembles','id=eq.'+curEn,{news});load(false);
-  closeM('modal-add-news');pendNewsImg=null;
-  document.getElementById('news-img-prev').innerHTML='';
-  document.getElementById('news-title').value='';document.getElementById('news-text').value='';
-  renderNews('en-news-list',news);toast('Новость опубликована');
+
+async function openEn(id) {
+  if (CU !== "admin" && !(CU && CU.type === "ensemble" && CU.id === id)) { openM("modal-login"); return; }
+  load(true); const rows = await dbGet("ensembles", "id=eq." + id); load(false);
+  if (!rows || !rows.length) { toast("Ансамбль не найден"); return; }
+  const e = rows[0]; curEn = id; const isA = CU === "admin";
+  document.getElementById("en-name").textContent = e.name;
+  document.getElementById("en-role").textContent = e.descr || "Вокальный ансамбль";
+  document.getElementById("en-init").textContent = "♪";
+  if (e.photo) { document.getElementById("en-img").src = e.photo; document.getElementById("en-img").style.display = "block"; document.getElementById("en-init").style.display = "none"; }
+  else { document.getElementById("en-img").style.display = "none"; document.getElementById("en-init").style.display = "block"; }
+  document.getElementById("en-studio-up").style.display = isA ? "block" : "none";
+  renderMediaList("en-media-list", Array.isArray(e.media) ? e.media : [], "ensemble");
+  renderStudio("en-studio-list", Array.isArray(e.studio) ? e.studio : [], "en-stu-empty", "stu_ensemble");
+  renderSongs("en-songs", Array.isArray(e.songs) ? e.songs : [], "ensemble");
+  renderNews("en-news-list", Array.isArray(e.news) ? e.news : []);
+  document.getElementById("en-song-add").style.display = isA ? "block" : "none";
+  document.getElementById("en-news-add").style.display = isA ? "block" : "none";
+  sp("page-ensemble");
 }
-async function delNews(i){
-  load(true);const rows=await get('ensembles','id=eq.'+curEn);if(!rows||!rows.length){load(false);return;}
-  const news=Array.isArray(rows[0].news)?rows[0].news:[];news.splice(i,1);
-  await patch('ensembles','id=eq.'+curEn,{news});load(false);renderNews('en-news-list',news);toast('Удалено');
+
+function renderNews(listId, news) {
+  const el = document.getElementById(listId);
+  if (!news || !news.length) { el.innerHTML = '<div class="empty-s">Новостей пока нет</div>'; return; }
+  el.innerHTML = [...news].reverse().map((n, ri) => {
+    const i = news.length - 1 - ri;
+    const delBtn = CU === "admin" ? `<button class="media-del" onclick="delNews(${i})">✕</button>` : "";
+    return `<div class="news-item"><div class="news-hdr"><span class="news-title-el">${n.title}</span><div style="display:flex;align-items:center;gap:.5rem"><span class="news-date-el">${n.date}</span>${delBtn}</div></div><div class="news-text-el">${n.text}</div>${n.img ? `<img src="${n.img}" alt="">` : ""}</div>`;
+  }).join("");
 }
-function renderSongs(listId,songs,ctx){
-  const el=document.getElementById(listId);
-  if(!songs||!songs.length){el.innerHTML='<div class="empty-s">Репертуар пуст</div>';return;}
-  el.innerHTML=songs.map((s,i)=>'<div class="song-item" onclick="openSong(''+s.id+'',''+ctx+'')"><div class="song-num">'+(i+1)+'</div><div class="song-name">'+s.name+'</div><div class="song-author">'+(s.author||'')+'</div><span class="song-arrow">›</span></div>').join('');
+function handleNewsImg(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = x => { pendNewsImg = x.target.result; document.getElementById("news-img-prev").innerHTML = `<img src="${pendNewsImg}" style="width:100%;max-height:120px;object-fit:cover;border-radius:8px;margin-top:.4rem">`; };
+  r.readAsDataURL(f);
 }
-async function openSong(songId,ctx){
+async function createNews() {
+  const title = document.getElementById("news-title").value.trim(), text = document.getElementById("news-text").value.trim();
+  if (!title) { toast("Введите заголовок"); return; }
+  load(true); const rows = await dbGet("ensembles", "id=eq." + curEn); if (!rows || !rows.length) { load(false); return; }
+  const news = Array.isArray(rows[0].news) ? rows[0].news : [];
+  news.push({id: "n" + Date.now(), title, text, img: pendNewsImg || null, date: new Date().toLocaleDateString("ru")});
+  await dbPatch("ensembles", "id=eq." + curEn, {news}); load(false);
+  closeM("modal-add-news"); pendNewsImg = null;
+  document.getElementById("news-img-prev").innerHTML = "";
+  document.getElementById("news-title").value = ""; document.getElementById("news-text").value = "";
+  renderNews("en-news-list", news); toast("Новость опубликована");
+}
+async function delNews(i) {
+  load(true); const rows = await dbGet("ensembles", "id=eq." + curEn); if (!rows || !rows.length) { load(false); return; }
+  const news = Array.isArray(rows[0].news) ? rows[0].news : []; news.splice(i, 1);
+  await dbPatch("ensembles", "id=eq." + curEn, {news}); load(false);
+  renderNews("en-news-list", news); toast("Удалено");
+}
+
+function renderSongs(listId, songs, ctx) {
+  const el = document.getElementById(listId);
+  if (!songs || !songs.length) { el.innerHTML = '<div class="empty-s">Репертуар пуст</div>'; return; }
+  el.innerHTML = songs.map((s, i) => `<div class="song-item" onclick="openSong('${s.id}','${ctx}')"><div class="song-num">${i+1}</div><div class="song-name">${s.name}</div><div class="song-author">${s.author||""}</div><span class="song-arrow">›</span></div>`).join("");
+}
+
+async function openSong(songId, ctx) {
   let ent;
-  if(ctx==='student'){const r=await get('students','id=eq.'+curSt);ent=r&&r[0];prevSngPage='student';}
-  else{const r=await get('ensembles','id=eq.'+curEn);ent=r&&r[0];prevSngPage='ensemble';}
-  if(!ent)return;
-  const songs=Array.isArray(ent.songs)?ent.songs:[];
-  const song=songs.find(s=>s.id===songId);if(!song)return;
-  curSng=songId;curSngCtx=ctx;const isA=CU==='admin';
-  document.getElementById('song-title').textContent=song.name;
-  document.getElementById('song-meta').textContent=(song.author||'')+(song.key?' · '+song.key:'');
-  const ab=document.getElementById('song-adm-btns');
-  if(isA){ab.style.display='flex';ab.innerHTML='<button class="btn-ghost" onclick="delSong(''+songId+'',''+ctx+'')">🗑 Удалить</button>';}
-  else ab.style.display='none';
-  const ly=document.getElementById('song-lyrics');
-  ly.innerHTML=song.lyrics||'<span style="color:var(--text-dim)">Текст не добавлен</span>';
-  ly.contentEditable='false';ly.style.pointerEvents='none';
-  document.getElementById('ly-edit-btn').style.display=isA?'inline-block':'none';
-  renderSongPlayer('orig-player',song.original,'orig-empty');
-  renderDlBtn('orig-dl',song.original,'Скачать оригинал');
-  document.getElementById('orig-upload').style.display=isA?'block':'none';
-  document.getElementById('orig-inp').value='';
-  document.getElementById('song-link-inp').value=song.originalLink||'';
-  document.getElementById('song-link-save').style.display=isA?'inline-block':'none';
-  document.getElementById('song-link-disp').innerHTML=song.originalLink?'<a href="'+song.originalLink+'" target="_blank" style="color:var(--indigo-light);font-size:.8rem">🔗 Открыть ссылку</a>':'';
-  renderSongPlayer('minus-player',song.minus,'minus-empty');
-  renderDlBtn('minus-dl',song.minus,'Скачать минус');
-  document.getElementById('minus-upload').style.display=isA?'block':'none';
-  document.getElementById('minus-inp').value='';
-  renderNotes(song.notes||[]);
-  document.getElementById('notes-upload').style.display=isA?'block':'none';
-  document.getElementById('notes-inp').value='';
-  const nt=document.getElementById('notes-text-disp');
-  nt.innerHTML=song.notesText||'<span style="color:var(--text-dim)">Заметки не добавлены</span>';
-  nt.contentEditable=isA?'true':'false';nt.style.pointerEvents=isA?'auto':'none';
-  document.getElementById('notes-text-tb').style.display=isA?'block':'none';
-  switchTab('lyrics',document.querySelector('.tab-row .tab-btn'));
-  sp('page-song');
+  if (ctx === "student") { const r = await dbGet("students", "id=eq." + curSt); ent = r && r[0]; prevSngPage = "student"; }
+  else { const r = await dbGet("ensembles", "id=eq." + curEn); ent = r && r[0]; prevSngPage = "ensemble"; }
+  if (!ent) return;
+  const songs = Array.isArray(ent.songs) ? ent.songs : [];
+  const song = songs.find(s => s.id === songId); if (!song) return;
+  curSng = songId; curSngCtx = ctx; const isA = CU === "admin";
+  document.getElementById("song-title").textContent = song.name;
+  document.getElementById("song-meta").textContent = (song.author || "") + (song.key ? " · " + song.key : "");
+  const ab = document.getElementById("song-adm-btns");
+  if (isA) { ab.style.display = "flex"; ab.innerHTML = `<button class="btn-ghost" onclick="delSong('${songId}','${ctx}')">🗑 Удалить</button>`; }
+  else ab.style.display = "none";
+  const ly = document.getElementById("song-lyrics");
+  ly.innerHTML = song.lyrics || '<span style="color:var(--text-dim)">Текст не добавлен</span>';
+  ly.contentEditable = "false"; ly.style.pointerEvents = "none";
+  document.getElementById("ly-edit-btn").style.display = isA ? "inline-block" : "none";
+  renderSongPlayer("orig-player", song.original, "orig-empty");
+  renderDlBtn("orig-dl", song.original, "Скачать оригинал");
+  document.getElementById("orig-upload").style.display = isA ? "block" : "none";
+  document.getElementById("orig-inp").value = "";
+  document.getElementById("song-link-inp").value = song.originalLink || "";
+  document.getElementById("song-link-save").style.display = isA ? "inline-block" : "none";
+  document.getElementById("song-link-disp").innerHTML = song.originalLink ? `<a href="${song.originalLink}" target="_blank" style="color:var(--indigo-light);font-size:.8rem">🔗 Открыть ссылку</a>` : "";
+  renderSongPlayer("minus-player", song.minus, "minus-empty");
+  renderDlBtn("minus-dl", song.minus, "Скачать минус");
+  document.getElementById("minus-upload").style.display = isA ? "block" : "none";
+  document.getElementById("minus-inp").value = "";
+  renderNotes(song.notes || []);
+  document.getElementById("notes-upload").style.display = isA ? "block" : "none";
+  document.getElementById("notes-inp").value = "";
+  const nt = document.getElementById("notes-text-disp");
+  nt.innerHTML = song.notesText || '<span style="color:var(--text-dim)">Заметки не добавлены</span>';
+  nt.contentEditable = isA ? "true" : "false"; nt.style.pointerEvents = isA ? "auto" : "none";
+  document.getElementById("notes-text-tb").style.display = isA ? "block" : "none";
+  switchTab("lyrics", document.querySelector(".tab-row .tab-btn"));
+  sp("page-song");
 }
-function renderDlBtn(elId,file,label){const el=document.getElementById(elId);if(!file||!file.url){el.innerHTML='';return;}el.innerHTML='<a class="btn-dl" href="'+file.url+'" download="'+(file.name||'file')+'">⬇ '+label+'</a>';}
-function renderSongPlayer(pid,file,emptyId){const el=document.getElementById(pid),em=document.getElementById(emptyId);if(!file){el.innerHTML='';if(em)em.style.display='block';return;}if(em)em.style.display='none';el.innerHTML=file.type==='video'?'<video controls src="'+file.url+'" style="width:100%;max-height:240px;border-radius:8px"></video>':'<audio controls src="'+file.url+'" style="width:100%;height:36px"></audio>';}
-function renderNotes(notes){const el=document.getElementById('notes-files'),em=document.getElementById('notes-empty');if(!notes||!notes.length){el.innerHTML='';if(em)em.style.display='block';return;}if(em)em.style.display='none';el.innerHTML=notes.map((n,i)=>n.isPdf?'<div style="display:flex;align-items:center;gap:.55rem;margin-bottom:.5rem"><span style="color:var(--rust-light)">📄</span><a href="'+n.url+'" download="'+n.name+'" style="color:var(--indigo-light);font-size:.83rem">'+n.name+'</a><a class="btn-dl" href="'+n.url+'" download="'+n.name+'">⬇</a>'+(CU==='admin'?'<button class="media-del" onclick="delNote('+i+')">✕</button>':'')+'</div>':'<div style="margin-bottom:.8rem"><div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.3rem"><span style="color:var(--indigo-light);font-size:.83rem">🖼 '+n.name+'</span>'+(CU==='admin'?'<button class="media-del" onclick="delNote('+i+')">✕</button>':'')+'</div><img src="'+n.url+'" alt="'+n.name+'" style="max-width:100%;border-radius:8px;border:1px solid var(--border)"></div>').join('');}
-async function getSE(){if(curSngCtx==='student'){const r=await get('students','id=eq.'+curSt);return r&&r[0]?{ent:r[0],table:'students',fid:curSt}:null;}else{const r=await get('ensembles','id=eq.'+curEn);return r&&r[0]?{ent:r[0],table:'ensembles',fid:curEn}:null;}}
-async function handleSongFile(event,type){
-  const files=event.target.files;if(!files.length)return;
-  const res=await getSE();if(!res)return;
-  const {ent,table,fid}=res;const songs=Array.isArray(ent.songs)?[...ent.songs]:[];
-  const si=songs.findIndex(s=>s.id===curSng);if(si<0)return;
-  if(type==='original'||type==='minus'){
-    const f=files[0];const url=URL.createObjectURL(f);
-    songs[si][type]={url,name:f.name,type:f.type.startsWith('video')?'video':'audio'};
-    load(true);await patch(table,'id=eq.'+fid,{songs});load(false);
-    renderSongPlayer(type==='original'?'orig-player':'minus-player',songs[si][type],type==='original'?'orig-empty':'minus-empty');
-    renderDlBtn(type==='original'?'orig-dl':'minus-dl',songs[si][type],'Скачать '+(type==='original'?'оригинал':'минус'));
-    toast('Загружено: '+f.name);
-  } else if(type==='notes'){
-    const notes=songs[si].notes||[];
-    for(const f of Array.from(files))notes.push({url:URL.createObjectURL(f),name:f.name,isPdf:f.name.toLowerCase().endsWith('.pdf')});
-    songs[si].notes=notes;load(true);await patch(table,'id=eq.'+fid,{songs});load(false);renderNotes(notes);toast('Загружено');
+
+function renderDlBtn(elId, file, label) {
+  const el = document.getElementById(elId);
+  if (!file || !file.url) { el.innerHTML = ""; return; }
+  el.innerHTML = `<a class="btn-dl" href="${file.url}" download="${file.name || 'file'}">⬇ ${label}</a>`;
+}
+function renderSongPlayer(pid, file, emptyId) {
+  const el = document.getElementById(pid), em = document.getElementById(emptyId);
+  if (!file) { el.innerHTML = ""; if (em) em.style.display = "block"; return; }
+  if (em) em.style.display = "none";
+  el.innerHTML = file.type === "video" ? `<video controls src="${file.url}" style="width:100%;max-height:240px;border-radius:8px"></video>` : `<audio controls src="${file.url}" style="width:100%;height:36px"></audio>`;
+}
+function renderNotes(notes) {
+  const el = document.getElementById("notes-files"), em = document.getElementById("notes-empty");
+  if (!notes || !notes.length) { el.innerHTML = ""; if (em) em.style.display = "block"; return; }
+  if (em) em.style.display = "none";
+  el.innerHTML = notes.map((n, i) => n.isPdf
+    ? `<div style="display:flex;align-items:center;gap:.55rem;margin-bottom:.5rem"><span style="color:var(--rust-light)">📄</span><a href="${n.url}" download="${n.name}" style="color:var(--indigo-light);font-size:.83rem">${n.name}</a><a class="btn-dl" href="${n.url}" download="${n.name}">⬇</a>${CU === "admin" ? `<button class="media-del" onclick="delNote(${i})">✕</button>` : ""}</div>`
+    : `<div style="margin-bottom:.8rem"><div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.3rem"><span style="color:var(--indigo-light);font-size:.83rem">🖼 ${n.name}</span>${CU === "admin" ? `<button class="media-del" onclick="delNote(${i})">✕</button>` : ""}</div><img src="${n.url}" alt="${n.name}" style="max-width:100%;border-radius:8px;border:1px solid var(--border)"></div>`
+  ).join("");
+}
+
+async function getSE() {
+  if (curSngCtx === "student") { const r = await dbGet("students", "id=eq." + curSt); return r && r[0] ? {ent: r[0], table: "students", fid: curSt} : null; }
+  else { const r = await dbGet("ensembles", "id=eq." + curEn); return r && r[0] ? {ent: r[0], table: "ensembles", fid: curEn} : null; }
+}
+async function handleSongFile(event, type) {
+  const files = event.target.files; if (!files.length) return;
+  const res = await getSE(); if (!res) return;
+  const {ent, table, fid} = res; const songs = Array.isArray(ent.songs) ? [...ent.songs] : [];
+  const si = songs.findIndex(s => s.id === curSng); if (si < 0) return;
+  if (type === "original" || type === "minus") {
+    const f = files[0]; const url = URL.createObjectURL(f);
+    songs[si][type] = {url, name: f.name, type: f.type.startsWith("video") ? "video" : "audio"};
+    load(true); await dbPatch(table, "id=eq." + fid, {songs}); load(false);
+    renderSongPlayer(type === "original" ? "orig-player" : "minus-player", songs[si][type], type === "original" ? "orig-empty" : "minus-empty");
+    renderDlBtn(type === "original" ? "orig-dl" : "minus-dl", songs[si][type], "Скачать " + (type === "original" ? "оригинал" : "минус"));
+    toast("Загружено: " + f.name);
+  } else if (type === "notes") {
+    const notes = songs[si].notes || [];
+    for (const f of Array.from(files)) notes.push({url: URL.createObjectURL(f), name: f.name, isPdf: f.name.toLowerCase().endsWith(".pdf")});
+    songs[si].notes = notes; load(true); await dbPatch(table, "id=eq." + fid, {songs}); load(false);
+    renderNotes(notes); toast("Загружено");
   }
-  event.target.value='';
+  event.target.value = "";
 }
-async function saveSongLink(){const res=await getSE();if(!res)return;const {ent,table,fid}=res;const songs=Array.isArray(ent.songs)?[...ent.songs]:[];const si=songs.findIndex(s=>s.id===curSng);if(si<0)return;const v=document.getElementById('song-link-inp').value.trim();songs[si].originalLink=v;load(true);await patch(table,'id=eq.'+fid,{songs});load(false);document.getElementById('song-link-disp').innerHTML=v?'<a href="'+v+'" target="_blank" style="color:var(--indigo-light);font-size:.8rem">🔗 Открыть ссылку</a>':'';toast('Ссылка сохранена');}
-async function saveNotesText(){const res=await getSE();if(!res)return;const {ent,table,fid}=res;const songs=Array.isArray(ent.songs)?[...ent.songs]:[];const si=songs.findIndex(s=>s.id===curSng);if(si<0)return;songs[si].notesText=document.getElementById('notes-text-disp').innerHTML;load(true);await patch(table,'id=eq.'+fid,{songs});load(false);toast('Заметки сохранены');}
-async function toggleLyrics(){const el=document.getElementById('song-lyrics');if(el.contentEditable==='true'){const res=await getSE();if(!res)return;const {ent,table,fid}=res;const songs=Array.isArray(ent.songs)?[...ent.songs]:[];const si=songs.findIndex(s=>s.id===curSng);if(si>=0){songs[si].lyrics=el.innerHTML;load(true);await patch(table,'id=eq.'+fid,{songs});load(false);}el.contentEditable='false';el.style.pointerEvents='none';document.getElementById('ly-edit-btn').textContent='✏️ Редактировать';showInd('lyrics-saved');}else{el.contentEditable='true';el.style.pointerEvents='auto';el.focus();document.getElementById('ly-edit-btn').textContent='💾 Сохранить';}}
-async function delNote(i){const res=await getSE();if(!res)return;const {ent,table,fid}=res;const songs=Array.isArray(ent.songs)?[...ent.songs]:[];const si=songs.findIndex(s=>s.id===curSng);if(si<0)return;songs[si].notes.splice(i,1);load(true);await patch(table,'id=eq.'+fid,{songs});load(false);renderNotes(songs[si].notes);}
-function openAddSong(ctx){addSngCtx=ctx;openM('modal-add-song');}
-async function createSong(){
-  const name=document.getElementById('sng-n').value.trim(),author=document.getElementById('sng-a').value.trim(),key=document.getElementById('sng-k').value.trim();
-  if(!name){toast('Введите название');return;}
-  const song={id:'sng'+Date.now(),name,author,key,lyrics:'',original:null,originalLink:'',minus:null,notes:[],notesText:''};
+async function saveSongLink() {
+  const res = await getSE(); if (!res) return;
+  const {ent, table, fid} = res; const songs = Array.isArray(ent.songs) ? [...ent.songs] : [];
+  const si = songs.findIndex(s => s.id === curSng); if (si < 0) return;
+  const v = document.getElementById("song-link-inp").value.trim();
+  songs[si].originalLink = v; load(true); await dbPatch(table, "id=eq." + fid, {songs}); load(false);
+  document.getElementById("song-link-disp").innerHTML = v ? `<a href="${v}" target="_blank" style="color:var(--indigo-light);font-size:.8rem">🔗 Открыть ссылку</a>` : "";
+  toast("Ссылка сохранена");
+}
+async function saveNotesText() {
+  const res = await getSE(); if (!res) return;
+  const {ent, table, fid} = res; const songs = Array.isArray(ent.songs) ? [...ent.songs] : [];
+  const si = songs.findIndex(s => s.id === curSng); if (si < 0) return;
+  songs[si].notesText = document.getElementById("notes-text-disp").innerHTML;
+  load(true); await dbPatch(table, "id=eq." + fid, {songs}); load(false); toast("Заметки сохранены");
+}
+async function toggleLyrics() {
+  const el = document.getElementById("song-lyrics");
+  if (el.contentEditable === "true") {
+    const res = await getSE(); if (!res) return;
+    const {ent, table, fid} = res; const songs = Array.isArray(ent.songs) ? [...ent.songs] : [];
+    const si = songs.findIndex(s => s.id === curSng);
+    if (si >= 0) { songs[si].lyrics = el.innerHTML; load(true); await dbPatch(table, "id=eq." + fid, {songs}); load(false); }
+    el.contentEditable = "false"; el.style.pointerEvents = "none";
+    document.getElementById("ly-edit-btn").textContent = "✏️ Редактировать"; showInd("lyrics-saved");
+  } else { el.contentEditable = "true"; el.style.pointerEvents = "auto"; el.focus(); document.getElementById("ly-edit-btn").textContent = "💾 Сохранить"; }
+}
+async function delNote(i) {
+  const res = await getSE(); if (!res) return;
+  const {ent, table, fid} = res; const songs = Array.isArray(ent.songs) ? [...ent.songs] : [];
+  const si = songs.findIndex(s => s.id === curSng); if (si < 0) return;
+  songs[si].notes.splice(i, 1); load(true); await dbPatch(table, "id=eq." + fid, {songs}); load(false);
+  renderNotes(songs[si].notes);
+}
+
+function openAddSong(ctx) { addSngCtx = ctx; openM("modal-add-song"); }
+async function createSong() {
+  const name = document.getElementById("sng-n").value.trim(), author = document.getElementById("sng-a").value.trim(), key = document.getElementById("sng-k").value.trim();
+  if (!name) { toast("Введите название"); return; }
+  const song = {id: "sng" + Date.now(), name, author, key, lyrics: "", original: null, originalLink: "", minus: null, notes: [], notesText: ""};
   load(true);
-  if(addSngCtx==='student'&&curSt){const r=await get('students','id=eq.'+curSt);if(r&&r[0]){const songs=[...(Array.isArray(r[0].songs)?r[0].songs:[]),song];await patch('students','id=eq.'+curSt,{songs});renderSongs('st-songs',songs,'student');}}
-  else if(addSngCtx==='ensemble'&&curEn){const r=await get('ensembles','id=eq.'+curEn);if(r&&r[0]){const songs=[...(Array.isArray(r[0].songs)?r[0].songs:[]),song];await patch('ensembles','id=eq.'+curEn,{songs});renderSongs('en-songs',songs,'ensemble');}}
-  load(false);closeM('modal-add-song');['sng-n','sng-a','sng-k'].forEach(id=>document.getElementById(id).value='');toast('Песня добавлена: '+name);
+  if (addSngCtx === "student" && curSt) { const r = await dbGet("students", "id=eq." + curSt); if (r && r[0]) { const songs = [...(Array.isArray(r[0].songs) ? r[0].songs : []), song]; await dbPatch("students", "id=eq." + curSt, {songs}); renderSongs("st-songs", songs, "student"); } }
+  else if (addSngCtx === "ensemble" && curEn) { const r = await dbGet("ensembles", "id=eq." + curEn); if (r && r[0]) { const songs = [...(Array.isArray(r[0].songs) ? r[0].songs : []), song]; await dbPatch("ensembles", "id=eq." + curEn, {songs}); renderSongs("en-songs", songs, "ensemble"); } }
+  load(false); closeM("modal-add-song");
+  ["sng-n","sng-a","sng-k"].forEach(id => document.getElementById(id).value = "");
+  toast("Песня добавлена: " + name);
 }
-async function delSong(sid,ctx){
-  if(!confirm('Удалить песню?'))return;load(true);
-  if(ctx==='student'){const r=await get('students','id=eq.'+curSt);if(r&&r[0]){const songs=(Array.isArray(r[0].songs)?r[0].songs:[]).filter(x=>x.id!==sid);await patch('students','id=eq.'+curSt,{songs});renderSongs('st-songs',songs,'student');}sp('page-student');}
-  else{const r=await get('ensembles','id=eq.'+curEn);if(r&&r[0]){const songs=(Array.isArray(r[0].songs)?r[0].songs:[]).filter(x=>x.id!==sid);await patch('ensembles','id=eq.'+curEn,{songs});renderSongs('en-songs',songs,'ensemble');}sp('page-ensemble');}
-  load(false);toast('Удалено');
+async function delSong(sid, ctx) {
+  if (!confirm("Удалить песню?")) return; load(true);
+  if (ctx === "student") { const r = await dbGet("students", "id=eq." + curSt); if (r && r[0]) { const songs = (Array.isArray(r[0].songs) ? r[0].songs : []).filter(x => x.id !== sid); await dbPatch("students", "id=eq." + curSt, {songs}); renderSongs("st-songs", songs, "student"); } sp("page-student"); }
+  else { const r = await dbGet("ensembles", "id=eq." + curEn); if (r && r[0]) { const songs = (Array.isArray(r[0].songs) ? r[0].songs : []).filter(x => x.id !== sid); await dbPatch("ensembles", "id=eq." + curEn, {songs}); renderSongs("en-songs", songs, "ensemble"); } sp("page-ensemble"); }
+  load(false); toast("Удалено");
 }
-async function handleMedia(event,listId,ctx){
-  const files=event.target.files;if(!files.length)return;
-  const items=Array.from(files).map(f=>({id:'m'+Date.now()+Math.random(),name:f.name,type:f.type.startsWith('video')?'video':'audio',url:URL.createObjectURL(f),date:new Date().toLocaleDateString('ru'),note:''}));
+
+async function handleMedia(event, listId, ctx) {
+  const files = event.target.files; if (!files.length) return;
+  const items = Array.from(files).map(f => ({id: "m" + Date.now() + Math.random(), name: f.name, type: f.type.startsWith("video") ? "video" : "audio", url: URL.createObjectURL(f), date: new Date().toLocaleDateString("ru"), note: ""}));
   load(true);
-  if(ctx==='student'&&curSt){const r=await get('students','id=eq.'+curSt);if(r&&r[0]){const media=[...items,...(Array.isArray(r[0].media)?r[0].media:[])];await patch('students','id=eq.'+curSt,{media});renderMediaList(listId,media,'student');}}
-  else if(ctx==='ensemble'&&curEn){const r=await get('ensembles','id=eq.'+curEn);if(r&&r[0]){const media=[...items,...(Array.isArray(r[0].media)?r[0].media:[])];await patch('ensembles','id=eq.'+curEn,{media});renderMediaList(listId,media,'ensemble');}}
-  else if(ctx==='stu_student'&&curSt){const r=await get('students','id=eq.'+curSt);if(r&&r[0]){const studio=[...items,...(Array.isArray(r[0].studio)?r[0].studio:[])];await patch('students','id=eq.'+curSt,{studio});renderStudio('st-studio-list',studio,'st-stu-empty','stu_student');}}
-  else if(ctx==='stu_ensemble'&&curEn){const r=await get('ensembles','id=eq.'+curEn);if(r&&r[0]){const studio=[...items,...(Array.isArray(r[0].studio)?r[0].studio:[])];await patch('ensembles','id=eq.'+curEn,{studio});renderStudio('en-studio-list',studio,'en-stu-empty','stu_ensemble');}}
-  load(false);event.target.value='';toast('Загружено');
+  if (ctx === "student" && curSt) { const r = await dbGet("students","id=eq."+curSt); if (r&&r[0]) { const media=[...items,...(Array.isArray(r[0].media)?r[0].media:[])]; await dbPatch("students","id=eq."+curSt,{media}); renderMediaList(listId,media,"student"); } }
+  else if (ctx === "ensemble" && curEn) { const r = await dbGet("ensembles","id=eq."+curEn); if (r&&r[0]) { const media=[...items,...(Array.isArray(r[0].media)?r[0].media:[])]; await dbPatch("ensembles","id=eq."+curEn,{media}); renderMediaList(listId,media,"ensemble"); } }
+  else if (ctx === "stu_student" && curSt) { const r = await dbGet("students","id=eq."+curSt); if (r&&r[0]) { const studio=[...items,...(Array.isArray(r[0].studio)?r[0].studio:[])]; await dbPatch("students","id=eq."+curSt,{studio}); renderStudio("st-studio-list",studio,"st-stu-empty","stu_student"); } }
+  else if (ctx === "stu_ensemble" && curEn) { const r = await dbGet("ensembles","id=eq."+curEn); if (r&&r[0]) { const studio=[...items,...(Array.isArray(r[0].studio)?r[0].studio:[])]; await dbPatch("ensembles","id=eq."+curEn,{studio}); renderStudio("en-studio-list",studio,"en-stu-empty","stu_ensemble"); } }
+  load(false); event.target.value = ""; toast("Загружено");
 }
-function renderMediaList(listId,items,ctx){const el=document.getElementById(listId);if(!items||!items.length){el.innerHTML='<div class="empty-s">Файлов нет</div>';return;}el.innerHTML=items.map(m=>'<div class="media-item"><div class="media-hdr"><span class="media-icon">'+(m.type==='video'?'🎬':'🎵')+'</span><span class="media-name">'+m.name+'</span><span class="media-date">'+m.date+'</span><a class="btn-dl" href="'+m.url+'" download="'+m.name+'">⬇</a><button class="media-del" onclick="delMedia(''+m.id+'',''+ctx+'')">✕</button></div>'+(m.type==='video'?'<video controls src="'+m.url+'" style="max-height:220px"></video>':'<audio controls src="'+m.url+'"></audio>')+'<input class="note-input" placeholder="Заметка..." value="'+(m.note||'')+'" onchange="saveNote(''+m.id+'',''+ctx+'',this.value)"></div>').join('');}
-function renderStudio(listId,items,emptyId,ctx){const el=document.getElementById(listId),em=document.getElementById(emptyId);if(!items||!items.length){el.innerHTML='';if(em)em.style.display='block';return;}if(em)em.style.display='none';el.innerHTML=items.map(m=>'<div class="studio-track"><div class="studio-hdr"><span>💿</span><div><div class="studio-name">'+m.name+'</div><div class="studio-meta">'+m.date+'</div></div><a class="btn-dl" href="'+m.url+'" download="'+m.name+'">⬇</a>'+(CU==='admin'?'<button class="media-del" onclick="delStudio(''+m.id+'',''+listId+'',''+emptyId+'',''+ctx+'')">✕</button>':'')+'</div>'+(m.type==='video'?'<video controls src="'+m.url+'" style="width:100%;max-height:200px"></video>':'<audio controls src="'+m.url+'"></audio>')+'</div>').join('');}
-async function delMedia(mid,ctx){load(true);if(ctx==='student'&&curSt){const r=await get('students','id=eq.'+curSt);if(r&&r[0]){const media=(Array.isArray(r[0].media)?r[0].media:[]).filter(m=>m.id!==mid);await patch('students','id=eq.'+curSt,{media});renderMediaList('st-media-list',media,'student');}}else if(ctx==='ensemble'&&curEn){const r=await get('ensembles','id=eq.'+curEn);if(r&&r[0]){const media=(Array.isArray(r[0].media)?r[0].media:[]).filter(m=>m.id!==mid);await patch('ensembles','id=eq.'+curEn,{media});renderMediaList('en-media-list',media,'ensemble');}}load(false);}
-async function delStudio(mid,lid,eid,ctx){load(true);if(ctx==='stu_student'&&curSt){const r=await get('students','id=eq.'+curSt);if(r&&r[0]){const studio=(Array.isArray(r[0].studio)?r[0].studio:[]).filter(m=>m.id!==mid);await patch('students','id=eq.'+curSt,{studio});renderStudio(lid,studio,eid,ctx);}}else if(ctx==='stu_ensemble'&&curEn){const r=await get('ensembles','id=eq.'+curEn);if(r&&r[0]){const studio=(Array.isArray(r[0].studio)?r[0].studio:[]).filter(m=>m.id!==mid);await patch('ensembles','id=eq.'+curEn,{studio});renderStudio(lid,studio,eid,ctx);}}load(false);}
-async function saveNote(mid,ctx,val){if(ctx==='student'&&curSt){const r=await get('students','id=eq.'+curSt);if(r&&r[0]){const media=Array.isArray(r[0].media)?r[0].media:[];const m=media.find(x=>x.id===mid);if(m){m.note=val;await patch('students','id=eq.'+curSt,{media});}}}else if(ctx==='ensemble'&&curEn){const r=await get('ensembles','id=eq.'+curEn);if(r&&r[0]){const media=Array.isArray(r[0].media)?r[0].media:[];const m=media.find(x=>x.id===mid);if(m){m.note=val;await patch('ensembles','id=eq.'+curEn,{media});}}}}
-function triggerPh(type){if(CU!=='admin'&&!(CU&&CU.type===type))return;document.getElementById((type==='student'?'st':'en')+'-ph-inp').click();}
-function handlePh(event,type){const f=event.target.files[0];if(!f)return;const r=new FileReader();r.onload=async e=>{const url=e.target.result,px=type==='student'?'st':'en';if(type==='student'&&curSt){load(true);await patch('students','id=eq.'+curSt,{photo:url});load(false);}else if(type==='ensemble'&&curEn){load(true);await patch('ensembles','id=eq.'+curEn,{photo:url});load(false);}document.getElementById(px+'-img').src=url;document.getElementById(px+'-img').style.display='block';document.getElementById(px+'-init').style.display='none';toast('Фото обновлено');};r.readAsDataURL(f);}
-function triggerAboutPhoto(){if(CU==='admin')document.getElementById('about-photo-inp').click();}
-function handleAboutPhoto(event){const f=event.target.files[0];if(!f)return;const r=new FileReader();r.onload=async e=>{const url=e.target.result;load(true);await patch('settings','key=eq.about_photo',{value:url});load(false);document.getElementById('about-photo-wrap').innerHTML='<img src="'+url+'" alt="Педагог" style="width:100%;height:100%;object-fit:cover"><input type="file" id="about-photo-inp" accept="image/*" style="display:none" onchange="handleAboutPhoto(event)">';toast('Фото обновлено');};r.readAsDataURL(f);}
-async function saveTheory(){if(curSt){load(true);await patch('students','id=eq.'+curSt,{theory:document.getElementById('st-theory').innerHTML});load(false);showInd('st-th-saved');}}
-async function doLogin(){
-  const u=document.getElementById('lu').value.trim(),p=document.getElementById('lp').value.trim();
-  const errEl=document.getElementById('login-err'),btn=document.getElementById('login-btn');
-  errEl.style.display='none';btn.textContent='Проверяем...';btn.disabled=true;
-  if(u===ADM_L&&p===ADM_P){CU='admin';sessionStorage.setItem('vcu',JSON.stringify(CU));updateNav();closeM('modal-login');await renderAfisha();document.getElementById('afisha-admin-zone').style.display='block';await renderAdm();sp('page-admin');btn.textContent='Войти';btn.disabled=false;return;}
-  const sr=await get('students','login=eq.'+encodeURIComponent(u)+'&pass=eq.'+encodeURIComponent(p));
-  if(sr&&sr.length){CU={type:'student',id:sr[0].id,name:sr[0].name};sessionStorage.setItem('vcu',JSON.stringify(CU));updateNav();closeM('modal-login');btn.textContent='Войти';btn.disabled=false;await openSt(sr[0].id);return;}
-  const er=await get('ensembles','login=eq.'+encodeURIComponent(u)+'&pass=eq.'+encodeURIComponent(p));
-  if(er&&er.length){CU={type:'ensemble',id:er[0].id,name:er[0].name};sessionStorage.setItem('vcu',JSON.stringify(CU));updateNav();closeM('modal-login');btn.textContent='Войти';btn.disabled=false;await openEn(er[0].id);return;}
-  errEl.textContent='Неверный логин или пароль';errEl.style.display='block';btn.textContent='Войти';btn.disabled=false;
+
+function renderMediaList(listId, items, ctx) {
+  const el = document.getElementById(listId);
+  if (!items || !items.length) { el.innerHTML = '<div class="empty-s">Файлов нет</div>'; return; }
+  el.innerHTML = items.map(m => `<div class="media-item"><div class="media-hdr"><span class="media-icon">${m.type==="video"?"🎬":"🎵"}</span><span class="media-name">${m.name}</span><span class="media-date">${m.date}</span><a class="btn-dl" href="${m.url}" download="${m.name}">⬇</a><button class="media-del" onclick="delMedia('${m.id}','${ctx}')">✕</button></div>${m.type==="video"?`<video controls src="${m.url}" style="max-height:220px"></video>`:`<audio controls src="${m.url}"></audio>`}<input class="note-input" placeholder="Заметка..." value="${m.note||""}" onchange="saveNote('${m.id}','${ctx}',this.value)"></div>`).join("");
 }
-function doLogout(){CU=null;sessionStorage.removeItem('vcu');updateNav();goHome();toast('Вы вышли');}
-async function createStudent(){const n=document.getElementById('ns-n').value.trim(),r=document.getElementById('ns-r').value.trim()||'Эстрадный вокал',l=document.getElementById('ns-l').value.trim(),p=document.getElementById('ns-p').value.trim();if(!n||!l||!p){toast('Заполните все поля');return;}const c=await get('students','login=eq.'+encodeURIComponent(l));if(c&&c.length){toast('Логин занят');return;}load(true);await post('students',{id:'s'+Date.now(),name:n,role:r,login:l,pass:p,theory:'',photo:null,media:[],studio:[],songs:[]});load(false);closeM('modal-student');renderAdm();['ns-n','ns-r','ns-l','ns-p'].forEach(id=>document.getElementById(id).value='');toast('Ученик создан: '+n);}
-async function createEnsemble(){const n=document.getElementById('ne-n').value.trim(),d=document.getElementById('ne-d').value.trim()||'Вокальный ансамбль',l=document.getElementById('ne-l').value.trim(),p=document.getElementById('ne-p').value.trim();if(!n||!l||!p){toast('Заполните все поля');return;}const c=await get('ensembles','login=eq.'+encodeURIComponent(l));if(c&&c.length){toast('Логин занят');return;}load(true);await post('ensembles',{id:'e'+Date.now(),name:n,descr:d,login:l,pass:p,theory:'',photo:null,media:[],studio:[],songs:[],news:[]});load(false);closeM('modal-ensemble');renderAdm();toast('Ансамбль создан: '+n);}
-function handleAfImg(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=x=>{pendAfImg=x.target.result;document.getElementById('af-img-prev').innerHTML='<img src="'+pendAfImg+'" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px;margin-top:.4rem">';};r.readAsDataURL(f);}
-async function createAfisha(){const t=document.getElementById('af-t').value.trim(),d=document.getElementById('af-d').value,tm=document.getElementById('af-tm').value,pl=document.getElementById('af-pl').value.trim(),ds=document.getElementById('af-ds').value.trim(),ic=document.getElementById('af-ic').value;if(!t||!d){toast('Введите название и дату');return;}load(true);await post('events',{id:'a'+Date.now(),title:t,date:d,time:tm,place:pl,descr:ds,icon:ic,img:pendAfImg||null});load(false);closeM('modal-afisha');pendAfImg=null;document.getElementById('af-img-prev').innerHTML='';['af-t','af-pl','af-ds'].forEach(id=>document.getElementById(id).value='');await renderAfisha();if(CU==='admin')renderAdm();toast('Мероприятие добавлено');}
-async function delAfisha(id){load(true);await del('events','id=eq.'+id);load(false);await renderAfisha();if(CU==='admin')renderAdm();toast('Удалено');}
-async function delSt(id){if(!confirm('Удалить ученика?'))return;load(true);await del('students','id=eq.'+id);load(false);renderAdm();toast('Удалено');}
-async function delEn(id){if(!confirm('Удалить ансамбль?'))return;load(true);await del('ensembles','id=eq.'+id);load(false);renderAdm();toast('Удалено');}
-document.querySelectorAll('.modal-ov').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');}));
-document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-ov.open').forEach(m=>m.classList.remove('open'));});
-document.getElementById('lp').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
-async function init(){
+function renderStudio(listId, items, emptyId, ctx) {
+  const el = document.getElementById(listId), em = document.getElementById(emptyId);
+  if (!items || !items.length) { el.innerHTML = ""; if (em) em.style.display = "block"; return; }
+  if (em) em.style.display = "none";
+  el.innerHTML = items.map(m => `<div class="studio-track"><div class="studio-hdr"><span>💿</span><div><div class="studio-name">${m.name}</div><div class="studio-meta">${m.date}</div></div><a class="btn-dl" href="${m.url}" download="${m.name}">⬇</a>${CU==="admin"?`<button class="media-del" onclick="delStudio('${m.id}','${listId}','${emptyId}','${ctx}')">✕</button>`:""}</div>${m.type==="video"?`<video controls src="${m.url}" style="width:100%;max-height:200px"></video>`:`<audio controls src="${m.url}"></audio>`}</div>`).join("");
+}
+async function delMedia(mid, ctx) {
   load(true);
-  const s=sessionStorage.getItem('vcu');if(s)try{CU=JSON.parse(s);}catch(e){}
-  updateNav();
-  const ap=await get('settings','key=eq.about_photo');
-  if(ap&&ap.length&&ap[0].value){
-    const w=document.getElementById('about-photo-wrap');
-    w.innerHTML='<img src="'+ap[0].value+'" alt="Педагог" style="width:100%;height:100%;object-fit:cover"><input type="file" id="about-photo-inp" accept="image/*" style="display:none" onchange="handleAboutPhoto(event)">';
-  }
-  document.getElementById('about-photo-wrap').onclick=triggerAboutPhoto;
-  if(CU==='admin')document.getElementById('afisha-admin-zone').style.display='block';
-  await renderAfisha();
+  if (ctx==="student"&&curSt) { const r=await dbGet("students","id=eq."+curSt); if(r&&r[0]) { const media=(Array.isArray(r[0].media)?r[0].media:[]).filter(m=>m.id!==mid); await dbPatch("students","id=eq."+curSt,{media}); renderMediaList("st-media-list",media,"student"); } }
+  else if (ctx==="ensemble"&&curEn) { const r=await dbGet("ensembles","id=eq."+curEn); if(r&&r[0]) { const media=(Array.isArray(r[0].media)?r[0].media:[]).filter(m=>m.id!==mid); await dbPatch("ensembles","id=eq."+curEn,{media}); renderMediaList("en-media-list",media,"ensemble"); } }
   load(false);
-  if(CU&&CU!=='admin'){if(CU.type==='student')await openSt(CU.id);else if(CU.type==='ensemble')await openEn(CU.id);}
-  else if(CU==='admin'){sp('page-admin');await renderAdm();}
+}
+async function delStudio(mid, lid, eid, ctx) {
+  load(true);
+  if (ctx==="stu_student"&&curSt) { const r=await dbGet("students","id=eq."+curSt); if(r&&r[0]) { const studio=(Array.isArray(r[0].studio)?r[0].studio:[]).filter(m=>m.id!==mid); await dbPatch("students","id=eq."+curSt,{studio}); renderStudio(lid,studio,eid,ctx); } }
+  else if (ctx==="stu_ensemble"&&curEn) { const r=await dbGet("ensembles","id=eq."+curEn); if(r&&r[0]) { const studio=(Array.isArray(r[0].studio)?r[0].studio:[]).filter(m=>m.id!==mid); await dbPatch("ensembles","id=eq."+curEn,{studio}); renderStudio(lid,studio,eid,ctx); } }
+  load(false);
+}
+async function saveNote(mid, ctx, val) {
+  if (ctx==="student"&&curSt) { const r=await dbGet("students","id=eq."+curSt); if(r&&r[0]) { const media=Array.isArray(r[0].media)?r[0].media:[]; const m=media.find(x=>x.id===mid); if(m) { m.note=val; await dbPatch("students","id=eq."+curSt,{media}); } } }
+  else if (ctx==="ensemble"&&curEn) { const r=await dbGet("ensembles","id=eq."+curEn); if(r&&r[0]) { const media=Array.isArray(r[0].media)?r[0].media:[]; const m=media.find(x=>x.id===mid); if(m) { m.note=val; await dbPatch("ensembles","id=eq."+curEn,{media}); } } }
+}
+
+function triggerPh(type) { if (CU !== "admin" && !(CU && CU.type === type)) return; document.getElementById((type==="student"?"st":"en")+"-ph-inp").click(); }
+function handlePh(event, type) {
+  const f = event.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = async e => {
+    const url = e.target.result, px = type === "student" ? "st" : "en";
+    if (type==="student"&&curSt) { load(true); await dbPatch("students","id=eq."+curSt,{photo:url}); load(false); }
+    else if (type==="ensemble"&&curEn) { load(true); await dbPatch("ensembles","id=eq."+curEn,{photo:url}); load(false); }
+    document.getElementById(px+"-img").src = url; document.getElementById(px+"-img").style.display = "block"; document.getElementById(px+"-init").style.display = "none";
+    toast("Фото обновлено");
+  };
+  r.readAsDataURL(f);
+}
+function triggerAboutPhoto() { if (CU === "admin") document.getElementById("about-photo-inp").click(); }
+function handleAboutPhoto(event) {
+  const f = event.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = async e => {
+    const url = e.target.result;
+    load(true); await dbPatch("settings", "key=eq.about_photo", {value: url}); load(false);
+    document.getElementById("about-photo-wrap").innerHTML = `<img src="${url}" alt="Педагог" style="width:100%;height:100%;object-fit:cover"><input type="file" id="about-photo-inp" accept="image/*" style="display:none" onchange="handleAboutPhoto(event)">`;
+    toast("Фото обновлено");
+  };
+  r.readAsDataURL(f);
+}
+async function saveTheory() {
+  if (curSt) { load(true); await dbPatch("students","id=eq."+curSt,{theory:document.getElementById("st-theory").innerHTML}); load(false); showInd("st-th-saved"); }
+}
+
+async function doLogin() {
+  const u = document.getElementById("lu").value.trim(), p = document.getElementById("lp").value.trim();
+  const errEl = document.getElementById("login-err"), btn = document.getElementById("login-btn");
+  errEl.style.display = "none"; btn.textContent = "Проверяем..."; btn.disabled = true;
+  if (u === ADM_L && p === ADM_P) {
+    CU = "admin"; sessionStorage.setItem("vcu", JSON.stringify(CU)); updateNav(); closeM("modal-login");
+    await renderAfisha(); document.getElementById("afisha-admin-zone").style.display = "block";
+    await renderAdm(); sp("page-admin"); btn.textContent = "Войти"; btn.disabled = false; return;
+  }
+  const sr = await dbGet("students", "login=eq." + encodeURIComponent(u) + "&pass=eq." + encodeURIComponent(p));
+  if (sr && sr.length) { CU = {type:"student",id:sr[0].id,name:sr[0].name}; sessionStorage.setItem("vcu",JSON.stringify(CU)); updateNav(); closeM("modal-login"); btn.textContent="Войти"; btn.disabled=false; await openSt(sr[0].id); return; }
+  const er = await dbGet("ensembles", "login=eq." + encodeURIComponent(u) + "&pass=eq." + encodeURIComponent(p));
+  if (er && er.length) { CU = {type:"ensemble",id:er[0].id,name:er[0].name}; sessionStorage.setItem("vcu",JSON.stringify(CU)); updateNav(); closeM("modal-login"); btn.textContent="Войти"; btn.disabled=false; await openEn(er[0].id); return; }
+  errEl.textContent = "Неверный логин или пароль"; errEl.style.display = "block"; btn.textContent = "Войти"; btn.disabled = false;
+}
+function doLogout() { CU = null; sessionStorage.removeItem("vcu"); updateNav(); goHome(); toast("Вы вышли"); }
+
+async function createStudent() {
+  const n=document.getElementById("ns-n").value.trim(), r=document.getElementById("ns-r").value.trim()||"Эстрадный вокал", l=document.getElementById("ns-l").value.trim(), p=document.getElementById("ns-p").value.trim();
+  if (!n||!l||!p) { toast("Заполните все поля"); return; }
+  const c = await dbGet("students","login=eq."+encodeURIComponent(l)); if (c&&c.length) { toast("Логин занят"); return; }
+  load(true); await dbPost("students",{id:"s"+Date.now(),name:n,role:r,login:l,pass:p,theory:"",photo:null,media:[],studio:[],songs:[]}); load(false);
+  closeM("modal-student"); renderAdm(); ["ns-n","ns-r","ns-l","ns-p"].forEach(id=>document.getElementById(id).value=""); toast("Ученик создан: "+n);
+}
+async function createEnsemble() {
+  const n=document.getElementById("ne-n").value.trim(), d=document.getElementById("ne-d").value.trim()||"Вокальный ансамбль", l=document.getElementById("ne-l").value.trim(), p=document.getElementById("ne-p").value.trim();
+  if (!n||!l||!p) { toast("Заполните все поля"); return; }
+  const c = await dbGet("ensembles","login=eq."+encodeURIComponent(l)); if (c&&c.length) { toast("Логин занят"); return; }
+  load(true); await dbPost("ensembles",{id:"e"+Date.now(),name:n,descr:d,login:l,pass:p,theory:"",photo:null,media:[],studio:[],songs:[],news:[]}); load(false);
+  closeM("modal-ensemble"); renderAdm(); toast("Ансамбль создан: "+n);
+}
+function handleAfImg(e) {
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader(); r.onload=x=>{pendAfImg=x.target.result; document.getElementById("af-img-prev").innerHTML=`<img src="${pendAfImg}" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px;margin-top:.4rem">`;};r.readAsDataURL(f);
+}
+async function createAfisha() {
+  const t=document.getElementById("af-t").value.trim(), d=document.getElementById("af-d").value, tm=document.getElementById("af-tm").value, pl=document.getElementById("af-pl").value.trim(), ds=document.getElementById("af-ds").value.trim(), ic=document.getElementById("af-ic").value;
+  if (!t||!d) { toast("Введите название и дату"); return; }
+  load(true); await dbPost("events",{id:"a"+Date.now(),title:t,date:d,time:tm,place:pl,descr:ds,icon:ic,img:pendAfImg||null}); load(false);
+  closeM("modal-afisha"); pendAfImg=null; document.getElementById("af-img-prev").innerHTML="";
+  ["af-t","af-pl","af-ds"].forEach(id=>document.getElementById(id).value="");
+  await renderAfisha(); if(CU==="admin") renderAdm(); toast("Мероприятие добавлено");
+}
+async function delAfisha(id) { load(true); await dbDel("events","id=eq."+id); load(false); await renderAfisha(); if(CU==="admin") renderAdm(); toast("Удалено"); }
+async function delSt(id) { if(!confirm("Удалить ученика?")) return; load(true); await dbDel("students","id=eq."+id); load(false); renderAdm(); toast("Удалено"); }
+async function delEn(id) { if(!confirm("Удалить ансамбль?")) return; load(true); await dbDel("ensembles","id=eq."+id); load(false); renderAdm(); toast("Удалено"); }
+
+document.querySelectorAll(".modal-ov").forEach(el => el.addEventListener("click", e => { if(e.target===el) el.classList.remove("open"); }));
+document.addEventListener("keydown", e => { if(e.key==="Escape") document.querySelectorAll(".modal-ov.open").forEach(m=>m.classList.remove("open")); });
+document.getElementById("lp").addEventListener("keydown", e => { if(e.key==="Enter") doLogin(); });
+
+async function init() {
+  load(true);
+  const s = sessionStorage.getItem("vcu"); if(s) try { CU = JSON.parse(s); } catch(e) {}
+  updateNav();
+  const ap = await dbGet("settings","key=eq.about_photo");
+  if (ap && ap.length && ap[0].value) {
+    const w = document.getElementById("about-photo-wrap");
+    w.innerHTML = `<img src="${ap[0].value}" alt="Педагог" style="width:100%;height:100%;object-fit:cover"><input type="file" id="about-photo-inp" accept="image/*" style="display:none" onchange="handleAboutPhoto(event)">`;
+  }
+  document.getElementById("about-photo-wrap").onclick = triggerAboutPhoto;
+  if (CU === "admin") document.getElementById("afisha-admin-zone").style.display = "block";
+  await renderAfisha(); load(false);
+  if (CU && CU !== "admin") { if(CU.type==="student") await openSt(CU.id); else if(CU.type==="ensemble") await openEn(CU.id); }
+  else if (CU === "admin") { sp("page-admin"); await renderAdm(); }
 }
 init();
+
 </script>
 </body>
 </html>
