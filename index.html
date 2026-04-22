@@ -546,7 +546,7 @@ footer span{color:var(--indigo-light);}
 </div></div>
 <div class="toast" id="toast"></div>
 <script>
-const SB= + SB_URL + ,SK= + SB_KEY + ;
+const SB='https://rlmmyydpgiggzqihpjxt.supabase.co',SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsbW15eWRwZ2lnZ3pxaWhwanh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4MDUzMzMsImV4cCI6MjA5MjM4MTMzM30.rD7W-_4v3tNVCS1l7L2cYPq3DZ-JVPUBR3h1PbdXDiI';
 const ADM_L='admin',ADM_P='vivace2024';
 async function q(table,method,body,filter){
   const url=SB+'/rest/v1/'+table+(filter?'?'+filter:'');
