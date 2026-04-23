@@ -187,6 +187,15 @@ footer span{color:var(--indigo-light);}
 .why-icon{font-size:1.3rem;flex-shrink:0;margin-top:.1rem;}
 .why-card h4{font-size:.92rem;font-weight:600;color:var(--text);margin-bottom:.3rem;}
 .why-card p{font-size:.82rem;color:var(--text-muted);font-weight:300;line-height:1.6;}
+
+.upload-progress{display:none;margin-bottom:.9rem;}
+.upload-progress.show{display:block;}
+.upload-progress-label{font-size:0.78rem;color:var(--text-muted);margin-bottom:.4rem;display:flex;justify-content:space-between;}
+.upload-progress-bar{width:100%;height:6px;background:rgba(61,59,142,0.2);border-radius:3px;overflow:hidden;}
+.upload-progress-fill{height:100%;background:var(--indigo-light);border-radius:3px;width:0%;transition:width .2s;}
+.upload-progress-fill.done{background:#1a8a4a;}
+.upload-size-warn{font-size:0.75rem;color:var(--rust-light);margin-top:.3rem;display:none;}
+.upload-size-warn.show{display:block;}
 </style>
 </head>
 <body>
@@ -360,6 +369,10 @@ footer span{color:var(--indigo-light);}
               <input type="file" id="st-rasp-inp" multiple accept="audio/*" onchange="handleMedia(event,'st-raspevki-list','raspevki_student')">
               <div class="upload-icon">🎙</div><p>Загрузить распевку (MP3, WAV)</p>
             </div>
+            <div class="upload-progress" id="prog-raspevki">
+              <div class="upload-progress-label"><span id="prog-raspevki-name">Загрузка...</span><span id="prog-raspevki-pct">0%</span></div>
+              <div class="upload-progress-bar"><div class="upload-progress-fill" id="prog-raspevki-fill"></div></div>
+            </div>
           </div>
           <div class="media-list" id="st-raspevki-list"></div>
           <div class="empty-s" id="st-rasp-empty" style="display:none">Распевки появятся здесь</div>
@@ -369,6 +382,11 @@ footer span{color:var(--indigo-light);}
           <div class="upload-zone" onclick="document.getElementById('st-med-inp').click()">
             <input type="file" id="st-med-inp" multiple accept="audio/*,video/*" onchange="handleMedia(event,'st-media-list','student')">
             <div class="upload-icon">⬆</div><p>Загрузить аудио или видео</p>
+          </div>
+          <div class="upload-progress" id="prog-student">
+            <div class="upload-progress-label"><span id="prog-student-name">Загрузка...</span><span id="prog-student-pct">0%</span></div>
+            <div class="upload-progress-bar"><div class="upload-progress-fill" id="prog-student-fill"></div></div>
+            <div class="upload-size-warn" id="prog-student-warn">⚠ Файл больше 50 МБ — загрузка может занять несколько минут. Рекомендуем сжать видео перед загрузкой.</div>
           </div>
           <div class="media-list" id="st-media-list"></div>
         </div>
@@ -418,6 +436,11 @@ footer span{color:var(--indigo-light);}
           <div class="upload-zone" onclick="document.getElementById('en-med-inp').click()">
             <input type="file" id="en-med-inp" multiple accept="audio/*,video/*" onchange="handleMedia(event,'en-media-list','ensemble')">
             <div class="upload-icon">⬆</div><p>Загрузить аудио или видео</p>
+          </div>
+          <div class="upload-progress" id="prog-ensemble">
+            <div class="upload-progress-label"><span id="prog-ensemble-name">Загрузка...</span><span id="prog-ensemble-pct">0%</span></div>
+            <div class="upload-progress-bar"><div class="upload-progress-fill" id="prog-ensemble-fill"></div></div>
+            <div class="upload-size-warn" id="prog-ensemble-warn">⚠ Файл больше 50 МБ — загрузка может занять несколько минут.</div>
           </div>
           <div class="media-list" id="en-media-list"></div>
         </div>
@@ -472,6 +495,11 @@ footer span{color:var(--indigo-light);}
           <div class="upload-zone" onclick="document.getElementById('orig-inp').click()">
             <input type="file" id="orig-inp" accept="audio/*,video/*" onchange="handleSongFile(event,'original')">
             <div class="upload-icon">⬆</div><p>Загрузить оригинал</p>
+          </div>
+          <div class="upload-progress" id="prog-song">
+            <div class="upload-progress-label"><span id="prog-song-name">Загрузка...</span><span id="prog-song-pct">0%</span></div>
+            <div class="upload-progress-bar"><div class="upload-progress-fill" id="prog-song-fill"></div></div>
+            <div class="upload-size-warn" id="prog-song-warn">⚠ Файл больше 50 МБ — загрузка займёт несколько минут.</div>
           </div>
         </div>
         <div id="orig-empty" style="color:var(--text-dim);font-size:.8rem">Оригинал не загружен</div>
@@ -839,7 +867,7 @@ async function handleSongFile(event, type) {
   const {ent, table, fid} = res; const songs = Array.isArray(ent.songs) ? [...ent.songs] : [];
   const si = songs.findIndex(s => s.id === curSng); if (si < 0) return;
   if (type === "original" || type === "minus") {
-    const f = files[0]; const url = await uploadToStorage(f); if (!url) { toast("Ошибка загрузки"); return; }
+    const f = files[0]; const url = await uploadToStorage(f, "song"); if (!url) { toast("Ошибка загрузки"); return; }
     songs[si][type] = {url, name: f.name, type: f.type.startsWith("video") ? "video" : "audio"};
     load(true); await dbPatch(table, "id=eq." + fid, {songs}); load(false);
     renderSongPlayer(type === "original" ? "orig-player" : "minus-player", songs[si][type], type === "original" ? "orig-empty" : "minus-empty");
@@ -910,42 +938,70 @@ async function delSong(sid, ctx) {
   load(false); toast("Удалено");
 }
 
-async function uploadToStorage(file) {
+async function uploadToStorage(file, progressId) {
   const ext = file.name.split(".").pop().toLowerCase();
   const safeName = Date.now() + "_" + Math.random().toString(36).slice(2) + "." + ext;
   const path = "uploads/" + safeName;
-  try {
-    const res = await fetch(SB + "/storage/v1/object/vivace/" + path, {
-      method: "POST",
-      headers: {
-        "apikey": SK,
-        "Authorization": "Bearer " + SK,
-        "Content-Type": file.type || "application/octet-stream",
-        "x-upsert": "true"
-      },
-      body: file
-    });
-    if (!res.ok) {
-      const err = await res.text();
-      console.error("Storage error:", err);
-      toast("Ошибка загрузки файла. Проверьте настройки хранилища.");
-      return null;
-    }
-    const publicUrl = SB + "/storage/v1/object/public/vivace/" + path;
-    return publicUrl;
-  } catch(e) {
-    console.error("Upload exception:", e);
-    toast("Ошибка соединения при загрузке файла.");
-    return null;
+
+  // Show progress bar
+  const progWrap = progressId ? document.getElementById("prog-" + progressId) : null;
+  const progFill = progressId ? document.getElementById("prog-" + progressId + "-fill") : null;
+  const progPct = progressId ? document.getElementById("prog-" + progressId + "-pct") : null;
+  const progName = progressId ? document.getElementById("prog-" + progressId + "-name") : null;
+  const progWarn = progressId ? document.getElementById("prog-" + progressId + "-warn") : null;
+
+  if (progWrap) {
+    progWrap.classList.add("show");
+    if (progName) progName.textContent = file.name.length > 30 ? file.name.slice(0,28) + "..." : file.name;
+    if (progFill) { progFill.style.width = "0%"; progFill.classList.remove("done"); }
+    if (progPct) progPct.textContent = "0%";
+    if (progWarn) { progWarn.classList.toggle("show", file.size > 50 * 1024 * 1024); }
   }
+
+  return new Promise((resolve) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", SB + "/storage/v1/object/vivace/" + path);
+    xhr.setRequestHeader("apikey", SK);
+    xhr.setRequestHeader("Authorization", "Bearer " + SK);
+    xhr.setRequestHeader("Content-Type", file.type || "application/octet-stream");
+    xhr.setRequestHeader("x-upsert", "true");
+
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable && progFill && progPct) {
+        const pct = Math.round((e.loaded / e.total) * 100);
+        progFill.style.width = pct + "%";
+        progPct.textContent = pct + "%";
+      }
+    };
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        if (progFill) { progFill.style.width = "100%"; progFill.classList.add("done"); }
+        if (progPct) progPct.textContent = "100% ✓";
+        setTimeout(() => { if (progWrap) progWrap.classList.remove("show"); }, 2000);
+        resolve(SB + "/storage/v1/object/public/vivace/" + path);
+      } else {
+        console.error("Storage error:", xhr.responseText);
+        toast("Ошибка загрузки файла.");
+        if (progWrap) progWrap.classList.remove("show");
+        resolve(null);
+      }
+    };
+    xhr.onerror = () => {
+      toast("Ошибка соединения при загрузке.");
+      if (progWrap) progWrap.classList.remove("show");
+      resolve(null);
+    };
+    xhr.send(file);
+  });
 }
 
 async function handleMedia(event, listId, ctx) {
   const files = event.target.files; if (!files.length) return;
   load(true);
   const items = [];
+  const progressId = ctx === "student" ? "student" : ctx === "ensemble" ? "ensemble" : ctx === "raspevki_student" ? "raspevki" : null;
   for (const f of Array.from(files)) {
-    const url = await uploadToStorage(f);
+    const url = await uploadToStorage(f, progressId);
     if (!url) { toast("Ошибка загрузки: " + f.name); continue; }
     items.push({id: "m" + Date.now() + Math.random(), name: f.name, type: f.type.startsWith("video") ? "video" : "audio", url, date: new Date().toLocaleDateString("ru"), note: ""});
   }
