@@ -216,7 +216,7 @@ footer span{color:var(--indigo-light);}
     <p class="hero-overline">Музыкальная студия Vivace</p>
     <h1>Приходи таким<br><em>какой ты есть</em></h1>
     <p class="hero-sub">Виваче — пространство, где рождается музыка. Эстрадный вокал, ансамблевое пение, профессиональная запись.</p>
-    <div class="hero-cta"><a href="#contacts" class="btn btn-primary">Записаться</a><a href="#about" class="btn btn-outline">О студии</a></div>
+    <div class="hero-cta"><a href="#contacts" class="btn btn-primary" onclick="goHome();setTimeout(()=>document.getElementById('contacts').scrollIntoView({behavior:'smooth'}),100)">Записаться</a><a href="#about" class="btn btn-outline" onclick="goHome();setTimeout(()=>document.getElementById('about').scrollIntoView({behavior:'smooth'}),100)">О студии</a></div>
   </section>
   <section id="about" class="section">
     <span class="section-label">Педагог</span>
@@ -253,6 +253,20 @@ footer span{color:var(--indigo-light);}
       <div class="service-card"><div class="service-icon">🏆</div><h3>Конкурсы и концерты</h3><p>Подготовка к конкурсам, отчётным концертам и мероприятиям.</p></div>
     </div>
   </section>
+  <section class="section" style="padding-top:0">
+    <span class="section-label">О нас</span>
+    <h2 class="section-title">Почему выбирают <em>Vivace?</em></h2>
+    <div class="section-line"></div>
+    <div class="why-grid">
+      <div class="why-card"><div class="why-icon">✅</div><div><h4>Авторские методики</h4><p>Уникальные подходы к обучению вокалу разработанные специально для студии</p></div></div>
+      <div class="why-card"><div class="why-icon">✅</div><div><h4>Уютная атмосфера</h4><p>Пространство где каждый чувствует себя комфортно и раскрывается творчески</p></div></div>
+      <div class="why-card"><div class="why-icon">✅</div><div><h4>Концерты и конкурсы</h4><p>Регулярные выступления и участие в городских мероприятиях для всех учеников</p></div></div>
+      <div class="why-card"><div class="why-icon">✅</div><div><h4>Запись на заказ</h4><p>Запишем песню, текст и минусовку — профессиональный трек для вашего репертуара</p></div></div>
+      <div class="why-card"><div class="why-icon">✅</div><div><h4>Дети от 4 лет</h4><p>Специальная программа музыкального развития для самых маленьких</p></div></div>
+      <div class="why-card"><div class="why-icon">✅</div><div><h4>Индивидуальный подход</h4><p>Каждый ученик получает программу подобранную именно под его голос и цели</p></div></div>
+    </div>
+  </section>
+
   <section id="afisha" class="section" style="padding-top:0">
     <span class="section-label">Мероприятия</span>
     <h2 class="section-title">Афиша <em>событий</em></h2>
@@ -276,27 +290,18 @@ footer span{color:var(--indigo-light);}
       </div>
     </div>
   </section>
-  <section class="section" style="padding-top:0">
-    <span class="section-label">О нас</span>
-    <h2 class="section-title">Почему выбирают <em>Vivace?</em></h2>
-    <div class="section-line"></div>
-    <div class="why-grid">
-      <div class="why-card"><div class="why-icon">✅</div><div><h4>Авторские методики</h4><p>Уникальные подходы к обучению вокалу разработанные специально для студии</p></div></div>
-      <div class="why-card"><div class="why-icon">✅</div><div><h4>Уютная атмосфера</h4><p>Пространство где каждый чувствует себя комфортно и раскрывается творчески</p></div></div>
-      <div class="why-card"><div class="why-icon">✅</div><div><h4>Концерты и конкурсы</h4><p>Регулярные выступления и участие в городских мероприятиях для всех учеников</p></div></div>
-      <div class="why-card"><div class="why-icon">✅</div><div><h4>Запись на заказ</h4><p>Запишем песню, текст и минусовку — профессиональный трек для вашего репертуара</p></div></div>
-      <div class="why-card"><div class="why-icon">✅</div><div><h4>Дети от 4 лет</h4><p>Специальная программа музыкального развития для самых маленьких</p></div></div>
-      <div class="why-card"><div class="why-icon">✅</div><div><h4>Индивидуальный подход</h4><p>Каждый ученик получает программу подобранную именно под его голос и цели</p></div></div>
-    </div>
-  </section>
-
   <section id="map-section" class="section" style="padding-top:0">
     <span class="section-label">Как добраться</span>
     <h2 class="section-title">Мы на <em>карте</em></h2>
     <div class="section-line"></div>
     <p style="color:var(--text-muted);font-size:.9rem;margin-bottom:1.5rem">ул. Греческая, 38, кабинет 8</p>
     <div style="border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);height:420px;">
-      <iframe src="https://yandex.com/maps/-/CPC~qN4w?embed=1" width="100%" height="420" frameborder="0" allowfullscreen style="display:block;filter:hue-rotate(220deg) saturate(0.7) brightness(0.8)"></iframe>
+      <div style="position:relative;width:100%;height:420px;">
+      <iframe src="https://yandex.ru/map-widget/v1/?ll=37.615560,55.741556&z=16&pt=37.615560,55.741556,pm2rdm" width="100%" height="420" frameborder="0" allowfullscreen style="display:block;border-radius:var(--radius-lg)"></iframe>
+      <div style="position:absolute;bottom:12px;right:12px;z-index:10">
+        <a href="https://yandex.ru/maps/-/CPC~qN4w" target="_blank" class="btn btn-primary btn-sm">Открыть в Яндекс Картах</a>
+      </div>
+    </div>
     </div>
   </section>
 
