@@ -180,6 +180,13 @@ footer span{color:var(--indigo-light);}
   .hero h1{font-size:2.8rem;}
   .afisha-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}
 }
+
+.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;}
+.why-card{display:flex;align-items:flex-start;gap:1rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.3rem;transition:border-color .2s;}
+.why-card:hover{border-color:var(--border-hover);}
+.why-icon{font-size:1.3rem;flex-shrink:0;margin-top:.1rem;}
+.why-card h4{font-size:.92rem;font-weight:600;color:var(--text);margin-bottom:.3rem;}
+.why-card p{font-size:.82rem;color:var(--text-muted);font-weight:300;line-height:1.6;}
 </style>
 </head>
 <body>
@@ -206,8 +213,8 @@ footer span{color:var(--indigo-light);}
 <div id="page-home" class="page active">
   <section class="hero">
     <div class="hero-bg"></div><div class="hero-ring"></div><div class="hero-ring2"></div>
-    <p class="hero-overline">Студия вокала и эстрадного ансамбля</p>
-    <h1>Найди свой<br><em>голос</em></h1>
+    <p class="hero-overline">Музыкальная студия Vivace</p>
+    <h1>Приходи таким<br><em>какой ты есть</em></h1>
     <p class="hero-sub">Виваче — пространство, где рождается музыка. Эстрадный вокал, ансамблевое пение, профессиональная запись.</p>
     <div class="hero-cta"><a href="#contacts" class="btn btn-primary">Записаться</a><a href="#about" class="btn btn-outline">О студии</a></div>
   </section>
@@ -221,13 +228,14 @@ footer span{color:var(--indigo-light);}
         <input type="file" id="about-photo-inp" accept="image/*" style="display:none" onchange="handleAboutPhoto(event)">
       </div>
       <div class="about-text">
-        <p>Студия <strong style="color:var(--text)">«Виваче»</strong> — творческое пространство для тех, кто хочет петь красиво, уверенно и с душой.</p>
-        <p>Работаем с учениками любого уровня. Каждый получает индивидуальный подход, подобранный репертуар и возможность выступить на сцене.</p>
-        <p>Профессиональное оборудование для записи — ваши любимые песни звучат на уровне студийного продакшна.</p>
+        <p style="font-size:1.1rem;color:var(--text);font-weight:400;margin-bottom:1.2rem">🎵 Музыкальная студия Vivace – твоя дверь в мир музыки! 🎶</p>
+        <p>Обучение для всех возрастов — дети от 4 лет и взрослые. Индивидуальные уроки вокала, ансамбли, сольфеджио и музыкальное развитие для малышей.</p>
+        <p>Гибкий график — занятия под твой ритм жизни. Профессиональное оборудование для записи — ваши любимые песни на уровне студийного продакшна.</p>
         <div class="about-tags">
           <span class="tag">Эстрадный вокал</span><span class="tag">Постановка голоса</span>
-          <span class="tag">Ансамбль</span><span class="tag tag-rust">Работа с микрофоном</span>
-          <span class="tag tag-rust">Студийная запись</span><span class="tag">Сценическое движение</span>
+          <span class="tag">Ансамбль</span><span class="tag">Сольфеджио</span>
+          <span class="tag tag-rust">Дети от 4 лет</span><span class="tag tag-rust">Студийная запись</span>
+          <span class="tag">Гибкий график</span><span class="tag">Сценическое движение</span>
         </div>
       </div>
     </div>
@@ -268,6 +276,30 @@ footer span{color:var(--indigo-light);}
       </div>
     </div>
   </section>
+  <section class="section" style="padding-top:0">
+    <span class="section-label">О нас</span>
+    <h2 class="section-title">Почему выбирают <em>Vivace?</em></h2>
+    <div class="section-line"></div>
+    <div class="why-grid">
+      <div class="why-card"><div class="why-icon">✅</div><div><h4>Авторские методики</h4><p>Уникальные подходы к обучению вокалу разработанные специально для студии</p></div></div>
+      <div class="why-card"><div class="why-icon">✅</div><div><h4>Уютная атмосфера</h4><p>Пространство где каждый чувствует себя комфортно и раскрывается творчески</p></div></div>
+      <div class="why-card"><div class="why-icon">✅</div><div><h4>Концерты и конкурсы</h4><p>Регулярные выступления и участие в городских мероприятиях для всех учеников</p></div></div>
+      <div class="why-card"><div class="why-icon">✅</div><div><h4>Запись на заказ</h4><p>Запишем песню, текст и минусовку — профессиональный трек для вашего репертуара</p></div></div>
+      <div class="why-card"><div class="why-icon">✅</div><div><h4>Дети от 4 лет</h4><p>Специальная программа музыкального развития для самых маленьких</p></div></div>
+      <div class="why-card"><div class="why-icon">✅</div><div><h4>Индивидуальный подход</h4><p>Каждый ученик получает программу подобранную именно под его голос и цели</p></div></div>
+    </div>
+  </section>
+
+  <section id="map-section" class="section" style="padding-top:0">
+    <span class="section-label">Как добраться</span>
+    <h2 class="section-title">Мы на <em>карте</em></h2>
+    <div class="section-line"></div>
+    <p style="color:var(--text-muted);font-size:.9rem;margin-bottom:1.5rem">ул. Греческая, 38, кабинет 8</p>
+    <div style="border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);height:420px;">
+      <iframe src="https://yandex.com/maps/-/CPC~qN4w?embed=1" width="100%" height="420" frameborder="0" allowfullscreen style="display:block;filter:hue-rotate(220deg) saturate(0.7) brightness(0.8)"></iframe>
+    </div>
+  </section>
+
   <footer><p>© 2024 Музыкальная студия <span>Виваче</span> · ул. Греческая, 38, каб. 8 · +7 919 891 40 55</p></footer>
 </div>
 
@@ -315,6 +347,17 @@ footer span{color:var(--indigo-light);}
           </div>
           <div id="st-theory" class="theory-c" contenteditable="false" style="pointer-events:none"><p>Теория появится здесь...</p></div>
           <div class="save-ind" id="st-th-saved">✓ Сохранено</div>
+        </div>
+        <div class="block">
+          <div class="block-title">🎼 Распевки</div>
+          <div id="st-raspevki-up" style="display:none">
+            <div class="upload-zone" onclick="document.getElementById('st-rasp-inp').click()">
+              <input type="file" id="st-rasp-inp" multiple accept="audio/*" onchange="handleMedia(event,'st-raspevki-list','raspevki_student')">
+              <div class="upload-icon">🎙</div><p>Загрузить распевку (MP3, WAV)</p>
+            </div>
+          </div>
+          <div class="media-list" id="st-raspevki-list"></div>
+          <div class="empty-s" id="st-rasp-empty" style="display:none">Распевки появятся здесь</div>
         </div>
         <div class="block">
           <div class="block-title">🎵 Мои записи</div>
@@ -654,6 +697,10 @@ async function openSt(id) {
   renderStudio("st-studio-list", Array.isArray(s.studio) ? s.studio : [], "st-stu-empty", "stu_student");
   renderSongs("st-songs", Array.isArray(s.songs) ? s.songs : [], "student");
   document.getElementById("st-song-add").style.display = isA ? "block" : "none";
+  // Raspevki
+  document.getElementById("st-raspevki-up").style.display = "block";
+  document.getElementById("st-rasp-empty").style.display = "none";
+  renderMediaList("st-raspevki-list", Array.isArray(s.raspevki) ? s.raspevki : [], "raspevki_student");
   sp("page-student");
 }
 
@@ -787,7 +834,7 @@ async function handleSongFile(event, type) {
   const {ent, table, fid} = res; const songs = Array.isArray(ent.songs) ? [...ent.songs] : [];
   const si = songs.findIndex(s => s.id === curSng); if (si < 0) return;
   if (type === "original" || type === "minus") {
-    const f = files[0]; const url = URL.createObjectURL(f);
+    const f = files[0]; const url = await uploadToStorage(f); if (!url) { toast("Ошибка загрузки"); return; }
     songs[si][type] = {url, name: f.name, type: f.type.startsWith("video") ? "video" : "audio"};
     load(true); await dbPatch(table, "id=eq." + fid, {songs}); load(false);
     renderSongPlayer(type === "original" ? "orig-player" : "minus-player", songs[si][type], type === "original" ? "orig-empty" : "minus-empty");
@@ -795,7 +842,10 @@ async function handleSongFile(event, type) {
     toast("Загружено: " + f.name);
   } else if (type === "notes") {
     const notes = songs[si].notes || [];
-    for (const f of Array.from(files)) notes.push({url: URL.createObjectURL(f), name: f.name, isPdf: f.name.toLowerCase().endsWith(".pdf")});
+    for (const f of Array.from(files)) {
+      const url = await uploadToStorage(f);
+      if (url) notes.push({url, name: f.name, isPdf: f.name.toLowerCase().endsWith(".pdf")});
+    }
     songs[si].notes = notes; load(true); await dbPatch(table, "id=eq." + fid, {songs}); load(false);
     renderNotes(notes); toast("Загружено");
   }
@@ -855,13 +905,32 @@ async function delSong(sid, ctx) {
   load(false); toast("Удалено");
 }
 
+async function uploadToStorage(file) {
+  const ext = file.name.split(".").pop();
+  const path = "uploads/" + Date.now() + "_" + Math.random().toString(36).slice(2) + "." + ext;
+  const res = await fetch(SB + "/storage/v1/object/vivace/" + path, {
+    method: "POST",
+    headers: {"apikey": SK, "Authorization": "Bearer " + SK, "Content-Type": file.type, "x-upsert": "true"},
+    body: file
+  });
+  if (!res.ok) { console.error("Storage upload failed", await res.text()); return null; }
+  return SB + "/storage/v1/object/public/vivace/" + path;
+}
+
 async function handleMedia(event, listId, ctx) {
   const files = event.target.files; if (!files.length) return;
-  const items = Array.from(files).map(f => ({id: "m" + Date.now() + Math.random(), name: f.name, type: f.type.startsWith("video") ? "video" : "audio", url: URL.createObjectURL(f), date: new Date().toLocaleDateString("ru"), note: ""}));
   load(true);
+  const items = [];
+  for (const f of Array.from(files)) {
+    const url = await uploadToStorage(f);
+    if (!url) { toast("Ошибка загрузки: " + f.name); continue; }
+    items.push({id: "m" + Date.now() + Math.random(), name: f.name, type: f.type.startsWith("video") ? "video" : "audio", url, date: new Date().toLocaleDateString("ru"), note: ""});
+  }
+  if (!items.length) { load(false); return; }
   if (ctx === "student" && curSt) { const r = await dbGet("students","id=eq."+curSt); if (r&&r[0]) { const media=[...items,...(Array.isArray(r[0].media)?r[0].media:[])]; await dbPatch("students","id=eq."+curSt,{media}); renderMediaList(listId,media,"student"); } }
   else if (ctx === "ensemble" && curEn) { const r = await dbGet("ensembles","id=eq."+curEn); if (r&&r[0]) { const media=[...items,...(Array.isArray(r[0].media)?r[0].media:[])]; await dbPatch("ensembles","id=eq."+curEn,{media}); renderMediaList(listId,media,"ensemble"); } }
   else if (ctx === "stu_student" && curSt) { const r = await dbGet("students","id=eq."+curSt); if (r&&r[0]) { const studio=[...items,...(Array.isArray(r[0].studio)?r[0].studio:[])]; await dbPatch("students","id=eq."+curSt,{studio}); renderStudio("st-studio-list",studio,"st-stu-empty","stu_student"); } }
+  else if (ctx === "raspevki_student" && curSt) { const r = await dbGet("students","id=eq."+curSt); if (r&&r[0]) { const raspevki=[...items,...(Array.isArray(r[0].raspevki)?r[0].raspevki:[])]; await dbPatch("students","id=eq."+curSt,{raspevki}); renderMediaList("st-raspevki-list",raspevki,"raspevki_student"); } }
   else if (ctx === "stu_ensemble" && curEn) { const r = await dbGet("ensembles","id=eq."+curEn); if (r&&r[0]) { const studio=[...items,...(Array.isArray(r[0].studio)?r[0].studio:[])]; await dbPatch("ensembles","id=eq."+curEn,{studio}); renderStudio("en-studio-list",studio,"en-stu-empty","stu_ensemble"); } }
   load(false); event.target.value = ""; toast("Загружено");
 }
@@ -881,6 +950,7 @@ async function delMedia(mid, ctx) {
   load(true);
   if (ctx==="student"&&curSt) { const r=await dbGet("students","id=eq."+curSt); if(r&&r[0]) { const media=(Array.isArray(r[0].media)?r[0].media:[]).filter(m=>m.id!==mid); await dbPatch("students","id=eq."+curSt,{media}); renderMediaList("st-media-list",media,"student"); } }
   else if (ctx==="ensemble"&&curEn) { const r=await dbGet("ensembles","id=eq."+curEn); if(r&&r[0]) { const media=(Array.isArray(r[0].media)?r[0].media:[]).filter(m=>m.id!==mid); await dbPatch("ensembles","id=eq."+curEn,{media}); renderMediaList("en-media-list",media,"ensemble"); } }
+  else if (ctx==="raspevki_student"&&curSt) { const r=await dbGet("students","id=eq."+curSt); if(r&&r[0]) { const raspevki=(Array.isArray(r[0].raspevki)?r[0].raspevki:[]).filter(m=>m.id!==mid); await dbPatch("students","id=eq."+curSt,{raspevki}); renderMediaList("st-raspevki-list",raspevki,"raspevki_student"); } }
   load(false);
 }
 async function delStudio(mid, lid, eid, ctx) {
@@ -944,7 +1014,7 @@ async function createStudent() {
   const n=document.getElementById("ns-n").value.trim(), r=document.getElementById("ns-r").value.trim()||"Эстрадный вокал", l=document.getElementById("ns-l").value.trim(), p=document.getElementById("ns-p").value.trim();
   if (!n||!l||!p) { toast("Заполните все поля"); return; }
   const c = await dbGet("students","login=eq."+encodeURIComponent(l)); if (c&&c.length) { toast("Логин занят"); return; }
-  load(true); await dbPost("students",{id:"s"+Date.now(),name:n,role:r,login:l,pass:p,theory:"",photo:null,media:[],studio:[],songs:[]}); load(false);
+  load(true); await dbPost("students",{id:"s"+Date.now(),name:n,role:r,login:l,pass:p,theory:"",photo:null,media:[],studio:[],songs:[],raspevki:[]}); load(false);
   closeM("modal-student"); renderAdm(); ["ns-n","ns-r","ns-l","ns-p"].forEach(id=>document.getElementById(id).value=""); toast("Ученик создан: "+n);
 }
 async function createEnsemble() {
