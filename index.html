@@ -196,6 +196,23 @@ footer span{color:var(--indigo-light);}
 .upload-progress-fill.done{background:#1a8a4a;}
 .upload-size-warn{font-size:0.75rem;color:var(--rust-light);margin-top:.3rem;display:none;}
 .upload-size-warn.show{display:block;}
+
+.upload-mini-indicator{
+  position:fixed;bottom:1.5rem;left:1.5rem;z-index:400;
+  background:var(--bg-card2);border:1px solid var(--indigo);
+  border-radius:var(--radius);padding:.7rem 1.1rem;
+  display:none;flex-direction:column;gap:.4rem;
+  min-width:220px;max-width:280px;
+  box-shadow:0 4px 20px rgba(0,0,0,.4);
+}
+.upload-mini-indicator.show{display:flex;}
+.upload-mini-top{display:flex;align-items:center;justify-content:space-between;gap:.5rem;}
+.upload-mini-name{font-size:0.78rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
+.upload-mini-pct{font-size:0.78rem;color:var(--indigo-light);font-weight:600;flex-shrink:0;}
+.upload-mini-bar{width:100%;height:4px;background:rgba(61,59,142,0.2);border-radius:2px;overflow:hidden;}
+.upload-mini-fill{height:100%;background:var(--indigo-light);border-radius:2px;width:0%;transition:width .15s;}
+.upload-mini-fill.done{background:#1a8a4a;}
+.upload-mini-warn{font-size:0.72rem;color:var(--rust-light);}
 </style>
 </head>
 <body>
@@ -620,6 +637,15 @@ footer span{color:var(--indigo-light);}
   </div>
   <button class="btn btn-primary" onclick="createNews()" style="width:100%">Опубликовать</button>
 </div></div>
+<div class="upload-mini-indicator" id="upload-mini">
+  <div class="upload-mini-top">
+    <span style="font-size:16px">⬆</span>
+    <span class="upload-mini-name" id="mini-name">Загрузка...</span>
+    <span class="upload-mini-pct" id="mini-pct">0%</span>
+  </div>
+  <div class="upload-mini-bar"><div class="upload-mini-fill" id="mini-fill"></div></div>
+  <div class="upload-mini-warn" id="mini-warn" style="display:none">⚠ Большой файл — займёт несколько минут</div>
+</div>
 <div class="toast" id="toast"></div>
 <script>
 
@@ -942,20 +968,35 @@ async function uploadToStorage(file, progressId) {
   const ext = file.name.split(".").pop().toLowerCase();
   const safeName = Date.now() + "_" + Math.random().toString(36).slice(2) + "." + ext;
   const path = "uploads/" + safeName;
+  const shortName = file.name.length > 28 ? file.name.slice(0,26) + "..." : file.name;
+  const isBig = file.size > 50 * 1024 * 1024;
 
-  // Show progress bar
+  // Show inline progress bar under upload zone
   const progWrap = progressId ? document.getElementById("prog-" + progressId) : null;
   const progFill = progressId ? document.getElementById("prog-" + progressId + "-fill") : null;
-  const progPct = progressId ? document.getElementById("prog-" + progressId + "-pct") : null;
+  const progPct  = progressId ? document.getElementById("prog-" + progressId + "-pct")  : null;
   const progName = progressId ? document.getElementById("prog-" + progressId + "-name") : null;
   const progWarn = progressId ? document.getElementById("prog-" + progressId + "-warn") : null;
-
   if (progWrap) {
     progWrap.classList.add("show");
-    if (progName) progName.textContent = file.name.length > 30 ? file.name.slice(0,28) + "..." : file.name;
+    if (progName) progName.textContent = shortName;
     if (progFill) { progFill.style.width = "0%"; progFill.classList.remove("done"); }
-    if (progPct) progPct.textContent = "0%";
-    if (progWarn) { progWarn.classList.toggle("show", file.size > 50 * 1024 * 1024); }
+    if (progPct)  progPct.textContent = "0%";
+    if (progWarn) progWarn.classList.toggle("show", isBig);
+  }
+
+  // Show mini indicator in bottom-left corner (non-blocking)
+  const mini = document.getElementById("upload-mini");
+  const miniFill = document.getElementById("mini-fill");
+  const miniPct  = document.getElementById("mini-pct");
+  const miniName = document.getElementById("mini-name");
+  const miniWarn = document.getElementById("mini-warn");
+  if (mini) {
+    mini.classList.add("show");
+    if (miniName) miniName.textContent = shortName;
+    if (miniFill) { miniFill.style.width = "0%"; miniFill.classList.remove("done"); }
+    if (miniPct)  miniPct.textContent = "0%";
+    if (miniWarn) miniWarn.style.display = isBig ? "block" : "none";
   }
 
   return new Promise((resolve) => {
@@ -967,28 +1008,37 @@ async function uploadToStorage(file, progressId) {
     xhr.setRequestHeader("x-upsert", "true");
 
     xhr.upload.onprogress = (e) => {
-      if (e.lengthComputable && progFill && progPct) {
+      if (e.lengthComputable) {
         const pct = Math.round((e.loaded / e.total) * 100);
-        progFill.style.width = pct + "%";
-        progPct.textContent = pct + "%";
+        if (progFill) progFill.style.width = pct + "%";
+        if (progPct)  progPct.textContent = pct + "%";
+        if (miniFill) miniFill.style.width = pct + "%";
+        if (miniPct)  miniPct.textContent = pct + "%";
       }
     };
     xhr.onload = () => {
       if (xhr.status >= 200 && xhr.status < 300) {
         if (progFill) { progFill.style.width = "100%"; progFill.classList.add("done"); }
-        if (progPct) progPct.textContent = "100% ✓";
-        setTimeout(() => { if (progWrap) progWrap.classList.remove("show"); }, 2000);
+        if (progPct)  progPct.textContent = "100% ✓";
+        if (miniFill) { miniFill.style.width = "100%"; miniFill.classList.add("done"); }
+        if (miniPct)  miniPct.textContent = "✓";
+        setTimeout(() => {
+          if (progWrap) progWrap.classList.remove("show");
+          if (mini) mini.classList.remove("show");
+        }, 2000);
         resolve(SB + "/storage/v1/object/public/vivace/" + path);
       } else {
         console.error("Storage error:", xhr.responseText);
-        toast("Ошибка загрузки файла.");
+        toast("Ошибка загрузки: " + xhr.status);
         if (progWrap) progWrap.classList.remove("show");
+        if (mini) mini.classList.remove("show");
         resolve(null);
       }
     };
     xhr.onerror = () => {
       toast("Ошибка соединения при загрузке.");
       if (progWrap) progWrap.classList.remove("show");
+      if (mini) mini.classList.remove("show");
       resolve(null);
     };
     xhr.send(file);
@@ -997,7 +1047,6 @@ async function uploadToStorage(file, progressId) {
 
 async function handleMedia(event, listId, ctx) {
   const files = event.target.files; if (!files.length) return;
-  load(true);
   const items = [];
   const progressId = ctx === "student" ? "student" : ctx === "ensemble" ? "ensemble" : ctx === "raspevki_student" ? "raspevki" : null;
   for (const f of Array.from(files)) {
@@ -1005,7 +1054,7 @@ async function handleMedia(event, listId, ctx) {
     if (!url) { toast("Ошибка загрузки: " + f.name); continue; }
     items.push({id: "m" + Date.now() + Math.random(), name: f.name, type: f.type.startsWith("video") ? "video" : "audio", url, date: new Date().toLocaleDateString("ru"), note: ""});
   }
-  if (!items.length) { load(false); return; }
+  if (!items.length) { return; }
   if (ctx === "student" && curSt) { const r = await dbGet("students","id=eq."+curSt); if (r&&r[0]) { const media=[...items,...(Array.isArray(r[0].media)?r[0].media:[])]; await dbPatch("students","id=eq."+curSt,{media}); renderMediaList(listId,media,"student"); } }
   else if (ctx === "ensemble" && curEn) { const r = await dbGet("ensembles","id=eq."+curEn); if (r&&r[0]) { const media=[...items,...(Array.isArray(r[0].media)?r[0].media:[])]; await dbPatch("ensembles","id=eq."+curEn,{media}); renderMediaList(listId,media,"ensemble"); } }
   else if (ctx === "stu_student" && curSt) { const r = await dbGet("students","id=eq."+curSt); if (r&&r[0]) { const studio=[...items,...(Array.isArray(r[0].studio)?r[0].studio:[])]; await dbPatch("students","id=eq."+curSt,{studio}); renderStudio("st-studio-list",studio,"st-stu-empty","stu_student"); } }
