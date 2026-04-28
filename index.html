@@ -510,8 +510,8 @@ footer span{color:var(--indigo-light);}
         <div id="orig-player"></div><div id="orig-dl" style="margin-top:.5rem"></div>
         <div id="orig-upload" style="display:none;margin-top:.7rem">
           <div class="upload-zone" onclick="document.getElementById('orig-inp').click()">
-            <input type="file" id="orig-inp" accept="audio/*,video/*" onchange="handleSongFile(event,'original')">
-            <div class="upload-icon">⬆</div><p>Загрузить оригинал</p>
+            <input type="file" id="orig-inp" accept="audio/*,video/*" multiple onchange="handleSongFile(event,'original')">
+            <div class="upload-icon">⬆</div><p>Загрузить оригинал (можно несколько)</p>
           </div>
           <div class="upload-progress" id="prog-song">
             <div class="upload-progress-label"><span id="prog-song-name">Загрузка...</span><span id="prog-song-pct">0%</span></div>
@@ -536,8 +536,8 @@ footer span{color:var(--indigo-light);}
         <div id="minus-player"></div><div id="minus-dl" style="margin-top:.5rem"></div>
         <div id="minus-upload" style="display:none;margin-top:.7rem">
           <div class="upload-zone" onclick="document.getElementById('minus-inp').click()">
-            <input type="file" id="minus-inp" accept="audio/*,video/*" onchange="handleSongFile(event,'minus')">
-            <div class="upload-icon">⬆</div><p>Загрузить минус</p>
+            <input type="file" id="minus-inp" accept="audio/*,video/*" multiple onchange="handleSongFile(event,'minus')">
+            <div class="upload-icon">⬆</div><p>Загрузить минус (можно несколько)</p>
           </div>
         </div>
         <div id="minus-empty" style="color:var(--text-dim);font-size:.8rem">Минус не загружен</div>
@@ -710,18 +710,7 @@ function backInner() { if (CU === "admin") { sp("page-admin"); renderAdm(); } el
 function backSong() { if (prevSngPage === "student") sp("page-student"); else if (prevSngPage === "ensemble") sp("page-ensemble"); else goHome(); }
 
 async function renderAfisha() {
-  const g = document.getElementById("afisha-grid");
-  g.innerHTML = '<div class="empty-s">Загрузка...</div>';
-  const rows = await dbGet("events", "order=date.asc");
-  if (!rows || !rows.length) { g.innerHTML = '<div class="empty-s">Мероприятий пока нет</div>'; return; }
-  g.innerHTML = rows.map(ev => {
-    const d = new Date(ev.date + "T00:00:00"), ds = d.toLocaleDateString("ru", {day: "numeric", month: "long"});
-    const poster = ev.img
-      ? `<img src="${ev.img}" alt="">`
-      : `<div class="afisha-poster-ph"><div class="ev-icon">${ev.icon}</div><div class="ev-name">${ev.title}</div></div>`;
-    const delBtn = CU === "admin" ? `<button class="afisha-del" onclick="delAfisha('${ev.id}')">✕ Удалить</button>` : "";
-    return `<div class="afisha-card"><div class="afisha-poster">${poster}<div class="afisha-date-badge">${ds}</div></div><div class="afisha-body"><h3>${ev.title}</h3><div class="afisha-meta"><span>📅 ${ds}</span><span>🕕 ${ev.time||""}</span><span>📍 ${ev.place||""}</span></div><p>${ev.descr||""}</p>${delBtn}</div></div>`;
-  }).join("");
+  await renderAfishaBackground();
 }
 
 async function renderAdm() {
@@ -840,15 +829,17 @@ async function openSong(songId, ctx) {
   ly.innerHTML = song.lyrics || '<span style="color:var(--text-dim)">Текст не добавлен</span>';
   ly.contentEditable = "false"; ly.style.pointerEvents = "none";
   document.getElementById("ly-edit-btn").style.display = isA ? "inline-block" : "none";
-  renderSongPlayer("orig-player", song.original, "orig-empty");
-  renderDlBtn("orig-dl", song.original, "Скачать оригинал");
+  const origFiles = song.originals || (song.original ? [song.original] : []);
+  renderSongFiles("orig-player", origFiles, "orig-empty", "original");
+  document.getElementById("orig-dl").innerHTML = "";
   document.getElementById("orig-upload").style.display = isA ? "block" : "none";
   document.getElementById("orig-inp").value = "";
   document.getElementById("song-link-inp").value = song.originalLink || "";
   document.getElementById("song-link-save").style.display = isA ? "inline-block" : "none";
   document.getElementById("song-link-disp").innerHTML = song.originalLink ? `<a href="${song.originalLink}" target="_blank" style="color:var(--indigo-light);font-size:.8rem">🔗 Открыть ссылку</a>` : "";
-  renderSongPlayer("minus-player", song.minus, "minus-empty");
-  renderDlBtn("minus-dl", song.minus, "Скачать минус");
+  const minusFiles = song.minuss || (song.minus ? [song.minus] : []);
+  renderSongFiles("minus-player", minusFiles, "minus-empty", "minus");
+  document.getElementById("minus-dl").innerHTML = "";
   document.getElementById("minus-upload").style.display = isA ? "block" : "none";
   document.getElementById("minus-inp").value = "";
   renderNotes(song.notes || []);
@@ -873,6 +864,21 @@ function renderSongPlayer(pid, file, emptyId) {
   if (em) em.style.display = "none";
   el.innerHTML = file.type === "video" ? `<video controls src="${file.url}" style="width:100%;max-height:240px;border-radius:8px"></video>` : `<audio controls src="${file.url}" style="width:100%;height:36px"></audio>`;
 }
+function renderSongFiles(pid, files, emptyId, type) {
+  const el = document.getElementById(pid), em = document.getElementById(emptyId);
+  if (!files || !files.length) { el.innerHTML = ""; if (em) em.style.display = "block"; return; }
+  if (em) em.style.display = "none";
+  el.innerHTML = files.map((f, i) => `
+    <div class="media-item" style="margin-bottom:.6rem">
+      <div class="media-hdr">
+        <span class="media-icon">${f.type==="video"?"🎬":"🎵"}</span>
+        <span class="media-name">${f.name}</span>
+        <a class="btn-dl" href="${f.url}" download="${f.name}">⬇</a>
+        ${CU==="admin" ? `<button class="media-del" onclick="delSongFile('${type}',${i})">✕</button>` : ""}
+      </div>
+      ${f.type==="video" ? `<video controls src="${f.url}" style="width:100%;max-height:200px;border-radius:6px"></video>` : `<audio controls src="${f.url}" style="width:100%;height:34px"></audio>`}
+    </div>`).join("");
+}
 function renderNotes(notes) {
   const el = document.getElementById("notes-files"), em = document.getElementById("notes-empty");
   if (!notes || !notes.length) { el.innerHTML = ""; if (em) em.style.display = "block"; return; }
@@ -893,12 +899,17 @@ async function handleSongFile(event, type) {
   const {ent, table, fid} = res; const songs = Array.isArray(ent.songs) ? [...ent.songs] : [];
   const si = songs.findIndex(s => s.id === curSng); if (si < 0) return;
   if (type === "original" || type === "minus") {
-    const f = files[0]; const url = await uploadToStorage(f, "song"); if (!url) { toast("Ошибка загрузки"); return; }
-    songs[si][type] = {url, name: f.name, type: f.type.startsWith("video") ? "video" : "audio"};
+    // Support multiple files - store as array
+    const existing = songs[si][type + "s"] || (songs[si][type] ? [songs[si][type]] : []);
+    for (const f of Array.from(files)) {
+      const url = await uploadToStorage(f, "song"); if (!url) continue;
+      existing.push({url, name: f.name, type: f.type.startsWith("video") ? "video" : "audio"});
+    }
+    songs[si][type + "s"] = existing;
+    songs[si][type] = existing[existing.length - 1]; // keep last for compat
     load(true); await dbPatch(table, "id=eq." + fid, {songs}); load(false);
-    renderSongPlayer(type === "original" ? "orig-player" : "minus-player", songs[si][type], type === "original" ? "orig-empty" : "minus-empty");
-    renderDlBtn(type === "original" ? "orig-dl" : "minus-dl", songs[si][type], "Скачать " + (type === "original" ? "оригинал" : "минус"));
-    toast("Загружено: " + f.name);
+    renderSongFiles(type === "original" ? "orig-player" : "minus-player", existing, type === "original" ? "orig-empty" : "minus-empty", type);
+    toast("Загружено ✓");
   } else if (type === "notes") {
     const notes = songs[si].notes || [];
     for (const f of Array.from(files)) {
@@ -936,6 +947,19 @@ async function toggleLyrics() {
     el.contentEditable = "false"; el.style.pointerEvents = "none";
     document.getElementById("ly-edit-btn").textContent = "✏️ Редактировать"; showInd("lyrics-saved");
   } else { el.contentEditable = "true"; el.style.pointerEvents = "auto"; el.focus(); document.getElementById("ly-edit-btn").textContent = "💾 Сохранить"; }
+}
+async function delSongFile(type, idx) {
+  const res = await getSE(); if (!res) return;
+  const {ent, table, fid} = res;
+  const songs = Array.isArray(ent.songs) ? [...ent.songs] : [];
+  const si = songs.findIndex(s => s.id === curSng); if (si < 0) return;
+  const arr = songs[si][type + "s"] || [];
+  arr.splice(idx, 1);
+  songs[si][type + "s"] = arr;
+  songs[si][type] = arr.length ? arr[arr.length-1] : null;
+  load(true); await dbPatch(table, "id=eq." + fid, {songs}); load(false);
+  renderSongFiles(type === "original" ? "orig-player" : "minus-player", arr, type === "original" ? "orig-empty" : "minus-empty", type);
+  toast("Удалено");
 }
 async function delNote(i) {
   const res = await getSE(); if (!res) return;
@@ -1126,17 +1150,17 @@ async function doLogin() {
   const errEl = document.getElementById("login-err"), btn = document.getElementById("login-btn");
   errEl.style.display = "none"; btn.textContent = "Проверяем..."; btn.disabled = true;
   if (u === ADM_L && p === ADM_P) {
-    CU = "admin"; sessionStorage.setItem("vcu", JSON.stringify(CU)); updateNav(); closeM("modal-login");
+    CU = "admin"; localStorage.setItem("vcu", JSON.stringify(CU)); updateNav(); closeM("modal-login");
     await renderAfisha(); document.getElementById("afisha-admin-zone").style.display = "block";
     await renderAdm(); sp("page-admin"); btn.textContent = "Войти"; btn.disabled = false; return;
   }
   const sr = await dbGet("students", "login=eq." + encodeURIComponent(u) + "&pass=eq." + encodeURIComponent(p));
-  if (sr && sr.length) { CU = {type:"student",id:sr[0].id,name:sr[0].name}; sessionStorage.setItem("vcu",JSON.stringify(CU)); updateNav(); closeM("modal-login"); btn.textContent="Войти"; btn.disabled=false; await openSt(sr[0].id); return; }
+  if (sr && sr.length) { CU = {type:"student",id:sr[0].id,name:sr[0].name}; localStorage.setItem("vcu",JSON.stringify(CU)); updateNav(); closeM("modal-login"); btn.textContent="Войти"; btn.disabled=false; await openSt(sr[0].id); return; }
   const er = await dbGet("ensembles", "login=eq." + encodeURIComponent(u) + "&pass=eq." + encodeURIComponent(p));
-  if (er && er.length) { CU = {type:"ensemble",id:er[0].id,name:er[0].name}; sessionStorage.setItem("vcu",JSON.stringify(CU)); updateNav(); closeM("modal-login"); btn.textContent="Войти"; btn.disabled=false; await openEn(er[0].id); return; }
+  if (er && er.length) { CU = {type:"ensemble",id:er[0].id,name:er[0].name}; localStorage.setItem("vcu",JSON.stringify(CU)); updateNav(); closeM("modal-login"); btn.textContent="Войти"; btn.disabled=false; await openEn(er[0].id); return; }
   errEl.textContent = "Неверный логин или пароль"; errEl.style.display = "block"; btn.textContent = "Войти"; btn.disabled = false;
 }
-function doLogout() { CU = null; sessionStorage.removeItem("vcu"); updateNav(); goHome(); toast("Вы вышли"); }
+function doLogout() { CU = null; localStorage.removeItem("vcu"); updateNav(); goHome(); toast("Вы вышли"); }
 
 async function createStudent() {
   const n=document.getElementById("ns-n").value.trim(), r=document.getElementById("ns-r").value.trim()||"Эстрадный вокал", l=document.getElementById("ns-l").value.trim(), p=document.getElementById("ns-p").value.trim();
@@ -1164,6 +1188,42 @@ async function createAfisha() {
   ["af-t","af-pl","af-ds"].forEach(id=>document.getElementById(id).value="");
   await renderAfisha(); if(CU==="admin") renderAdm(); toast("Мероприятие добавлено");
 }
+async function editAfisha(id) {
+  const rows = await dbGet("events","id=eq."+id);
+  if (!rows||!rows.length) return;
+  const ev = rows[0];
+  document.getElementById("af-t").value = ev.title || "";
+  document.getElementById("af-d").value = ev.date || "";
+  document.getElementById("af-tm").value = ev.time || "";
+  document.getElementById("af-pl").value = ev.place || "";
+  document.getElementById("af-ds").value = ev.descr || "";
+  document.getElementById("af-ic").value = ev.icon || "🎤";
+  // Store editing id
+  window._editAfishaId = id;
+  document.querySelector("#modal-afisha h2").textContent = "Редактировать мероприятие";
+  document.querySelector("#modal-afisha .btn-primary").textContent = "Сохранить изменения";
+  document.querySelector("#modal-afisha .btn-primary").onclick = saveEditAfisha;
+  openM("modal-afisha");
+}
+async function saveEditAfisha() {
+  const id = window._editAfishaId; if (!id) return;
+  const t=document.getElementById("af-t").value.trim(), d=document.getElementById("af-d").value,
+    tm=document.getElementById("af-tm").value, pl=document.getElementById("af-pl").value.trim(),
+    ds=document.getElementById("af-ds").value.trim(), ic=document.getElementById("af-ic").value;
+  if (!t||!d) { toast("Введите название и дату"); return; }
+  load(true);
+  const updateData = {title:t,date:d,time:tm,place:pl,descr:ds,icon:ic};
+  if (pendAfImg) updateData.img = pendAfImg;
+  await dbPatch("events","id=eq."+id, updateData);
+  load(false); closeM("modal-afisha");
+  window._editAfishaId = null; pendAfImg = null;
+  document.getElementById("af-img-prev").innerHTML="";
+  // Reset modal to add mode
+  document.querySelector("#modal-afisha h2").textContent = "Новое мероприятие";
+  document.querySelector("#modal-afisha .btn-primary").textContent = "Добавить";
+  document.querySelector("#modal-afisha .btn-primary").onclick = createAfisha;
+  await renderAfisha(); if(CU==="admin") renderAdm(); toast("Мероприятие обновлено");
+}
 async function delAfisha(id) { load(true); await dbDel("events","id=eq."+id); load(false); await renderAfisha(); if(CU==="admin") renderAdm(); toast("Удалено"); }
 async function delSt(id) { if(!confirm("Удалить ученика?")) return; load(true); await dbDel("students","id=eq."+id); load(false); renderAdm(); toast("Удалено"); }
 async function delEn(id) { if(!confirm("Удалить ансамбль?")) return; load(true); await dbDel("ensembles","id=eq."+id); load(false); renderAdm(); toast("Удалено"); }
@@ -1173,20 +1233,68 @@ document.addEventListener("keydown", e => { if(e.key==="Escape") document.queryS
 document.getElementById("lp").addEventListener("keydown", e => { if(e.key==="Enter") doLogin(); });
 
 async function init() {
-  load(true);
-  const s = sessionStorage.getItem("vcu"); if(s) try { CU = JSON.parse(s); } catch(e) {}
+  const s = localStorage.getItem("vcu");
+  if (s) try { CU = JSON.parse(s); } catch(e) {}
   updateNav();
-  const ap = await dbGet("settings","key=eq.about_photo");
-  if (ap && ap.length && ap[0].value) {
-    const w = document.getElementById("about-photo-wrap");
-    w.innerHTML = `<img src="${ap[0].value}" alt="Педагог" style="width:100%;height:100%;object-fit:cover"><input type="file" id="about-photo-inp" accept="image/*" style="display:none" onchange="handleAboutPhoto(event)">`;
-  }
   document.getElementById("about-photo-wrap").onclick = triggerAboutPhoto;
-  if (CU === "admin") document.getElementById("afisha-admin-zone").style.display = "block";
-  await renderAfisha(); load(false);
-  if (CU && CU !== "admin") { if(CU.type==="student") await openSt(CU.id); else if(CU.type==="ensemble") await openEn(CU.id); }
-  else if (CU === "admin") { sp("page-admin"); await renderAdm(); }
+  if (CU && CU !== "admin") {
+    if (CU.type === "student") openStFast(CU.id);
+    else if (CU.type === "ensemble") openEnFast(CU.id);
+  } else if (CU === "admin") {
+    sp("page-admin");
+    renderAdm();
+    document.getElementById("afisha-admin-zone").style.display = "block";
+  }
+  renderAfishaBackground();
+  loadAboutPhotoBackground();
 }
+
+async function openStFast(id) {
+  curSt = id;
+  document.getElementById("st-name").textContent = CU.name || "Ученик";
+  document.getElementById("st-role").textContent = "";
+  document.getElementById("st-init").textContent = (CU.name||"А").split(" ").map(n=>n[0]).join("").slice(0,2);
+  sp("page-student");
+  const rows = await dbGet("students", "id=eq." + id);
+  if (!rows || !rows.length) return;
+  const s = rows[0]; const isA = CU === "admin";
+  document.getElementById("st-name").textContent = s.name;
+  document.getElementById("st-role").textContent = s.role || "Эстрадный вокал";
+  if (s.photo) { document.getElementById("st-img").src=s.photo; document.getElementById("st-img").style.display="block"; document.getElementById("st-init").style.display="none"; }
+  const th = document.getElementById("st-theory");
+  th.innerHTML = s.theory || "<p>Теория появится здесь...</p>";
+  if (isA) { th.contentEditable="true"; th.style.pointerEvents="auto"; document.getElementById("st-theory-tb").style.display="flex"; }
+  else { th.contentEditable="false"; th.style.pointerEvents="none"; document.getElementById("st-theory-tb").style.display="none"; }
+  document.getElementById("st-studio-up").style.display = isA ? "block" : "none";
+  document.getElementById("st-song-add").style.display = isA ? "block" : "none";
+  document.getElementById("st-raspevki-up").style.display = "block";
+  renderMediaList("st-media-list", Array.isArray(s.media)?s.media:[], "student");
+  renderStudio("st-studio-list", Array.isArray(s.studio)?s.studio:[], "st-stu-empty", "stu_student");
+  renderSongs("st-songs", Array.isArray(s.songs)?s.songs:[], "student");
+  renderMediaList("st-raspevki-list", Array.isArray(s.raspevki)?s.raspevki:[], "raspevki_student");
+}
+
+async function openEnFast(id) {
+  curEn = id;
+  document.getElementById("en-name").textContent = CU.name || "Ансамбль";
+  document.getElementById("en-role").textContent = "";
+  document.getElementById("en-init").textContent = "♪";
+  sp("page-ensemble");
+  const rows = await dbGet("ensembles", "id=eq." + id);
+  if (!rows || !rows.length) return;
+  const e = rows[0]; const isA = CU === "admin";
+  document.getElementById("en-name").textContent = e.name;
+  document.getElementById("en-role").textContent = e.descr || "Вокальный ансамбль";
+  if (e.photo) { document.getElementById("en-img").src=e.photo; document.getElementById("en-img").style.display="block"; document.getElementById("en-init").style.display="none"; }
+  document.getElementById("en-studio-up").style.display = isA ? "block" : "none";
+  document.getElementById("en-song-add").style.display = isA ? "block" : "none";
+  document.getElementById("en-news-add").style.display = isA ? "block" : "none";
+  renderMediaList("en-media-list", Array.isArray(e.media)?e.media:[], "ensemble");
+  renderStudio("en-studio-list", Array.isArray(e.studio)?e.studio:[], "en-stu-empty", "stu_ensemble");
+  renderSongs("en-songs", Array.isArray(e.songs)?e.songs:[], "ensemble");
+  renderNews("en-news-list", Array.isArray(e.news)?e.news:[]);
+}
+
 init();
 
 </script>
