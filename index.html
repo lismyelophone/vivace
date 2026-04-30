@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Виваче — Музыкальная студия</title>
+<link rel="preconnect" href="https://rlmmyydpgiggzqihpjxt.supabase.co">
+<link rel="dns-prefetch" href="https://rlmmyydpgiggzqihpjxt.supabase.co">
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--indigo:#3D3B8E;--indigo-light:#6664C8;--indigo-pale:#1E1D4A;--rust:#C4521A;--rust-light:#E06830;--bg:#0A0A0F;--bg-card:#0F0F1A;--bg-card2:#131320;--text:#EEEEf8;--text-muted:#9090B8;--text-dim:#55556A;--border:rgba(61,59,142,0.25);--border-hover:rgba(61,59,142,0.65);--border-rust:rgba(196,82,26,0.35);--radius:10px;--radius-lg:14px;--font-head:"Cormorant Garamond",serif;--font-body:"Inter",sans-serif;}
@@ -213,6 +216,38 @@ footer span{color:var(--indigo-light);}
 .upload-mini-fill{height:100%;background:var(--indigo-light);border-radius:2px;width:0%;transition:width .15s;}
 .upload-mini-fill.done{background:#1a8a4a;}
 .upload-mini-warn{font-size:0.72rem;color:var(--rust-light);}
+
+.afisha-ribbon{
+  position:absolute;top:14px;left:-28px;
+  width:110px;padding:4px 0;
+  text-align:center;
+  font-size:0.62rem;font-weight:700;letter-spacing:.12em;
+  color:#fff;
+  transform:rotate(-45deg);
+  box-shadow:0 2px 6px rgba(0,0,0,.3);
+  z-index:2;
+}
+
+.afisha-type-badge{
+  position:absolute;top:0;left:0;
+  background:var(--indigo);color:#fff;
+  font-size:0.65rem;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:.22rem .7rem;
+  border-bottom-right-radius:8px;
+  border-top-left-radius:var(--radius-lg);
+}
+
+.skeleton{background:linear-gradient(90deg,rgba(61,59,142,0.1) 25%,rgba(61,59,142,0.2) 50%,rgba(61,59,142,0.1) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:6px;height:16px;margin-bottom:.5rem;}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+.video-embed-wrap{position:relative;width:100%;padding-bottom:56.25%;border-radius:var(--radius);overflow:hidden;background:#000;margin-bottom:.6rem;}
+.video-embed-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
+.video-link-item{background:rgba(61,59,142,0.06);border:1px solid var(--border);border-radius:var(--radius);padding:.85rem 1rem;margin-bottom:.7rem;}
+.video-link-hdr{display:flex;align-items:center;gap:.55rem;margin-bottom:.6rem;}
+.video-link-name{flex:1;font-size:0.83rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.video-link-add{display:flex;gap:.5rem;margin-bottom:.8rem;}
+.video-link-add input{flex:1;}
 </style>
 </head>
 <body>
@@ -331,7 +366,7 @@ footer span{color:var(--indigo-light);}
     </div>
   </section>
 
-  <footer><p>© 2024 Музыкальная студия <span>Виваче</span> · ул. Греческая, 38, каб. 8 · +7 919 891 40 55</p></footer>
+  <footer><p>© 2026 Музыкальная студия <span>Виваче</span> · ул. Греческая, 38, каб. 8 · +7 919 891 40 55</p></footer>
 </div>
 
 <div id="page-admin" class="page">
@@ -380,6 +415,20 @@ footer span{color:var(--indigo-light);}
           <div class="save-ind" id="st-th-saved">✓ Сохранено</div>
         </div>
         <div class="block">
+          <div class="block-title">🎬 Видео-ссылки</div>
+          <p style="font-size:0.77rem;color:var(--text-dim);margin-bottom:.8rem">YouTube, RuTube, VK Видео и др.</p>
+          <div id="st-videolinks-add" style="display:none">
+            <div class="video-link-add">
+              <input class="form-input" id="st-vl-url" type="url" placeholder="https://youtube.com/watch?v=...">
+            </div>
+            <div style="display:flex;gap:.5rem;margin-bottom:.8rem">
+              <input class="form-input" id="st-vl-name" type="text" placeholder="Название (необязательно)">
+              <button class="btn btn-primary btn-sm" onclick="addVideoLink('student','st-vl-url','st-vl-name','st-videolinks-list')">+ Добавить</button>
+            </div>
+          </div>
+          <div id="st-videolinks-list"></div>
+        </div>
+        <div class="block">
           <div class="block-title">🎼 Распевки</div>
           <div id="st-raspevki-up" style="display:none">
             <div class="upload-zone" onclick="document.getElementById('st-rasp-inp').click()">
@@ -398,7 +447,7 @@ footer span{color:var(--indigo-light);}
           <div class="block-title">🎵 Мои записи</div>
           <div class="upload-zone" onclick="document.getElementById('st-med-inp').click()">
             <input type="file" id="st-med-inp" multiple accept="audio/*,video/*" onchange="handleMedia(event,'st-media-list','student')">
-            <div class="upload-icon">⬆</div><p>Загрузить аудио или видео</p>
+            <div class="upload-icon">⬆</div><p>Загрузить аудио или видео</p><p style="font-size:0.7rem;color:var(--text-dim);margin-top:.2rem">Макс. размер видео: 50 МБ</p>
           </div>
           <div class="upload-progress" id="prog-student">
             <div class="upload-progress-label"><span id="prog-student-name">Загрузка...</span><span id="prog-student-pct">0%</span></div>
@@ -444,6 +493,20 @@ footer span{color:var(--indigo-light);}
     <div class="cols2">
       <div>
         <div class="block">
+          <div class="block-title">🎬 Видео-ссылки</div>
+          <p style="font-size:0.77rem;color:var(--text-dim);margin-bottom:.8rem">YouTube, RuTube, VK Видео и др.</p>
+          <div id="en-videolinks-add" style="display:none">
+            <div class="video-link-add">
+              <input class="form-input" id="en-vl-url" type="url" placeholder="https://youtube.com/watch?v=...">
+            </div>
+            <div style="display:flex;gap:.5rem;margin-bottom:.8rem">
+              <input class="form-input" id="en-vl-name" type="text" placeholder="Название (необязательно)">
+              <button class="btn btn-primary btn-sm" onclick="addVideoLink('ensemble','en-vl-url','en-vl-name','en-videolinks-list')">+ Добавить</button>
+            </div>
+          </div>
+          <div id="en-videolinks-list"></div>
+        </div>
+        <div class="block">
           <div class="block-title">📰 Новости</div>
           <div id="en-news-list"></div>
           <div id="en-news-add" style="display:none"><button class="add-dashed" onclick="openM('modal-add-news')">+ Добавить новость</button></div>
@@ -452,7 +515,7 @@ footer span{color:var(--indigo-light);}
           <div class="block-title">🎵 Репетиции</div>
           <div class="upload-zone" onclick="document.getElementById('en-med-inp').click()">
             <input type="file" id="en-med-inp" multiple accept="audio/*,video/*" onchange="handleMedia(event,'en-media-list','ensemble')">
-            <div class="upload-icon">⬆</div><p>Загрузить аудио или видео</p>
+            <div class="upload-icon">⬆</div><p>Загрузить аудио или видео</p><p style="font-size:0.7rem;color:var(--text-dim);margin-top:.2rem">Макс. размер видео: 50 МБ</p>
           </div>
           <div class="upload-progress" id="prog-ensemble">
             <div class="upload-progress-label"><span id="prog-ensemble-name">Загрузка...</span><span id="prog-ensemble-pct">0%</span></div>
@@ -709,15 +772,24 @@ async function goHome() {
 function backInner() { if (CU === "admin") { sp("page-admin"); renderAdm(); } else goHome(); }
 function backSong() { if (prevSngPage === "student") sp("page-student"); else if (prevSngPage === "ensemble") sp("page-ensemble"); else goHome(); }
 
-async function renderAfisha() {
+let _afishaCache = null;
+async function renderAfisha(forceReload) {
   const g = document.getElementById("afisha-grid");
-  const rows = await dbGet("events", "order=date.asc");
+  if (!_afishaCache || forceReload) {
+    _afishaCache = await dbGet("events", "order=date.asc");
+  }
+  const rows = _afishaCache;
   if (!rows || !rows.length) { g.innerHTML = '<div class="empty-s">Мероприятий пока нет</div>'; return; }
   g.innerHTML = rows.map(ev => {
     const d = new Date(ev.date + "T00:00:00"), ds = d.toLocaleDateString("ru", {day:"numeric",month:"long"});
-    const poster = ev.img ? `<img src="${ev.img}" alt="">` : `<div class="afisha-poster-ph"><div class="ev-icon">${ev.icon}</div><div class="ev-name">${ev.title}</div></div>`;
+    const poster = ev.img ? `<img src="${ev.img}" alt="" loading="lazy">` : `<div class="afisha-poster-ph"><div class="ev-icon">${ev.icon}</div><div class="ev-name">${ev.title}</div></div>`;
     const delBtn = CU === "admin" ? `<button class="afisha-del" onclick="editAfisha('${ev.id}')">✏ Изменить</button> <button class="afisha-del" onclick="delAfisha('${ev.id}')">✕ Удалить</button>` : "";
-    return `<div class="afisha-card"><div class="afisha-poster">${poster}<div class="afisha-date-badge">${ds}</div></div><div class="afisha-body"><h3>${ev.title}</h3><div class="afisha-meta"><span>📅 ${ds}</span><span>🕕 ${ev.time||""}</span><span>📍 ${ev.place||""}</span></div><p>${ev.descr||""}</p>${delBtn}</div></div>`;
+    const typeLabels = {"🎤":"КОНЦЕРТ","🏆":"КОНКУРС","🎵":"ВЫСТУПЛЕНИЕ","💿":"ЗАПИСЬ","🎶":"МАСТЕР-КЛАСС"};
+    const typeLabel = typeLabels[ev.icon] || "СОБЫТИЕ";
+    const typeColors = {"🎤":"#3D3B8E","🏆":"#C4521A","🎵":"#1a6b5a","💿":"#5a3a8a","🎶":"#1a5a8a"};
+    const typeColor = typeColors[ev.icon] || "#3D3B8E";
+    const ribbon = `<div class="afisha-ribbon" style="background:${typeColor}">${typeLabel}</div>`;
+    return `<div class="afisha-card"><div class="afisha-poster">${poster}${ribbon}<div class="afisha-date-badge">${ds}</div></div><div class="afisha-body"><h3>${ev.title}</h3><div class="afisha-meta"><span>📅 ${ds}</span><span>🕕 ${ev.time||""}</span><span>📍 ${ev.place||""}</span></div><p>${ev.descr||""}</p>${delBtn}</div></div>`;
   }).join("");
 }
 
@@ -736,7 +808,9 @@ async function renderAdm() {
 
 async function openSt(id) {
   if (CU !== "admin" && !(CU && CU.type === "student" && CU.id === id)) { openM("modal-login"); return; }
-  load(true); const rows = await dbGet("students", "id=eq." + id); load(false);
+  load(true);
+  if (!_entityCache["st_"+id]) _entityCache["st_"+id] = await dbGet("students","id=eq."+id);
+  const rows = _entityCache["st_"+id]; load(false);
   if (!rows || !rows.length) { toast("Ученик не найден"); return; }
   const s = rows[0]; curSt = id; const isA = CU === "admin";
   document.getElementById("st-name").textContent = s.name;
@@ -753,16 +827,19 @@ async function openSt(id) {
   renderStudio("st-studio-list", Array.isArray(s.studio) ? s.studio : [], "st-stu-empty", "stu_student");
   renderSongs("st-songs", Array.isArray(s.songs) ? s.songs : [], "student");
   document.getElementById("st-song-add").style.display = isA ? "block" : "none";
-  // Raspevki
   document.getElementById("st-raspevki-up").style.display = "block";
   document.getElementById("st-rasp-empty").style.display = "none";
   renderMediaList("st-raspevki-list", Array.isArray(s.raspevki) ? s.raspevki : [], "raspevki_student");
+  renderVideoLinks("st-videolinks-list", Array.isArray(s.videolinks)?s.videolinks:[], "student", isA);
+  document.getElementById("st-videolinks-add").style.display = "block";
   sp("page-student");
 }
 
 async function openEn(id) {
   if (CU !== "admin" && !(CU && CU.type === "ensemble" && CU.id === id)) { openM("modal-login"); return; }
-  load(true); const rows = await dbGet("ensembles", "id=eq." + id); load(false);
+  load(true);
+  if (!_entityCache["en_"+id]) _entityCache["en_"+id] = await dbGet("ensembles","id=eq."+id);
+  const rows = _entityCache["en_"+id]; load(false);
   if (!rows || !rows.length) { toast("Ансамбль не найден"); return; }
   const e = rows[0]; curEn = id; const isA = CU === "admin";
   document.getElementById("en-name").textContent = e.name;
@@ -777,6 +854,8 @@ async function openEn(id) {
   renderNews("en-news-list", Array.isArray(e.news) ? e.news : []);
   document.getElementById("en-song-add").style.display = isA ? "block" : "none";
   document.getElementById("en-news-add").style.display = isA ? "block" : "none";
+  renderVideoLinks("en-videolinks-list", Array.isArray(e.videolinks)?e.videolinks:[], "ensemble", isA);
+  document.getElementById("en-videolinks-add").style.display = "block";
   sp("page-ensemble");
 }
 
@@ -997,11 +1076,18 @@ async function delSong(sid, ctx) {
 }
 
 async function uploadToStorage(file, progressId) {
+  // Check file size - Supabase free plan limit is 50MB
+  const MAX_SIZE = 50 * 1024 * 1024; // 50MB
+  if (file.size > MAX_SIZE) {
+    const sizeMB = (file.size / 1024 / 1024).toFixed(1);
+    const ok = confirm(`Файл "${file.name}" весит ${sizeMB} МБ.\n\nSupabase (бесплатный план) принимает файлы до 50 МБ.\n\nРекомендуем сжать видео перед загрузкой:\n• iPhone: приложение "Compress Video"\n• Android: приложение "Video Compress"\n\nПопробовать загрузить всё равно?`);
+    if (!ok) return null;
+  }
   const ext = file.name.split(".").pop().toLowerCase();
   const safeName = Date.now() + "_" + Math.random().toString(36).slice(2) + "." + ext;
   const path = "uploads/" + safeName;
   const shortName = file.name.length > 28 ? file.name.slice(0,26) + "..." : file.name;
-  const isBig = file.size > 50 * 1024 * 1024;
+  const isBig = file.size > 20 * 1024 * 1024;
 
   // Show inline progress bar under upload zone
   const progWrap = progressId ? document.getElementById("prog-" + progressId) : null;
@@ -1060,8 +1146,17 @@ async function uploadToStorage(file, progressId) {
         }, 2000);
         resolve(SB + "/storage/v1/object/public/vivace/" + path);
       } else {
-        console.error("Storage error:", xhr.responseText);
-        toast("Ошибка загрузки: " + xhr.status);
+        let errMsg = "Ошибка загрузки";
+        try {
+          const errData = JSON.parse(xhr.responseText);
+          if (errData.error === "Payload too large" || xhr.status === 413) {
+            errMsg = "Файл слишком большой (макс. 50 МБ). Сожмите видео и попробуйте снова.";
+          } else if (xhr.status === 403) {
+            errMsg = "Нет прав доступа к хранилищу.";
+          }
+        } catch(e) {}
+        console.error("Storage error:", xhr.status, xhr.responseText);
+        toast(errMsg);
         if (progWrap) progWrap.classList.remove("show");
         if (mini) mini.classList.remove("show");
         resolve(null);
@@ -1087,11 +1182,11 @@ async function handleMedia(event, listId, ctx) {
     items.push({id: "m" + Date.now() + Math.random(), name: f.name, type: f.type.startsWith("video") ? "video" : "audio", url, date: new Date().toLocaleDateString("ru"), note: ""});
   }
   if (!items.length) { return; }
-  if (ctx === "student" && curSt) { const r = await dbGet("students","id=eq."+curSt); if (r&&r[0]) { const media=[...items,...(Array.isArray(r[0].media)?r[0].media:[])]; await dbPatch("students","id=eq."+curSt,{media}); renderMediaList(listId,media,"student"); } }
-  else if (ctx === "ensemble" && curEn) { const r = await dbGet("ensembles","id=eq."+curEn); if (r&&r[0]) { const media=[...items,...(Array.isArray(r[0].media)?r[0].media:[])]; await dbPatch("ensembles","id=eq."+curEn,{media}); renderMediaList(listId,media,"ensemble"); } }
-  else if (ctx === "stu_student" && curSt) { const r = await dbGet("students","id=eq."+curSt); if (r&&r[0]) { const studio=[...items,...(Array.isArray(r[0].studio)?r[0].studio:[])]; await dbPatch("students","id=eq."+curSt,{studio}); renderStudio("st-studio-list",studio,"st-stu-empty","stu_student"); } }
-  else if (ctx === "raspevki_student" && curSt) { const r = await dbGet("students","id=eq."+curSt); if (r&&r[0]) { const raspevki=[...items,...(Array.isArray(r[0].raspevki)?r[0].raspevki:[])]; await dbPatch("students","id=eq."+curSt,{raspevki}); renderMediaList("st-raspevki-list",raspevki,"raspevki_student"); } }
-  else if (ctx === "stu_ensemble" && curEn) { const r = await dbGet("ensembles","id=eq."+curEn); if (r&&r[0]) { const studio=[...items,...(Array.isArray(r[0].studio)?r[0].studio:[])]; await dbPatch("ensembles","id=eq."+curEn,{studio}); renderStudio("en-studio-list",studio,"en-stu-empty","stu_ensemble"); } }
+  if (ctx === "student" && curSt) { const r = await dbGet("students","id=eq."+curSt); if (r&&r[0]) { const media=[...items,...(Array.isArray(r[0].media)?r[0].media:[])]; delete _entityCache["st_"+curSt]; await dbPatch("students","id=eq."+curSt,{media}); renderMediaList(listId,media,"student"); } }
+  else if (ctx === "ensemble" && curEn) { const r = await dbGet("ensembles","id=eq."+curEn); if (r&&r[0]) { const media=[...items,...(Array.isArray(r[0].media)?r[0].media:[])]; delete _entityCache["en_"+curEn]; await dbPatch("ensembles","id=eq."+curEn,{media}); renderMediaList(listId,media,"ensemble"); } }
+  else if (ctx === "stu_student" && curSt) { const r = await dbGet("students","id=eq."+curSt); if (r&&r[0]) { const studio=[...items,...(Array.isArray(r[0].studio)?r[0].studio:[])]; delete _entityCache["st_"+curSt]; await dbPatch("students","id=eq."+curSt,{studio}); renderStudio("st-studio-list",studio,"st-stu-empty","stu_student"); } }
+  else if (ctx === "raspevki_student" && curSt) { const r = await dbGet("students","id=eq."+curSt); if (r&&r[0]) { const raspevki=[...items,...(Array.isArray(r[0].raspevki)?r[0].raspevki:[])]; delete _entityCache["st_"+curSt]; await dbPatch("students","id=eq."+curSt,{raspevki}); renderMediaList("st-raspevki-list",raspevki,"raspevki_student"); } }
+  else if (ctx === "stu_ensemble" && curEn) { const r = await dbGet("ensembles","id=eq."+curEn); if (r&&r[0]) { const studio=[...items,...(Array.isArray(r[0].studio)?r[0].studio:[])]; delete _entityCache["en_"+curEn]; await dbPatch("ensembles","id=eq."+curEn,{studio}); renderStudio("en-studio-list",studio,"en-stu-empty","stu_ensemble"); } }
   load(false); event.target.value = ""; toast("Загружено");
 }
 
@@ -1108,15 +1203,15 @@ function renderStudio(listId, items, emptyId, ctx) {
 }
 async function delMedia(mid, ctx) {
   load(true);
-  if (ctx==="student"&&curSt) { const r=await dbGet("students","id=eq."+curSt); if(r&&r[0]) { const media=(Array.isArray(r[0].media)?r[0].media:[]).filter(m=>m.id!==mid); await dbPatch("students","id=eq."+curSt,{media}); renderMediaList("st-media-list",media,"student"); } }
-  else if (ctx==="ensemble"&&curEn) { const r=await dbGet("ensembles","id=eq."+curEn); if(r&&r[0]) { const media=(Array.isArray(r[0].media)?r[0].media:[]).filter(m=>m.id!==mid); await dbPatch("ensembles","id=eq."+curEn,{media}); renderMediaList("en-media-list",media,"ensemble"); } }
-  else if (ctx==="raspevki_student"&&curSt) { const r=await dbGet("students","id=eq."+curSt); if(r&&r[0]) { const raspevki=(Array.isArray(r[0].raspevki)?r[0].raspevki:[]).filter(m=>m.id!==mid); await dbPatch("students","id=eq."+curSt,{raspevki}); renderMediaList("st-raspevki-list",raspevki,"raspevki_student"); } }
+  if (ctx==="student"&&curSt) { const r=await dbGet("students","id=eq."+curSt); if(r&&r[0]) { const media=(Array.isArray(r[0].media)?r[0].media:[]).filter(m=>m.id!==mid); delete _entityCache["st_"+curSt]; await dbPatch("students","id=eq."+curSt,{media}); renderMediaList("st-media-list",media,"student"); } }
+  else if (ctx==="ensemble"&&curEn) { const r=await dbGet("ensembles","id=eq."+curEn); if(r&&r[0]) { const media=(Array.isArray(r[0].media)?r[0].media:[]).filter(m=>m.id!==mid); delete _entityCache["en_"+curEn]; await dbPatch("ensembles","id=eq."+curEn,{media}); renderMediaList("en-media-list",media,"ensemble"); } }
+  else if (ctx==="raspevki_student"&&curSt) { const r=await dbGet("students","id=eq."+curSt); if(r&&r[0]) { const raspevki=(Array.isArray(r[0].raspevki)?r[0].raspevki:[]).filter(m=>m.id!==mid); delete _entityCache["st_"+curSt]; await dbPatch("students","id=eq."+curSt,{raspevki}); renderMediaList("st-raspevki-list",raspevki,"raspevki_student"); } }
   load(false);
 }
 async function delStudio(mid, lid, eid, ctx) {
   load(true);
-  if (ctx==="stu_student"&&curSt) { const r=await dbGet("students","id=eq."+curSt); if(r&&r[0]) { const studio=(Array.isArray(r[0].studio)?r[0].studio:[]).filter(m=>m.id!==mid); await dbPatch("students","id=eq."+curSt,{studio}); renderStudio(lid,studio,eid,ctx); } }
-  else if (ctx==="stu_ensemble"&&curEn) { const r=await dbGet("ensembles","id=eq."+curEn); if(r&&r[0]) { const studio=(Array.isArray(r[0].studio)?r[0].studio:[]).filter(m=>m.id!==mid); await dbPatch("ensembles","id=eq."+curEn,{studio}); renderStudio(lid,studio,eid,ctx); } }
+  if (ctx==="stu_student"&&curSt) { const r=await dbGet("students","id=eq."+curSt); if(r&&r[0]) { const studio=(Array.isArray(r[0].studio)?r[0].studio:[]).filter(m=>m.id!==mid); delete _entityCache["st_"+curSt]; await dbPatch("students","id=eq."+curSt,{studio}); renderStudio(lid,studio,eid,ctx); } }
+  else if (ctx==="stu_ensemble"&&curEn) { const r=await dbGet("ensembles","id=eq."+curEn); if(r&&r[0]) { const studio=(Array.isArray(r[0].studio)?r[0].studio:[]).filter(m=>m.id!==mid); delete _entityCache["en_"+curEn]; await dbPatch("ensembles","id=eq."+curEn,{studio}); renderStudio(lid,studio,eid,ctx); } }
   load(false);
 }
 async function saveNote(mid, ctx, val) {
@@ -1174,14 +1269,14 @@ async function createStudent() {
   const n=document.getElementById("ns-n").value.trim(), r=document.getElementById("ns-r").value.trim()||"Эстрадный вокал", l=document.getElementById("ns-l").value.trim(), p=document.getElementById("ns-p").value.trim();
   if (!n||!l||!p) { toast("Заполните все поля"); return; }
   const c = await dbGet("students","login=eq."+encodeURIComponent(l)); if (c&&c.length) { toast("Логин занят"); return; }
-  load(true); await dbPost("students",{id:"s"+Date.now(),name:n,role:r,login:l,pass:p,theory:"",photo:null,media:[],studio:[],songs:[],raspevki:[]}); load(false);
+  load(true); await dbPost("students",{id:"s"+Date.now(),name:n,role:r,login:l,pass:p,theory:"",photo:null,media:[],studio:[],songs:[],raspevki:[],videolinks:[]}); load(false);
   closeM("modal-student"); renderAdm(); ["ns-n","ns-r","ns-l","ns-p"].forEach(id=>document.getElementById(id).value=""); toast("Ученик создан: "+n);
 }
 async function createEnsemble() {
   const n=document.getElementById("ne-n").value.trim(), d=document.getElementById("ne-d").value.trim()||"Вокальный ансамбль", l=document.getElementById("ne-l").value.trim(), p=document.getElementById("ne-p").value.trim();
   if (!n||!l||!p) { toast("Заполните все поля"); return; }
   const c = await dbGet("ensembles","login=eq."+encodeURIComponent(l)); if (c&&c.length) { toast("Логин занят"); return; }
-  load(true); await dbPost("ensembles",{id:"e"+Date.now(),name:n,descr:d,login:l,pass:p,theory:"",photo:null,media:[],studio:[],songs:[],news:[]}); load(false);
+  load(true); await dbPost("ensembles",{id:"e"+Date.now(),name:n,descr:d,login:l,pass:p,theory:"",photo:null,media:[],studio:[],songs:[],news:[],videolinks:[]}); load(false);
   closeM("modal-ensemble"); renderAdm(); toast("Ансамбль создан: "+n);
 }
 function handleAfImg(e) {
@@ -1194,7 +1289,7 @@ async function createAfisha() {
   load(true); await dbPost("events",{id:"a"+Date.now(),title:t,date:d,time:tm,place:pl,descr:ds,icon:ic,img:pendAfImg||null}); load(false);
   closeM("modal-afisha"); pendAfImg=null; document.getElementById("af-img-prev").innerHTML="";
   ["af-t","af-pl","af-ds"].forEach(id=>document.getElementById(id).value="");
-  await renderAfisha(); if(CU==="admin") renderAdm(); toast("Мероприятие добавлено");
+  _afishaCache=null; await renderAfisha(true); if(CU==="admin") renderAdm(); toast("Мероприятие добавлено");
 }
 async function editAfisha(id) {
   const rows = await dbGet("events","id=eq."+id);
@@ -1230,15 +1325,113 @@ async function saveEditAfisha() {
   document.querySelector("#modal-afisha h2").textContent = "Новое мероприятие";
   document.querySelector("#modal-afisha .btn-primary").textContent = "Добавить";
   document.querySelector("#modal-afisha .btn-primary").onclick = createAfisha;
-  await renderAfisha(); if(CU==="admin") renderAdm(); toast("Мероприятие обновлено");
+  _afishaCache=null; await renderAfisha(true); if(CU==="admin") renderAdm(); toast("Мероприятие обновлено");
 }
-async function delAfisha(id) { load(true); await dbDel("events","id=eq."+id); load(false); await renderAfisha(); if(CU==="admin") renderAdm(); toast("Удалено"); }
+async function delAfisha(id) { load(true); await dbDel("events","id=eq."+id); load(false); _afishaCache=null; await renderAfisha(true); if(CU==="admin") renderAdm(); toast("Удалено"); }
 async function delSt(id) { if(!confirm("Удалить ученика?")) return; load(true); await dbDel("students","id=eq."+id); load(false); renderAdm(); toast("Удалено"); }
 async function delEn(id) { if(!confirm("Удалить ансамбль?")) return; load(true); await dbDel("ensembles","id=eq."+id); load(false); renderAdm(); toast("Удалено"); }
 
 document.querySelectorAll(".modal-ov").forEach(el => el.addEventListener("click", e => { if(e.target===el) el.classList.remove("open"); }));
 document.addEventListener("keydown", e => { if(e.key==="Escape") document.querySelectorAll(".modal-ov.open").forEach(m=>m.classList.remove("open")); });
 document.getElementById("lp").addEventListener("keydown", e => { if(e.key==="Enter") doLogin(); });
+
+
+function parseVideoUrl(url) {
+  if (!url) return null;
+  try {
+    // YouTube: youtube.com/watch?v=ID or youtu.be/ID or youtube.com/shorts/ID
+    let m = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([\w-]{11})/);
+    if (m) return {type:'youtube', id:m[1], embed:`https://www.youtube.com/embed/${m[1]}?rel=0`};
+
+    // RuTube: rutube.ru/video/ID
+    m = url.match(/rutube\.ru\/video\/([\w]+)/);
+    if (m) return {type:'rutube', id:m[1], embed:`https://rutube.ru/play/embed/${m[1]}/`};
+
+    // VK Video: vk.com/video-OWNERID_VIDEOID or vkvideo.ru
+    m = url.match(/vk\.com\/video(-?\d+_\d+)/);
+    if (m) return {type:'vk', id:m[1], embed:`https://vk.com/video_ext.php?oid=${m[1].split('_')[0]}&id=${m[1].split('_')[1]}&hd=2`};
+    m = url.match(/vkvideo\.ru\/video(-?\d+_\d+)/);
+    if (m) return {type:'vk', id:m[1], embed:`https://vk.com/video_ext.php?oid=${m[1].split('_')[0]}&id=${m[1].split('_')[1]}&hd=2`};
+
+    // Vimeo: vimeo.com/ID
+    m = url.match(/vimeo\.com\/(?!channels|groups)([\d]+)/);
+    if (m) return {type:'vimeo', id:m[1], embed:`https://player.vimeo.com/video/${m[1]}`};
+
+    // Yandex Video: video.yandex.ru
+    m = url.match(/video\.yandex\.ru\/([\w/.-]+)/);
+    if (m) return {type:'yandex', id:m[1], embed:`https://frontend.vh.yandex.ru/player/${m[1]}?autoplay=0`};
+
+    return null;
+  } catch(e) { return null; }
+}
+
+function renderVideoEmbed(parsed, name) {
+  if (!parsed) return `<a href="#" style="color:var(--indigo-light);font-size:.82rem">🔗 ${name||'Ссылка'}</a>`;
+  const icons = {youtube:'▶', rutube:'▶', vk:'▶', vimeo:'▶', yandex:'▶'};
+  return `<div class="video-embed-wrap"><iframe src="${parsed.embed}" allowfullscreen allow="autoplay; encrypted-media"></iframe></div>`;
+}
+
+function renderVideoLinks(listId, links, ctx, isAdmin) {
+  const el = document.getElementById(listId);
+  if (!links || !links.length) { el.innerHTML = '<div class="empty-s">Видео-ссылок нет</div>'; return; }
+  el.innerHTML = links.map((lnk, i) => {
+    const parsed = parseVideoUrl(lnk.url);
+    const delBtn = isAdmin ? `<button class="media-del" onclick="delVideoLink('${ctx}',${i})">✕</button>` : "";
+    return `<div class="video-link-item">
+      <div class="video-link-hdr">
+        <span style="font-size:1rem">🎬</span>
+        <span class="video-link-name">${lnk.name || lnk.url}</span>
+        ${delBtn}
+      </div>
+      ${renderVideoEmbed(parsed, lnk.name)}
+    </div>`;
+  }).join("");
+}
+
+async function addVideoLink(ctx, inputId, nameId, listId) {
+  const url = document.getElementById(inputId).value.trim();
+  const name = document.getElementById(nameId).value.trim() || url;
+  if (!url) { toast("Введите ссылку на видео"); return; }
+  const parsed = parseVideoUrl(url);
+  if (!parsed) { toast("Не удалось определить платформу. Поддерживаются YouTube, RuTube, VK, Vimeo"); return; }
+  document.getElementById(inputId).value = "";
+  document.getElementById(nameId).value = "";
+  load(true);
+  if (ctx === "student" && curSt) {
+    const r = await dbGet("students","id=eq."+curSt); if(!r||!r[0]) { load(false); return; }
+    const videoLinks = Array.isArray(r[0].videolinks) ? r[0].videolinks : [];
+    videoLinks.push({url, name});
+    await dbPatch("students","id=eq."+curSt,{videolinks:videoLinks});
+    load(false); renderVideoLinks(listId, videoLinks, ctx, CU==="admin");
+  } else if (ctx === "ensemble" && curEn) {
+    const r = await dbGet("ensembles","id=eq."+curEn); if(!r||!r[0]) { load(false); return; }
+    const videoLinks = Array.isArray(r[0].videolinks) ? r[0].videolinks : [];
+    videoLinks.push({url, name});
+    await dbPatch("ensembles","id=eq."+curEn,{videolinks:videoLinks});
+    load(false); renderVideoLinks(listId, videoLinks, ctx, CU==="admin");
+  }
+  toast("Видео добавлено ✓");
+}
+
+async function delVideoLink(ctx, idx) {
+  load(true);
+  if (ctx === "student" && curSt) {
+    const r = await dbGet("students","id=eq."+curSt); if(!r||!r[0]) { load(false); return; }
+    const videoLinks = Array.isArray(r[0].videolinks) ? r[0].videolinks : [];
+    videoLinks.splice(idx, 1);
+    await dbPatch("students","id=eq."+curSt,{videolinks:videoLinks});
+    load(false);
+    renderVideoLinks("st-videolinks-list", videoLinks, ctx, CU==="admin");
+  } else if (ctx === "ensemble" && curEn) {
+    const r = await dbGet("ensembles","id=eq."+curEn); if(!r||!r[0]) { load(false); return; }
+    const videoLinks = Array.isArray(r[0].videolinks) ? r[0].videolinks : [];
+    videoLinks.splice(idx, 1);
+    await dbPatch("ensembles","id=eq."+curEn,{videolinks:videoLinks});
+    load(false);
+    renderVideoLinks("en-videolinks-list", videoLinks, ctx, CU==="admin");
+  }
+  toast("Удалено");
+}
 
 async function init() {
   // Restore login - instant, no waiting
@@ -1271,6 +1464,7 @@ async function init() {
   });
 }
 
+let _entityCache = {};
 async function openStFast(id) {
   curSt = id;
   document.getElementById("st-name").textContent = CU.name || "Ученик";
@@ -1294,6 +1488,8 @@ async function openStFast(id) {
   renderStudio("st-studio-list", Array.isArray(s.studio)?s.studio:[], "st-stu-empty", "stu_student");
   renderSongs("st-songs", Array.isArray(s.songs)?s.songs:[], "student");
   renderMediaList("st-raspevki-list", Array.isArray(s.raspevki)?s.raspevki:[], "raspevki_student");
+  renderVideoLinks("st-videolinks-list", Array.isArray(s.videolinks)?s.videolinks:[], "student", isA);
+  document.getElementById("st-videolinks-add").style.display = "block";
 }
 
 async function openEnFast(id) {
@@ -1315,6 +1511,8 @@ async function openEnFast(id) {
   renderStudio("en-studio-list", Array.isArray(e.studio)?e.studio:[], "en-stu-empty", "stu_ensemble");
   renderSongs("en-songs", Array.isArray(e.songs)?e.songs:[], "ensemble");
   renderNews("en-news-list", Array.isArray(e.news)?e.news:[]);
+  renderVideoLinks("en-videolinks-list", Array.isArray(e.videolinks)?e.videolinks:[], "ensemble", isA);
+  document.getElementById("en-videolinks-add").style.display = "block";
 }
 
 init();
