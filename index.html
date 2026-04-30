@@ -277,8 +277,8 @@ footer span{color:var(--indigo-light);}
     <div class="hero-bg"></div><div class="hero-ring"></div><div class="hero-ring2"></div>
     <p class="hero-overline">Музыкальная студия Vivace</p>
     <h1>Приходи таким<br><em>какой ты есть</em></h1>
-    <p class="hero-sub">Виваче — пространство, где рождается музыка. Эстрадный вокал, ансамблевое пение, профессиональная запись.</p>
-    <div class="hero-cta"><a href="https://vk.com/vivace_music_studio" target="_blank" class="btn btn-primary">Записаться</a></div>
+    <p class="hero-sub">Виваче — пространство, где рождается творчество.</p>
+    <div class="hero-cta"><a href="#contacts" class="btn btn-primary" onclick="setTimeout(()=>document.getElementById('contacts').scrollIntoView({behavior:'smooth'}),50);return false;">Записаться</a></div>
   </section>
   <section id="about" class="section">
     <span class="section-label">Педагог</span>
@@ -342,13 +342,19 @@ footer span{color:var(--indigo-light);}
     <div class="section-line"></div>
     <div class="contacts-grid">
       <div>
-        <div class="contact-item"><div class="contact-icon">📱</div><div><span class="contact-label">Телефон / WhatsApp</span><p><a href="tel:+79198914055">+7 919 891 40 55</a></p></div></div>
+        <div class="contact-item"><div class="contact-icon">📱</div><div><span class="contact-label">Телефон для связи</span><p><a href="tel:+79198914055">+7 919 891 40 55</a></p></div></div>
         <div class="contact-item"><div class="contact-icon">💬</div><div><span class="contact-label">ВКонтакте</span><p><a href="https://vk.com/vivace_music_studio" target="_blank">vk.com/vivace_music_studio</a></p></div></div>
+        <div class="contact-item"><div class="contact-icon">✈️</div><div><span class="contact-label">Телеграм-канал</span><p><a href="https://t.me/vivace_music_studio" target="_blank">t.me/vivace_music_studio</a></p></div></div>
         <div class="contact-item"><div class="contact-icon">📍</div><div><span class="contact-label">Адрес</span><p style="color:var(--text-muted)">ул. Греческая, 38, кабинет 8</p></div></div>
       </div>
       <div>
-        <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:1.5rem;font-weight:300;line-height:1.8">Запишитесь на пробное занятие или задайте любой вопрос.</p>
-        <a href="https://vk.com/vivace_music_studio" target="_blank" class="btn btn-primary">Написать во ВКонтакте</a>
+        <p style="font-size:.95rem;color:var(--text);font-weight:500;margin-bottom:.6rem">Запись на консультацию или задать вопрос:</p>
+        <div style="display:flex;flex-direction:column;gap:.7rem;margin-bottom:1.2rem">
+          <a href="https://vk.com/vivace_music_studio" target="_blank" class="btn btn-primary" style="text-align:center">💬 ВКонтакте</a>
+          <a href="https://t.me/+79198914055" target="_blank" class="btn btn-outline" style="text-align:center">✈️ Telegram</a>
+          <a href="https://wa.me/79198914055" target="_blank" class="btn btn-outline" style="text-align:center">📱 WhatsApp</a>
+          <a href="https://max.ru/+79198914055" target="_blank" class="btn btn-outline" style="text-align:center">💜 MAX</a>
+        </div>
       </div>
     </div>
   </section>
@@ -444,7 +450,7 @@ footer span{color:var(--indigo-light);}
           <div class="media-list" id="st-raspevki-list"></div>
           <div class="empty-s" id="st-rasp-empty" style="display:none">Распевки появятся здесь</div>
         </div>
-<!-- Мои записи удалены -->
+<!-- Мои записи удалены --><div id="st-media-list" style="display:none"></div>
       </div>
       <div>
         <div class="block">
