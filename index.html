@@ -249,6 +249,46 @@ footer span{color:var(--indigo-light);}
 .video-link-name{flex:1;font-size:0.83rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .video-link-add{display:flex;gap:.5rem;margin-bottom:.8rem;}
 .video-link-add input{flex:1;}
+
+.hero-about{
+  position:relative;overflow:hidden;
+  padding:5rem 2rem 4rem;
+  background:var(--bg);
+}
+.hero-about-inner{
+  max-width:1080px;margin:0 auto;
+  display:grid;grid-template-columns:340px 1fr;
+  gap:4rem;align-items:center;
+}
+.hero-about-photo{
+  aspect-ratio:1/1;
+  border-radius:var(--radius-lg);
+  overflow:hidden;border:1px solid var(--border);
+  background:var(--bg-card);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;position:relative;
+  width:100%;
+}
+.hero-about-photo img{width:100%;height:100%;object-fit:cover;}
+.hero-about-photo:hover::after{
+  content:'Загрузить фото';
+  position:absolute;inset:0;background:rgba(0,0,0,.5);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.82rem;color:#fff;font-family:var(--font-body);
+  border-radius:var(--radius-lg);
+}
+.hero-h1{
+  font-family:var(--font-head);
+  font-size:clamp(2.2rem,5vw,4rem);
+  font-weight:600;line-height:1.1;color:var(--text);
+}
+.hero-h1 em{color:var(--indigo-light);font-style:italic;}
+@media(max-width:800px){
+  .hero-about-inner{grid-template-columns:1fr;gap:2rem;}
+  .hero-about-photo{width:180px;height:180px;margin:0 auto;}
+  .hero-about-text{text-align:center;}
+  .about-tags{justify-content:center;}
+}
 </style>
 </head>
 <body>
@@ -302,20 +342,13 @@ footer span{color:var(--indigo-light);}
       </div>
     </div>
   </section>
-  <section id="services" class="section" style="padding-top:0">
-    <span class="section-label">Направления</span>
-    <h2 class="section-title">Что мы <em>предлагаем</em></h2>
+  <section id="afisha" class="section" style="padding-top:0">
+    <span class="section-label">Мероприятия</span>
+    <h2 class="section-title">Афиша <em>событий</em></h2>
     <div class="section-line"></div>
-    <div class="services-grid">
-      <div class="service-card"><div class="service-icon">🎤</div><h3>Эстрадный вокал</h3><p>Постановка дыхания, расширение диапазона, работа над тембром и стилем.</p></div>
-      <div class="service-card"><div class="service-icon">🎧</div><h3>Работа в микрофон</h3><p>Владение микрофоном, работа со звуком и мониторинг.</p></div>
-      <div class="service-card"><div class="service-icon">🎵</div><h3>Ансамблевое пение</h3><p>Работа над гармонией, дикцией, сценическим взаимодействием.</p></div>
-      <div class="service-card"><div class="service-icon">💿</div><h3>Студийная запись</h3><p>Запись, сведение, мастеринг. Готовый трек — на память и в портфолио.</p></div>
-      <div class="service-card"><div class="service-icon">🕺</div><h3>Сценическое движение</h3><p>Пластика, раскрепощённость на сцене, артистизм.</p></div>
-      <div class="service-card"><div class="service-icon">🏆</div><h3>Конкурсы и концерты</h3><p>Подготовка к конкурсам, отчётным концертам и мероприятиям.</p></div>
-    </div>
-  </section>
-  <section class="section" style="padding-top:0">
+    <div class="afisha-grid" id="afisha-grid"><div class="empty-s">Загрузка...</div></div>
+    <div id="afisha-admin-zone" style="display:none;margin-top:1rem"><button class="add-dashed" onclick="openM('modal-afisha')">+ Добавить мероприятие</button></div>
+  </section>  <section class="section" style="padding-top:0">
     <span class="section-label">О нас</span>
     <h2 class="section-title">Почему выбирают <em>Vivace?</em></h2>
     <div class="section-line"></div>
@@ -328,15 +361,19 @@ footer span{color:var(--indigo-light);}
       <div class="why-card"><div class="why-icon">✅</div><div><h4>Индивидуальный подход</h4><p>Каждый ученик получает программу подобранную именно под его голос и цели</p></div></div>
     </div>
   </section>
-
-  <section id="afisha" class="section" style="padding-top:0">
-    <span class="section-label">Мероприятия</span>
-    <h2 class="section-title">Афиша <em>событий</em></h2>
+  <section id="services" class="section" style="padding-top:0">
+    <span class="section-label">Направления</span>
+    <h2 class="section-title">Что мы <em>предлагаем</em></h2>
     <div class="section-line"></div>
-    <div class="afisha-grid" id="afisha-grid"><div class="empty-s">Загрузка...</div></div>
-    <div id="afisha-admin-zone" style="display:none;margin-top:1rem"><button class="add-dashed" onclick="openM('modal-afisha')">+ Добавить мероприятие</button></div>
-  </section>
-  <section id="contacts" class="section" style="padding-top:0">
+    <div class="services-grid">
+      <div class="service-card"><div class="service-icon">🎤</div><h3>Эстрадный вокал</h3><p>Постановка дыхания, расширение диапазона, работа над тембром и стилем.</p></div>
+      <div class="service-card"><div class="service-icon">🎧</div><h3>Работа в микрофон</h3><p>Владение микрофоном, работа со звуком и мониторинг.</p></div>
+      <div class="service-card"><div class="service-icon">🎵</div><h3>Ансамблевое пение</h3><p>Работа над гармонией, дикцией, сценическим взаимодействием.</p></div>
+      <div class="service-card"><div class="service-icon">💿</div><h3>Студийная запись</h3><p>Запись, сведение, мастеринг. Готовый трек — на память и в портфолио.</p></div>
+      <div class="service-card"><div class="service-icon">🕺</div><h3>Сценическое движение</h3><p>Пластика, раскрепощённость на сцене, артистизм.</p></div>
+      <div class="service-card"><div class="service-icon">🏆</div><h3>Конкурсы и концерты</h3><p>Подготовка к конкурсам, отчётным концертам и мероприятиям.</p></div>
+    </div>
+  </section>  <section id="contacts" class="section" style="padding-top:0">
     <span class="section-label">Связаться</span>
     <h2 class="section-title">Контакты</h2>
     <div class="section-line"></div>
@@ -357,8 +394,7 @@ footer span{color:var(--indigo-light);}
         </div>
       </div>
     </div>
-  </section>
-  <section id="map-section" class="section" style="padding-top:0">
+  </section>  <section id="map-section" class="section" style="padding-top:0">
     <span class="section-label">Как добраться</span>
     <h2 class="section-title">Мы на <em>карте</em></h2>
     <div class="section-line"></div>
@@ -372,7 +408,6 @@ footer span{color:var(--indigo-light);}
     </div>
     </div>
   </section>
-
   <footer><p>© 2026 Музыкальная студия <span>Виваче</span> · ул. Греческая, 38, каб. 8 · +7 919 891 40 55</p></footer>
 </div>
 
@@ -1236,7 +1271,7 @@ function handleAboutPhoto(event) {
   r.onload = async e => {
     const url = e.target.result;
     load(true); await dbPatch("settings", "key=eq.about_photo", {value: url}); load(false);
-    document.getElementById("about-photo-wrap").innerHTML = `<img src="${url}" alt="Педагог" style="width:100%;height:100%;object-fit:cover"><input type="file" id="about-photo-inp" accept="image/*" style="display:none" onchange="handleAboutPhoto(event)">`;
+    document.getElementById("about-photo-wrap").innerHTML = `<img src="${url}" alt="Педагог" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-lg)"><input type="file" id="about-photo-inp" accept="image/*" style="display:none" onchange="handleAboutPhoto(event)">`;
     toast("Фото обновлено");
   };
   r.readAsDataURL(f);
@@ -1466,7 +1501,9 @@ async function init() {
   dbGet("settings","key=eq.about_photo").then(ap => {
     if (ap && ap.length && ap[0].value) {
       const w = document.getElementById("about-photo-wrap");
-      if (w) w.innerHTML = `<img src="${ap[0].value}" alt="Педагог" style="width:100%;height:100%;object-fit:cover"><input type="file" id="about-photo-inp" accept="image/*" style="display:none" onchange="handleAboutPhoto(event)">`;
+      if (w) {
+        w.innerHTML = `<img src="${ap[0].value}" alt="Педагог" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-lg)"><input type="file" id="about-photo-inp" accept="image/*" style="display:none" onchange="handleAboutPhoto(event)">`;
+      }
     }
   });
 }
