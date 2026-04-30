@@ -419,7 +419,7 @@ footer span{color:var(--indigo-light);}
           <p style="font-size:0.77rem;color:var(--text-dim);margin-bottom:.8rem">YouTube, RuTube, VK Видео и др.</p>
           <div id="st-videolinks-add" style="display:none">
             <div class="video-link-add">
-              <input class="form-input" id="st-vl-url" type="url" placeholder="https://youtube.com/watch?v=...">
+              <input class="form-input" id="st-vl-url" type="url" placeholder="YouTube, RuTube, VK, Telegram...">
             </div>
             <div style="display:flex;gap:.5rem;margin-bottom:.8rem">
               <input class="form-input" id="st-vl-name" type="text" placeholder="Название (необязательно)">
@@ -443,19 +443,7 @@ footer span{color:var(--indigo-light);}
           <div class="media-list" id="st-raspevki-list"></div>
           <div class="empty-s" id="st-rasp-empty" style="display:none">Распевки появятся здесь</div>
         </div>
-        <div class="block">
-          <div class="block-title">🎵 Мои записи</div>
-          <div class="upload-zone" onclick="document.getElementById('st-med-inp').click()">
-            <input type="file" id="st-med-inp" multiple accept="audio/*,video/*" onchange="handleMedia(event,'st-media-list','student')">
-            <div class="upload-icon">⬆</div><p>Загрузить аудио или видео</p><p style="font-size:0.7rem;color:var(--text-dim);margin-top:.2rem">Макс. размер видео: 50 МБ</p>
-          </div>
-          <div class="upload-progress" id="prog-student">
-            <div class="upload-progress-label"><span id="prog-student-name">Загрузка...</span><span id="prog-student-pct">0%</span></div>
-            <div class="upload-progress-bar"><div class="upload-progress-fill" id="prog-student-fill"></div></div>
-            <div class="upload-size-warn" id="prog-student-warn">⚠ Файл больше 50 МБ — загрузка может занять несколько минут. Рекомендуем сжать видео перед загрузкой.</div>
-          </div>
-          <div class="media-list" id="st-media-list"></div>
-        </div>
+<!-- Мои записи удалены -->
       </div>
       <div>
         <div class="block">
@@ -493,11 +481,16 @@ footer span{color:var(--indigo-light);}
     <div class="cols2">
       <div>
         <div class="block">
+          <div class="block-title">📰 Новости</div>
+          <div id="en-news-list"></div>
+          <div id="en-news-add" style="display:none"><button class="add-dashed" onclick="openM('modal-add-news')">+ Добавить новость</button></div>
+        </div>
+        <div class="block">
           <div class="block-title">🎬 Видео-ссылки</div>
           <p style="font-size:0.77rem;color:var(--text-dim);margin-bottom:.8rem">YouTube, RuTube, VK Видео и др.</p>
           <div id="en-videolinks-add" style="display:none">
             <div class="video-link-add">
-              <input class="form-input" id="en-vl-url" type="url" placeholder="https://youtube.com/watch?v=...">
+              <input class="form-input" id="en-vl-url" type="url" placeholder="YouTube, RuTube, VK, Telegram...">
             </div>
             <div style="display:flex;gap:.5rem;margin-bottom:.8rem">
               <input class="form-input" id="en-vl-name" type="text" placeholder="Название (необязательно)">
@@ -505,11 +498,6 @@ footer span{color:var(--indigo-light);}
             </div>
           </div>
           <div id="en-videolinks-list"></div>
-        </div>
-        <div class="block">
-          <div class="block-title">📰 Новости</div>
-          <div id="en-news-list"></div>
-          <div id="en-news-add" style="display:none"><button class="add-dashed" onclick="openM('modal-add-news')">+ Добавить новость</button></div>
         </div>
         <div class="block">
           <div class="block-title">🎵 Репетиции</div>
@@ -1361,13 +1349,22 @@ function parseVideoUrl(url) {
     m = url.match(/video\.yandex\.ru\/([\w/.-]+)/);
     if (m) return {type:'yandex', id:m[1], embed:`https://frontend.vh.yandex.ru/player/${m[1]}?autoplay=0`};
 
+    // Telegram: t.me links - no embed possible, show as button
+    if (url.includes('t.me') || url.includes('telegram.me')) {
+      return {type:'telegram', id:url, embed:null};
+    }
+
     return null;
   } catch(e) { return null; }
 }
 
-function renderVideoEmbed(parsed, name) {
-  if (!parsed) return `<a href="#" style="color:var(--indigo-light);font-size:.82rem">🔗 ${name||'Ссылка'}</a>`;
-  const icons = {youtube:'▶', rutube:'▶', vk:'▶', vimeo:'▶', yandex:'▶'};
+function renderVideoEmbed(parsed, name, url) {
+  if (!parsed) return `<a href="${url||'#'}" target="_blank" style="color:var(--indigo-light);font-size:.82rem">🔗 Открыть ссылку</a>`;
+  if (parsed.type === 'telegram') {
+    return `<a href="${parsed.id}" target="_blank" class="btn btn-outline btn-sm" style="display:inline-flex;align-items:center;gap:.4rem;margin-top:.3rem">
+      <span>✈</span> Открыть в Telegram
+    </a>`;
+  }
   return `<div class="video-embed-wrap"><iframe src="${parsed.embed}" allowfullscreen allow="autoplay; encrypted-media"></iframe></div>`;
 }
 
@@ -1377,13 +1374,14 @@ function renderVideoLinks(listId, links, ctx, isAdmin) {
   el.innerHTML = links.map((lnk, i) => {
     const parsed = parseVideoUrl(lnk.url);
     const delBtn = isAdmin ? `<button class="media-del" onclick="delVideoLink('${ctx}',${i})">✕</button>` : "";
+    const typeIcon = parsed ? {youtube:'▶️',rutube:'▶️',vk:'🎬',vimeo:'▶️',yandex:'▶️',telegram:'✈️'}[parsed.type]||'🎬' : '🔗';
     return `<div class="video-link-item">
       <div class="video-link-hdr">
-        <span style="font-size:1rem">🎬</span>
+        <span style="font-size:1rem">${typeIcon}</span>
         <span class="video-link-name">${lnk.name || lnk.url}</span>
         ${delBtn}
       </div>
-      ${renderVideoEmbed(parsed, lnk.name)}
+      ${renderVideoEmbed(parsed, lnk.name, lnk.url)}
     </div>`;
   }).join("");
 }
