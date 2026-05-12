@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Виваче — Музыкальная студия</title>
 <link rel="preconnect" href="https://rlmmyydpgiggzqihpjxt.supabase.co">
@@ -762,6 +763,32 @@ const dbPost = (t, b) => q(t, "POST", b);
 const dbPatch = (t, f, b) => q(t, "PATCH", b, f);
 const dbDel = (t, f) => q(t, "DELETE", null, f);
 
+
+// ── CACHE SYSTEM (5 min TTL) ──
+const CACHE = {};
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+function cacheGet(key) {
+  const c = CACHE[key];
+  if (!c) return null;
+  if (Date.now() - c.ts > CACHE_TTL) { delete CACHE[key]; return null; }
+  return c.data;
+}
+function cacheSet(key, data) { CACHE[key] = {data, ts: Date.now()}; }
+function cacheInvalidate(pattern) {
+  Object.keys(CACHE).forEach(k => { if (k.includes(pattern)) delete CACHE[k]; });
+}
+
+// Cached DB get
+async function dbGetCached(table, filter) {
+  const key = table + "?" + (filter||"");
+  const cached = cacheGet(key);
+  if (cached) return cached;
+  const data = await dbGet(table, filter);
+  if (data) cacheSet(key, data);
+  return data;
+}
+
 let CU = null, curSt = null, curEn = null, curSng = null, curSngCtx = null, prevSngPage = null;
 let pendAfImg = null, pendNewsImg = null, addSngCtx = null;
 
@@ -826,7 +853,11 @@ async function renderAfisha(forceReload) {
 }
 
 async function renderAdm() {
-  const [ss, es, evs] = await Promise.all([dbGet("students","order=created_at.asc"), dbGet("ensembles","order=created_at.asc"), dbGet("events","order=date.asc")]);
+  const [ss, es, evs] = await Promise.all([
+    dbGetCached("students","order=created_at.asc"),
+    dbGetCached("ensembles","order=created_at.asc"),
+    dbGetCached("events","order=date.asc")
+  ]);
   document.getElementById("adm-students").innerHTML = (ss && ss.length)
     ? ss.map(s => `<div class="al-item"><span class="al-link" onclick="openSt('${s.id}')">${s.name}</span><div style="display:flex;gap:.7rem;align-items:center"><span style="font-size:.7rem;color:var(--text-dim)">${s.login}</span><button class="al-del" onclick="delSt('${s.id}')">✕</button></div></div>`).join("")
     : '<p style="color:var(--text-dim);font-size:.82rem">Нет учеников</p>';
@@ -1214,9 +1245,9 @@ async function handleMedia(event, listId, ctx) {
     items.push({id: "m" + Date.now() + Math.random(), name: f.name, type: f.type.startsWith("video") ? "video" : "audio", url, date: new Date().toLocaleDateString("ru"), note: ""});
   }
   if (!items.length) { return; }
-  if (ctx === "student" && curSt) { const r = await dbGet("students","id=eq."+curSt); if (r&&r[0]) { const media=[...items,...(Array.isArray(r[0].media)?r[0].media:[])]; delete _entityCache["st_"+curSt]; await dbPatch("students","id=eq."+curSt,{media}); renderMediaList(listId,media,"student"); } }
+  if (ctx === "student" && curSt) { const r = await dbGet("students","id=eq."+curSt); if (r&&r[0]) { const media=[...items,...(Array.isArray(r[0].media)?r[0].media:[])]; delete _entityCache["st_"+curSt]; await dbPatch("students","id=eq."+curSt,{media}); cacheInvalidate("students"); renderMediaList(listId,media,"student"); } }
   else if (ctx === "ensemble" && curEn) { const r = await dbGet("ensembles","id=eq."+curEn); if (r&&r[0]) { const media=[...items,...(Array.isArray(r[0].media)?r[0].media:[])]; delete _entityCache["en_"+curEn]; await dbPatch("ensembles","id=eq."+curEn,{media}); renderMediaList(listId,media,"ensemble"); } }
-  else if (ctx === "stu_student" && curSt) { const r = await dbGet("students","id=eq."+curSt); if (r&&r[0]) { const studio=[...items,...(Array.isArray(r[0].studio)?r[0].studio:[])]; delete _entityCache["st_"+curSt]; await dbPatch("students","id=eq."+curSt,{studio}); renderStudio("st-studio-list",studio,"st-stu-empty","stu_student"); } }
+  else if (ctx === "stu_student" && curSt) { const r = await dbGet("students","id=eq."+curSt); if (r&&r[0]) { const studio=[...items,...(Array.isArray(r[0].studio)?r[0].studio:[])]; delete _entityCache["st_"+curSt]; await dbPatch("students","id=eq."+curSt,{studio}); cacheInvalidate("students"); renderStudio("st-studio-list",studio,"st-stu-empty","stu_student"); } }
   else if (ctx === "raspevki_student" && curSt) { const r = await dbGet("students","id=eq."+curSt); if (r&&r[0]) { const raspevki=[...items,...(Array.isArray(r[0].raspevki)?r[0].raspevki:[])]; delete _entityCache["st_"+curSt]; await dbPatch("students","id=eq."+curSt,{raspevki}); renderMediaList("st-raspevki-list",raspevki,"raspevki_student"); } }
   else if (ctx === "stu_ensemble" && curEn) { const r = await dbGet("ensembles","id=eq."+curEn); if (r&&r[0]) { const studio=[...items,...(Array.isArray(r[0].studio)?r[0].studio:[])]; delete _entityCache["en_"+curEn]; await dbPatch("ensembles","id=eq."+curEn,{studio}); renderStudio("en-studio-list",studio,"en-stu-empty","stu_ensemble"); } }
   load(false); event.target.value = ""; toast("Загружено");
@@ -1235,19 +1266,19 @@ function renderStudio(listId, items, emptyId, ctx) {
 }
 async function delMedia(mid, ctx) {
   load(true);
-  if (ctx==="student"&&curSt) { const r=await dbGet("students","id=eq."+curSt); if(r&&r[0]) { const media=(Array.isArray(r[0].media)?r[0].media:[]).filter(m=>m.id!==mid); delete _entityCache["st_"+curSt]; await dbPatch("students","id=eq."+curSt,{media}); renderMediaList("st-media-list",media,"student"); } }
+  if (ctx==="student"&&curSt) { const r=await dbGet("students","id=eq."+curSt); if(r&&r[0]) { const media=(Array.isArray(r[0].media)?r[0].media:[]).filter(m=>m.id!==mid); delete _entityCache["st_"+curSt]; await dbPatch("students","id=eq."+curSt,{media}); cacheInvalidate("students"); renderMediaList("st-media-list",media,"student"); } }
   else if (ctx==="ensemble"&&curEn) { const r=await dbGet("ensembles","id=eq."+curEn); if(r&&r[0]) { const media=(Array.isArray(r[0].media)?r[0].media:[]).filter(m=>m.id!==mid); delete _entityCache["en_"+curEn]; await dbPatch("ensembles","id=eq."+curEn,{media}); renderMediaList("en-media-list",media,"ensemble"); } }
   else if (ctx==="raspevki_student"&&curSt) { const r=await dbGet("students","id=eq."+curSt); if(r&&r[0]) { const raspevki=(Array.isArray(r[0].raspevki)?r[0].raspevki:[]).filter(m=>m.id!==mid); delete _entityCache["st_"+curSt]; await dbPatch("students","id=eq."+curSt,{raspevki}); renderMediaList("st-raspevki-list",raspevki,"raspevki_student"); } }
   load(false);
 }
 async function delStudio(mid, lid, eid, ctx) {
   load(true);
-  if (ctx==="stu_student"&&curSt) { const r=await dbGet("students","id=eq."+curSt); if(r&&r[0]) { const studio=(Array.isArray(r[0].studio)?r[0].studio:[]).filter(m=>m.id!==mid); delete _entityCache["st_"+curSt]; await dbPatch("students","id=eq."+curSt,{studio}); renderStudio(lid,studio,eid,ctx); } }
+  if (ctx==="stu_student"&&curSt) { const r=await dbGet("students","id=eq."+curSt); if(r&&r[0]) { const studio=(Array.isArray(r[0].studio)?r[0].studio:[]).filter(m=>m.id!==mid); delete _entityCache["st_"+curSt]; await dbPatch("students","id=eq."+curSt,{studio}); cacheInvalidate("students"); renderStudio(lid,studio,eid,ctx); } }
   else if (ctx==="stu_ensemble"&&curEn) { const r=await dbGet("ensembles","id=eq."+curEn); if(r&&r[0]) { const studio=(Array.isArray(r[0].studio)?r[0].studio:[]).filter(m=>m.id!==mid); delete _entityCache["en_"+curEn]; await dbPatch("ensembles","id=eq."+curEn,{studio}); renderStudio(lid,studio,eid,ctx); } }
   load(false);
 }
 async function saveNote(mid, ctx, val) {
-  if (ctx==="student"&&curSt) { const r=await dbGet("students","id=eq."+curSt); if(r&&r[0]) { const media=Array.isArray(r[0].media)?r[0].media:[]; const m=media.find(x=>x.id===mid); if(m) { m.note=val; await dbPatch("students","id=eq."+curSt,{media}); } } }
+  if (ctx==="student"&&curSt) { const r=await dbGet("students","id=eq."+curSt); if(r&&r[0]) { const media=Array.isArray(r[0].media)?r[0].media:[]; const m=media.find(x=>x.id===mid); if(m) { m.note=val; await dbPatch("students","id=eq."+curSt,{media}); cacheInvalidate("students"); } } }
   else if (ctx==="ensemble"&&curEn) { const r=await dbGet("ensembles","id=eq."+curEn); if(r&&r[0]) { const media=Array.isArray(r[0].media)?r[0].media:[]; const m=media.find(x=>x.id===mid); if(m) { m.note=val; await dbPatch("ensembles","id=eq."+curEn,{media}); } } }
 }
 
@@ -1257,8 +1288,8 @@ function handlePh(event, type) {
   const r = new FileReader();
   r.onload = async e => {
     const url = e.target.result, px = type === "student" ? "st" : "en";
-    if (type==="student"&&curSt) { load(true); await dbPatch("students","id=eq."+curSt,{photo:url}); load(false); }
-    else if (type==="ensemble"&&curEn) { load(true); await dbPatch("ensembles","id=eq."+curEn,{photo:url}); load(false); }
+    if (type==="student"&&curSt) { load(true); await dbPatch("students","id=eq."+curSt,{photo:url}); cacheInvalidate("students"); load(false); }
+    else if (type==="ensemble"&&curEn) { load(true); await dbPatch("ensembles","id=eq."+curEn,{photo:url}); cacheInvalidate("ensembles"); load(false); }
     document.getElementById(px+"-img").src = url; document.getElementById(px+"-img").style.display = "block"; document.getElementById(px+"-init").style.display = "none";
     toast("Фото обновлено");
   };
@@ -1277,7 +1308,7 @@ function handleAboutPhoto(event) {
   r.readAsDataURL(f);
 }
 async function saveTheory() {
-  if (curSt) { load(true); await dbPatch("students","id=eq."+curSt,{theory:document.getElementById("st-theory").innerHTML}); load(false); showInd("st-th-saved"); }
+  if (curSt) { load(true); await dbPatch("students","id=eq."+curSt,{theory:document.getElementById("st-theory").innerHTML}); cacheInvalidate("students"); load(false); showInd("st-th-saved"); }
 }
 
 async function doLogin() {
@@ -1301,14 +1332,14 @@ async function createStudent() {
   const n=document.getElementById("ns-n").value.trim(), r=document.getElementById("ns-r").value.trim()||"Эстрадный вокал", l=document.getElementById("ns-l").value.trim(), p=document.getElementById("ns-p").value.trim();
   if (!n||!l||!p) { toast("Заполните все поля"); return; }
   const c = await dbGet("students","login=eq."+encodeURIComponent(l)); if (c&&c.length) { toast("Логин занят"); return; }
-  load(true); await dbPost("students",{id:"s"+Date.now(),name:n,role:r,login:l,pass:p,theory:"",photo:null,media:[],studio:[],songs:[],raspevki:[],videolinks:[]}); load(false);
+  load(true); cacheInvalidate("students"); await dbPost("students",{id:"s"+Date.now(),name:n,role:r,login:l,pass:p,theory:"",photo:null,media:[],studio:[],songs:[],raspevki:[],videolinks:[]}); load(false);
   closeM("modal-student"); renderAdm(); ["ns-n","ns-r","ns-l","ns-p"].forEach(id=>document.getElementById(id).value=""); toast("Ученик создан: "+n);
 }
 async function createEnsemble() {
   const n=document.getElementById("ne-n").value.trim(), d=document.getElementById("ne-d").value.trim()||"Вокальный ансамбль", l=document.getElementById("ne-l").value.trim(), p=document.getElementById("ne-p").value.trim();
   if (!n||!l||!p) { toast("Заполните все поля"); return; }
   const c = await dbGet("ensembles","login=eq."+encodeURIComponent(l)); if (c&&c.length) { toast("Логин занят"); return; }
-  load(true); await dbPost("ensembles",{id:"e"+Date.now(),name:n,descr:d,login:l,pass:p,theory:"",photo:null,media:[],studio:[],songs:[],news:[],videolinks:[]}); load(false);
+  load(true); cacheInvalidate("ensembles"); await dbPost("ensembles",{id:"e"+Date.now(),name:n,descr:d,login:l,pass:p,theory:"",photo:null,media:[],studio:[],songs:[],news:[],videolinks:[]}); load(false);
   closeM("modal-ensemble"); renderAdm(); toast("Ансамбль создан: "+n);
 }
 function handleAfImg(e) {
@@ -1318,7 +1349,7 @@ function handleAfImg(e) {
 async function createAfisha() {
   const t=document.getElementById("af-t").value.trim(), d=document.getElementById("af-d").value, tm=document.getElementById("af-tm").value, pl=document.getElementById("af-pl").value.trim(), ds=document.getElementById("af-ds").value.trim(), ic=document.getElementById("af-ic").value;
   if (!t) { toast("Введите название мероприятия"); return; }
-  load(true); await dbPost("events",{id:"a"+Date.now(),title:t,date:d,time:tm,place:pl,descr:ds,icon:ic,img:pendAfImg||null}); load(false);
+  load(true); cacheInvalidate("events"); await dbPost("events",{id:"a"+Date.now(),title:t,date:d,time:tm,place:pl,descr:ds,icon:ic,img:pendAfImg||null}); load(false);
   closeM("modal-afisha"); pendAfImg=null; document.getElementById("af-img-prev").innerHTML="";
   ["af-t","af-pl","af-ds"].forEach(id=>document.getElementById(id).value="");
   _afishaCache=null; await renderAfisha(true); if(CU==="admin") renderAdm(); toast("Мероприятие добавлено");
@@ -1359,9 +1390,9 @@ async function saveEditAfisha() {
   document.querySelector("#modal-afisha .btn-primary").onclick = createAfisha;
   _afishaCache=null; await renderAfisha(true); if(CU==="admin") renderAdm(); toast("Мероприятие обновлено");
 }
-async function delAfisha(id) { load(true); await dbDel("events","id=eq."+id); load(false); _afishaCache=null; await renderAfisha(true); if(CU==="admin") renderAdm(); toast("Удалено"); }
-async function delSt(id) { if(!confirm("Удалить ученика?")) return; load(true); await dbDel("students","id=eq."+id); load(false); renderAdm(); toast("Удалено"); }
-async function delEn(id) { if(!confirm("Удалить ансамбль?")) return; load(true); await dbDel("ensembles","id=eq."+id); load(false); renderAdm(); toast("Удалено"); }
+async function delAfisha(id) { load(true); cacheInvalidate("events"); await dbDel("events","id=eq."+id); load(false); _afishaCache=null; await renderAfisha(true); if(CU==="admin") renderAdm(); toast("Удалено"); }
+async function delSt(id) { if(!confirm("Удалить ученика?")) return; load(true); cacheInvalidate("students"); await dbDel("students","id=eq."+id); load(false); renderAdm(); toast("Удалено"); }
+async function delEn(id) { if(!confirm("Удалить ансамбль?")) return; load(true); cacheInvalidate("ensembles"); await dbDel("ensembles","id=eq."+id); load(false); renderAdm(); toast("Удалено"); }
 
 document.querySelectorAll(".modal-ov").forEach(el => el.addEventListener("click", e => { if(e.target===el) el.classList.remove("open"); }));
 document.addEventListener("keydown", e => { if(e.key==="Escape") document.querySelectorAll(".modal-ov.open").forEach(m=>m.classList.remove("open")); });
@@ -1494,8 +1525,16 @@ async function init() {
     document.getElementById("afisha-admin-zone").style.display = "block";
   }
 
-  // Load afisha in background - non-blocking
+  // Prefetch ALL data in parallel in background - non-blocking
   renderAfisha();
+  // Prefetch students and ensembles into cache so admin opens instantly
+  if (CU === "admin") {
+    Promise.all([
+      dbGetCached("students","order=created_at.asc"),
+      dbGetCached("ensembles","order=created_at.asc"),
+      dbGetCached("events","order=date.asc")
+    ]);
+  }
 
   // Load about photo in background
   dbGet("settings","key=eq.about_photo").then(ap => {
@@ -1515,7 +1554,7 @@ async function openStFast(id) {
   document.getElementById("st-role").textContent = "";
   document.getElementById("st-init").textContent = (CU.name||"А").split(" ").map(n=>n[0]).join("").slice(0,2);
   sp("page-student");
-  const rows = await dbGet("students", "id=eq." + id);
+  const rows = await dbGetCached("students", "id=eq." + id);
   if (!rows || !rows.length) return;
   const s = rows[0]; const isA = CU === "admin";
   document.getElementById("st-name").textContent = s.name;
@@ -1542,7 +1581,7 @@ async function openEnFast(id) {
   document.getElementById("en-role").textContent = "";
   document.getElementById("en-init").textContent = "♪";
   sp("page-ensemble");
-  const rows = await dbGet("ensembles", "id=eq." + id);
+  const rows = await dbGetCached("ensembles", "id=eq." + id);
   if (!rows || !rows.length) return;
   const e = rows[0]; const isA = CU === "admin";
   document.getElementById("en-name").textContent = e.name;
