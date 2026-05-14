@@ -290,6 +290,27 @@ footer span{color:var(--indigo-light);}
   .hero-about-text{text-align:center;}
   .about-tags{justify-content:center;}
 }
+
+.contacts-horiz{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1rem;
+}
+.contact-card{
+  display:flex;align-items:flex-start;gap:.8rem;
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:1.2rem;
+  text-decoration:none;transition:border-color .2s,transform .2s;
+}
+a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px);}
+.contact-card .contact-icon{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
+  background:rgba(61,59,142,0.12);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:.9rem;
+}
+.contact-card p{font-size:0.82rem;color:var(--text-muted);margin-top:.15rem;word-break:break-all;}
+@media(max-width:700px){.contacts-horiz{grid-template-columns:1fr 1fr;}}
+@media(max-width:420px){.contacts-horiz{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -378,21 +399,22 @@ footer span{color:var(--indigo-light);}
     <span class="section-label">Связаться</span>
     <h2 class="section-title">Контакты</h2>
     <div class="section-line"></div>
-    <div class="contacts-grid">
-      <div>
-        <div class="contact-item"><div class="contact-icon">📱</div><div><span class="contact-label">Телефон для связи</span><p><a href="tel:+79198914055">+7 919 891 40 55</a></p></div></div>
-        <div class="contact-item"><div class="contact-icon">💬</div><div><span class="contact-label">ВКонтакте</span><p><a href="https://vk.com/vivace_music_studio" target="_blank">vk.com/vivace_music_studio</a></p></div></div>
-        <div class="contact-item"><div class="contact-icon">✈️</div><div><span class="contact-label">Телеграм-канал</span><p><a href="https://t.me/vivace_music_studio" target="_blank">t.me/vivace_music_studio</a></p></div></div>
-        <div class="contact-item"><div class="contact-icon">📍</div><div><span class="contact-label">Адрес</span><p style="color:var(--text-muted)">ул. Греческая, 38, кабинет 8</p></div></div>
-      </div>
-      <div>
-        <p style="font-size:.95rem;color:var(--text);font-weight:500;margin-bottom:.6rem">Запись на консультацию или задать вопрос:</p>
-        <div style="display:flex;flex-direction:column;gap:.7rem;margin-bottom:1.2rem">
-          <a href="https://vk.com/vivace_music_studio" target="_blank" class="btn btn-primary" style="text-align:center">💬 ВКонтакте</a>
-          <a href="https://t.me/+79198914055" target="_blank" class="btn btn-outline" style="text-align:center">✈️ Telegram</a>
-          <a href="https://wa.me/79198914055" target="_blank" class="btn btn-outline" style="text-align:center">📱 WhatsApp</a>
-          <a href="https://max.ru/+79198914055" target="_blank" class="btn btn-outline" style="text-align:center">💜 MAX</a>
-        </div>
+    <div class="contacts-horiz">
+      <a class="contact-card" href="tel:+79198914055">
+        <div class="contact-icon">📱</div>
+        <div><span class="contact-label">Телефон для связи</span><p>+7 919 891 40 55</p></div>
+      </a>
+      <a class="contact-card" href="https://vk.com/vivace_music_studio" target="_blank">
+        <div class="contact-icon">💬</div>
+        <div><span class="contact-label">ВКонтакте</span><p>vk.com/vivace_music_studio</p></div>
+      </a>
+      <a class="contact-card" href="https://t.me/vivace_music_studio" target="_blank">
+        <div class="contact-icon">✈️</div>
+        <div><span class="contact-label">Телеграм</span><p>t.me/vivace_music_studio</p></div>
+      </a>
+      <div class="contact-card" style="cursor:default">
+        <div class="contact-icon">📍</div>
+        <div><span class="contact-label">Адрес</span><p>ул. Греческая, 38, каб. 8</p></div>
       </div>
     </div>
   </section>  <section id="map-section" class="section" style="padding-top:0">
@@ -546,7 +568,7 @@ footer span{color:var(--indigo-light);}
           <div class="block-title">🎵 Репетиции</div>
           <div class="upload-zone" onclick="document.getElementById('en-med-inp').click()">
             <input type="file" id="en-med-inp" multiple accept="audio/*,video/*" onchange="handleMedia(event,'en-media-list','ensemble')">
-            <div class="upload-icon">⬆</div><p>Загрузить аудио или видео</p><p style="font-size:0.7rem;color:var(--text-dim);margin-top:.2rem">Макс. размер видео: 50 МБ</p>
+            <div class="upload-icon">⬆</div><p>Загрузить аудио или видео</p>
           </div>
           <div class="upload-progress" id="prog-ensemble">
             <div class="upload-progress-label"><span id="prog-ensemble-name">Загрузка...</span><span id="prog-ensemble-pct">0%</span></div>
@@ -1139,20 +1161,10 @@ async function delSong(sid, ctx) {
 }
 
 async function uploadToStorage(file, progressId) {
-  // Check file size - Supabase free plan limit is 50MB
-  const MAX_SIZE = 50 * 1024 * 1024; // 50MB
-  if (file.size > MAX_SIZE) {
-    const sizeMB = (file.size / 1024 / 1024).toFixed(1);
-    const ok = confirm(`Файл "${file.name}" весит ${sizeMB} МБ.\n\nSupabase (бесплатный план) принимает файлы до 50 МБ.\n\nРекомендуем сжать видео перед загрузкой:\n• iPhone: приложение "Compress Video"\n• Android: приложение "Video Compress"\n\nПопробовать загрузить всё равно?`);
-    if (!ok) return null;
-  }
   const ext = file.name.split(".").pop().toLowerCase();
-  const safeName = Date.now() + "_" + Math.random().toString(36).slice(2) + "." + ext;
-  const path = "uploads/" + safeName;
   const shortName = file.name.length > 28 ? file.name.slice(0,26) + "..." : file.name;
-  const isBig = file.size > 20 * 1024 * 1024;
 
-  // Show inline progress bar under upload zone
+  // Show progress indicators
   const progWrap = progressId ? document.getElementById("prog-" + progressId) : null;
   const progFill = progressId ? document.getElementById("prog-" + progressId + "-fill") : null;
   const progPct  = progressId ? document.getElementById("prog-" + progressId + "-pct")  : null;
@@ -1163,10 +1175,8 @@ async function uploadToStorage(file, progressId) {
     if (progName) progName.textContent = shortName;
     if (progFill) { progFill.style.width = "0%"; progFill.classList.remove("done"); }
     if (progPct)  progPct.textContent = "0%";
-    if (progWarn) progWarn.classList.toggle("show", isBig);
+    if (progWarn) progWarn.classList.remove("show");
   }
-
-  // Show mini indicator in bottom-left corner (non-blocking)
   const mini = document.getElementById("upload-mini");
   const miniFill = document.getElementById("mini-fill");
   const miniPct  = document.getElementById("mini-pct");
@@ -1177,17 +1187,20 @@ async function uploadToStorage(file, progressId) {
     if (miniName) miniName.textContent = shortName;
     if (miniFill) { miniFill.style.width = "0%"; miniFill.classList.remove("done"); }
     if (miniPct)  miniPct.textContent = "0%";
-    if (miniWarn) miniWarn.style.display = isBig ? "block" : "none";
+    if (miniWarn) miniWarn.style.display = "none";
   }
+
+  // Upload to Cloudinary — no file size limit on free plan (25GB total storage)
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "vivace_unsigned");
+  const isAudio = file.type.startsWith("audio") || ["mp3","wav","m4a","ogg","flac","aac"].includes(ext);
+  const resourceType = isAudio ? "raw" : "auto";
+  const uploadUrl = "https://api.cloudinary.com/v1_1/dgfjaegpd/" + resourceType + "/upload";
 
   return new Promise((resolve) => {
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", SB + "/storage/v1/object/vivace/" + path);
-    xhr.setRequestHeader("apikey", SK);
-    xhr.setRequestHeader("Authorization", "Bearer " + SK);
-    xhr.setRequestHeader("Content-Type", file.type || "application/octet-stream");
-    xhr.setRequestHeader("x-upsert", "true");
-
+    xhr.open("POST", uploadUrl);
     xhr.upload.onprogress = (e) => {
       if (e.lengthComputable) {
         const pct = Math.round((e.loaded / e.total) * 100);
@@ -1199,6 +1212,8 @@ async function uploadToStorage(file, progressId) {
     };
     xhr.onload = () => {
       if (xhr.status >= 200 && xhr.status < 300) {
+        const data = JSON.parse(xhr.responseText);
+        const url = data.secure_url;
         if (progFill) { progFill.style.width = "100%"; progFill.classList.add("done"); }
         if (progPct)  progPct.textContent = "100% ✓";
         if (miniFill) { miniFill.style.width = "100%"; miniFill.classList.add("done"); }
@@ -1207,19 +1222,10 @@ async function uploadToStorage(file, progressId) {
           if (progWrap) progWrap.classList.remove("show");
           if (mini) mini.classList.remove("show");
         }, 2000);
-        resolve(SB + "/storage/v1/object/public/vivace/" + path);
+        resolve(url);
       } else {
-        let errMsg = "Ошибка загрузки";
-        try {
-          const errData = JSON.parse(xhr.responseText);
-          if (errData.error === "Payload too large" || xhr.status === 413) {
-            errMsg = "Файл слишком большой (макс. 50 МБ). Сожмите видео и попробуйте снова.";
-          } else if (xhr.status === 403) {
-            errMsg = "Нет прав доступа к хранилищу.";
-          }
-        } catch(e) {}
-        console.error("Storage error:", xhr.status, xhr.responseText);
-        toast(errMsg);
+        console.error("Cloudinary error:", xhr.status, xhr.responseText);
+        toast("Ошибка загрузки. Попробуйте ещё раз.");
         if (progWrap) progWrap.classList.remove("show");
         if (mini) mini.classList.remove("show");
         resolve(null);
@@ -1231,9 +1237,10 @@ async function uploadToStorage(file, progressId) {
       if (mini) mini.classList.remove("show");
       resolve(null);
     };
-    xhr.send(file);
+    xhr.send(formData);
   });
 }
+
 
 async function handleMedia(event, listId, ctx) {
   const files = event.target.files; if (!files.length) return;
