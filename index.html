@@ -2,6 +2,12 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#3D3B8E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Виваче">
+<link rel="apple-touch-icon" href="/logo.jpg">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Виваче — Музыкальная студия</title>
@@ -329,6 +335,7 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
     <div id="nav-user" style="display:none" class="nav-user-area">
       <span class="nav-user-name" id="nav-uname"></span>
       <button class="nav-btn" onclick="goCabinet()">Личный кабинет</button>
+      <button class="nav-btn" id="pwa-install-btn" style="display:none" onclick="installPWA()">📲 Установить</button>
       <button class="nav-btn" onclick="doLogout()">Выйти</button>
     </div>
   </div></nav>
@@ -970,7 +977,9 @@ async function createNews() {
   closeM("modal-add-news"); pendNewsImg = null;
   document.getElementById("news-img-prev").innerHTML = "";
   document.getElementById("news-title").value = ""; document.getElementById("news-text").value = "";
-  renderNews("en-news-list", news); toast("Новость опубликована");
+  renderNews("en-news-list", news); toast("Новость опубликована ✓");
+  // Send push to ensemble members
+  if (curEn) sendPushToEnsemble(curEn, "Новость от Виваче 🎵", title);
 }
 async function delNews(i) {
   load(true); const rows = await dbGetCached("ensembles", "id=eq." + curEn); if (!rows || !rows.length) { load(false); return; }
@@ -1540,6 +1549,31 @@ async function delVideoLink(ctx, idx) {
   toast("Удалено");
 }
 
+
+// PWA Install prompt
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const btn = document.getElementById('pwa-install-btn');
+  if (btn) btn.style.display = 'block';
+});
+async function installPWA() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const result = await deferredPrompt.userChoice;
+  if (result.outcome === 'accepted') {
+    toast('Приложение установлено! ✓');
+    document.getElementById('pwa-install-btn').style.display = 'none';
+  }
+  deferredPrompt = null;
+}
+window.addEventListener('appinstalled', () => {
+  toast('Приложение Виваче установлено ✓');
+  const btn = document.getElementById('pwa-install-btn');
+  if (btn) btn.style.display = 'none';
+});
+
 async function init() {
   // Restore login - instant, no waiting
   const s = localStorage.getItem("vcu");
@@ -1813,5 +1847,100 @@ init();
     <p class="ht-footer">★ — высокочастотные теги · Рекомендуется 3–5 тегов в описании + 1–2 в заголовке</p>
   </div>
 </div>
+
+<!-- Firebase PWA Push Notifications -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging-compat.js"></script>
+<script>
+const FB_CONFIG = {
+  apiKey: "AIzaSyAr0-rgDAwt5cZUrygUIUsWm9IcuD-UBOI",
+  authDomain: "vivace-bdd23.firebaseapp.com",
+  projectId: "vivace-bdd23",
+  storageBucket: "vivace-bdd23.firebasestorage.app",
+  messagingSenderId: "606429133922",
+  appId: "1:606429133922:web:c9861ea23743bb4d8fa53b"
+};
+const VAPID_KEY = "BMzjsjJmO71f7JeENbW-i2vnHLUuceqkCpraCheceDpMw74iatEuHXKFahbBg4GbG9Ke0IaW-HbXPint4fl8p0w";
+
+let fbApp, fbMessaging, fcmToken = null;
+
+async function initFirebase() {
+  try {
+    fbApp = firebase.initializeApp(FB_CONFIG);
+    fbMessaging = firebase.messaging();
+
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      const reg = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+      console.log('SW registered:', reg.scope);
+    }
+
+    // Request notification permission
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+      fcmToken = await fbMessaging.getToken({ vapidKey: VAPID_KEY });
+      console.log('FCM Token:', fcmToken);
+      // Save token to Supabase for this user
+      await saveFcmToken(fcmToken);
+    }
+
+    // Handle foreground messages
+    fbMessaging.onMessage((payload) => {
+      console.log('Foreground message:', payload);
+      toast('🔔 ' + (payload.notification?.title || 'Новое уведомление') + ': ' + (payload.notification?.body || ''));
+    });
+  } catch(e) {
+    console.log('Firebase init error:', e);
+  }
+}
+
+async function saveFcmToken(token) {
+  if (!CU || CU === 'admin') return;
+  // Save token linked to ensemble or student
+  const table = CU.type === 'ensemble' ? 'ensembles' : 'students';
+  const id = CU.id;
+  // Get current tokens array
+  const rows = await dbGetCached(table, 'id=eq.' + id);
+  if (!rows || !rows.length) return;
+  const existing = rows[0];
+  const tokens = Array.isArray(existing.fcm_tokens) ? existing.fcm_tokens : [];
+  if (!tokens.includes(token)) {
+    tokens.push(token);
+    await dbPatch(table, 'id=eq.' + id, {fcm_tokens: tokens});
+    cacheInvalidate(table);
+  }
+}
+
+// Send notification to all ensemble members (admin only)
+async function sendPushToEnsemble(ensembleId, title, body) {
+  if (CU !== 'admin') return;
+  const rows = await dbGetCached('ensembles', 'id=eq.' + ensembleId);
+  if (!rows || !rows.length) return;
+  const tokens = rows[0].fcm_tokens || [];
+  if (!tokens.length) { toast('Нет подписчиков на уведомления'); return; }
+
+  // Send via Firebase Cloud Messaging HTTP API
+  for (const token of tokens) {
+    try {
+      await fetch('https://fcm.googleapis.com/fcm/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'key=YOUR_SERVER_KEY'
+        },
+        body: JSON.stringify({
+          to: token,
+          notification: { title, body },
+          data: { ensembleId }
+        })
+      });
+    } catch(e) { console.log('Push send error:', e); }
+  }
+  toast('Уведомления отправлены ✓');
+}
+
+// Auto-init when user logs in
+window._initFirebaseWhenReady = initFirebase;
+</script>
 </body>
 </html>
