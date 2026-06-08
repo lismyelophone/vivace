@@ -8,6 +8,12 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Виваче">
 <link rel="apple-touch-icon" href="/logo.jpg">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#3D3B8E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Виваче">
+<link rel="apple-touch-icon" href="/logo.jpg">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Виваче — Музыкальная студия</title>
@@ -457,6 +463,19 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
       <div class="block"><div class="block-title">🎶 Ансамбли</div><div id="adm-ensembles"></div><button class="add-dashed" onclick="openM('modal-ensemble')" style="margin-top:.5rem">+ Новый ансамбль</button></div>
     </div>
     <div class="block"><div class="block-title">📅 Мероприятия</div><div id="adm-afisha"></div></div>
+    <div class="block">
+      <div class="block-title">🔔 Push-уведомления</div>
+      <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:.8rem">Для отправки уведомлений введи Server Key из Firebase → Project Settings → Cloud Messaging</p>
+      <div style="display:flex;gap:.5rem">
+        <input class="form-input" id="fcm-server-key" type="password" placeholder="AAAA... (Server Key из Firebase)">
+        <button class="btn btn-primary btn-sm" onclick="saveFcmServerKey()">Сохранить</button>
+      </div>
+      <p id="fcm-key-status" style="font-size:.78rem;color:var(--indigo-light);margin-top:.4rem"></p>
+      <div style="margin-top:1rem">
+        <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:.5rem">Тест уведомления:</p>
+        <button class="btn btn-outline btn-sm" onclick="testPush()">📨 Отправить тестовое</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1375,7 +1394,7 @@ async function createStudent() {
   const n=document.getElementById("ns-n").value.trim(), r=document.getElementById("ns-r").value.trim()||"Эстрадный вокал", l=document.getElementById("ns-l").value.trim(), p=document.getElementById("ns-p").value.trim();
   if (!n||!l||!p) { toast("Заполните все поля"); return; }
   const c = await dbGetCached("students","login=eq."+encodeURIComponent(l)); if (c&&c.length) { toast("Логин занят"); return; }
-  load(true); cacheInvalidate("students"); await dbPost("students",{id:"s"+Date.now(),name:n,role:r,login:l,pass:p,theory:"",photo:null,media:[],studio:[],songs:[],raspevki:[],videolinks:[]}); load(false);
+  load(true); cacheInvalidate("students"); await dbPost("students",{id:"s"+Date.now(),name:n,role:r,login:l,pass:p,theory:"",photo:null,media:[],studio:[],songs:[],raspevki:[],videolinks:[],fcm_token:null}); load(false);
   closeM("modal-student"); renderAdm(); ["ns-n","ns-r","ns-l","ns-p"].forEach(id=>document.getElementById(id).value=""); toast("Ученик создан: "+n);
 }
 async function createEnsemble() {
@@ -1574,6 +1593,25 @@ window.addEventListener('appinstalled', () => {
   if (btn) btn.style.display = 'none';
 });
 
+
+function saveFcmServerKey() {
+  const key = document.getElementById('fcm-server-key').value.trim();
+  if (!key) { toast('Введите Server Key'); return; }
+  window.FCM_SERVER_KEY = key;
+  localStorage.setItem('fcm_server_key', key);
+  document.getElementById('fcm-key-status').textContent = '✓ Ключ сохранён (до перезагрузки страницы)';
+  toast('Server Key сохранён ✓');
+}
+async function testPush() {
+  if (!window.FCM_SERVER_KEY) { toast('Сначала введи Server Key'); return; }
+  await sendPushToAll('Тест уведомлений 🎵', 'Уведомления от студии Виваче работают!');
+}
+// Load server key from localStorage on init
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('fcm_server_key');
+  if (saved) { window.FCM_SERVER_KEY = saved; console.log('FCM server key loaded'); }
+});
+
 async function init() {
   // Restore login - instant, no waiting
   const s = localStorage.getItem("vcu");
@@ -1724,6 +1762,88 @@ function openHashtags() {
   updateHtCount();
 }
 
+
+// PWA Service Worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/firebase-messaging-sw.js')
+    .then(r => console.log('SW ok:', r.scope))
+    .catch(e => console.log('SW err:', e));
+}
+
+// FCM
+const FB_CFG = {apiKey:"AIzaSyAr0-rgDAwt5cZUrygUIUsWm9IcuD-UBOI",authDomain:"vivace-bdd23.firebaseapp.com",projectId:"vivace-bdd23",storageBucket:"vivace-bdd23.firebasestorage.app",messagingSenderId:"606429133922",appId:"1:606429133922:web:c9861ea23743bb4d8fa53b"};
+const VAPID = "BMzjsjJmO71f7JeENbW-i2vnHLUuceqkCpraCheceDpMw74iatEuHXKFahbBg4GbG9Ke0IaW-HbXPint4fl8p0w";
+let _fbMsg = null;
+
+async function initFCM() {
+  if (_fbMsg) return _fbMsg;
+  try {
+    const {initializeApp} = await import('https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js');
+    const {getMessaging, getToken, onMessage} = await import('https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging.js');
+    const app = initializeApp(FB_CFG);
+    _fbMsg = getMessaging(app);
+    onMessage(_fbMsg, p => showNotifBanner(p.notification?.title||'Виваче', p.notification?.body||''));
+    return {msg: _fbMsg, getToken};
+  } catch(e) { console.log('FCM err',e); return null; }
+}
+
+function showNotifBanner(title, body) {
+  const el = document.createElement('div');
+  el.style.cssText = 'position:fixed;top:70px;right:1rem;left:1rem;max-width:360px;margin:0 auto;background:#131320;border:1px solid #6664C8;border-radius:12px;padding:1rem 1.2rem;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.5);cursor:pointer;animation:slideIn .3s ease';
+  el.innerHTML = '<div style="display:flex;align-items:flex-start;gap:.8rem"><span style="font-size:1.5rem">🔔</span><div><div style="font-size:.9rem;font-weight:600;color:#EEEEf8;margin-bottom:.2rem">'+title+'</div><div style="font-size:.82rem;color:#9090B8">'+body+'</div></div></div>';
+  el.onclick = () => el.remove();
+  document.body.appendChild(el);
+  setTimeout(() => el.remove && el.remove(), 6000);
+}
+
+async function requestNotifPermission() {
+  if (!('Notification' in window)) { toast('Уведомления не поддерживаются'); return; }
+  const perm = await Notification.requestPermission();
+  if (perm !== 'granted') { toast('Уведомления отклонены'); return; }
+  const fcm = await initFCM();
+  if (!fcm) return;
+  try {
+    const swReg = await navigator.serviceWorker.ready;
+    const token = await fcm.getToken(fcm.msg, {vapidKey: VAPID, serviceWorkerRegistration: swReg});
+    if (CU && CU !== 'admin') {
+      const tbl = CU.type === 'student' ? 'students' : 'ensembles';
+      cacheInvalidate(tbl);
+      await dbPatch(tbl, 'id=eq.'+CU.id, {fcm_token: token});
+    }
+    toast('Уведомления включены! 🔔');
+  } catch(e) { console.log('Token err',e); toast('Ошибка подключения уведомлений'); }
+}
+
+function showNotifPrompt() {
+  if (document.getElementById('notif-prompt')) return;
+  if (Notification.permission === 'granted' || Notification.permission === 'denied') return;
+  const el = document.createElement('div');
+  el.id = 'notif-prompt';
+  el.style.cssText = 'position:fixed;bottom:1.5rem;left:1rem;right:1rem;max-width:400px;margin:0 auto;background:#131320;border:1px solid #3D3B8E;border-radius:12px;padding:1rem 1.2rem;z-index:200;box-shadow:0 4px 20px rgba(0,0,0,.4);';
+  el.innerHTML = '<div style="font-size:.88rem;color:#EEEEf8;margin-bottom:.7rem">🔔 Разрешить уведомления о новостях студии?</div><div style="display:flex;gap:.6rem"><button id="notif-yes" style="flex:1;background:#3D3B8E;color:#fff;border:none;border-radius:8px;padding:.45rem;font-size:.82rem;cursor:pointer;font-family:Inter,sans-serif">Разрешить</button><button id="notif-no" style="flex:1;background:transparent;color:#9090B8;border:1px solid rgba(61,59,142,.3);border-radius:8px;padding:.45rem;font-size:.82rem;cursor:pointer;font-family:Inter,sans-serif">Не сейчас</button></div>';
+  document.body.appendChild(el);
+  document.getElementById('notif-yes').onclick = () => { el.remove(); requestNotifPermission(); };
+  document.getElementById('notif-no').onclick = () => el.remove();
+}
+
+// PWA install button
+let _pwaPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); _pwaPrompt = e;
+  const btn = document.createElement('button');
+  btn.id = 'pwa-btn';
+  btn.innerHTML = '📲 Установить приложение';
+  btn.style.cssText = 'position:fixed;bottom:5rem;right:1rem;background:#3D3B8E;color:#fff;border:none;border-radius:20px;padding:.6rem 1.2rem;font-size:.82rem;font-family:Inter,sans-serif;cursor:pointer;z-index:200;box-shadow:0 2px 10px rgba(61,59,142,.5);';
+  btn.onclick = async () => { _pwaPrompt.prompt(); const r=await _pwaPrompt.userChoice; _pwaPrompt=null; btn.remove(); if(r.outcome==='accepted') toast('Приложение установлено! 🎉'); };
+  document.body.appendChild(btn);
+});
+
+const _origUpdateNav = updateNav;
+function updateNav() {
+  _origUpdateNav();
+  if (CU && CU !== 'admin') setTimeout(showNotifPrompt, 2000);
+}
+
 init();
 
 </script>
@@ -1866,28 +1986,44 @@ let fbApp, fbMessaging, fcmToken = null;
 
 async function initFirebase() {
   try {
+    // Avoid double init
+    if (fbApp) return;
     fbApp = firebase.initializeApp(FB_CONFIG);
     fbMessaging = firebase.messaging();
 
     // Register service worker
-    if ('serviceWorker' in navigator) {
-      const reg = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
-      console.log('SW registered:', reg.scope);
+    if (!('serviceWorker' in navigator)) {
+      console.log('Service workers not supported');
+      return;
     }
+    const reg = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+    console.log('SW registered:', reg.scope);
 
     // Request notification permission
-    const permission = await Notification.requestPermission();
+    let permission = Notification.permission;
+    if (permission === 'default') {
+      permission = await Notification.requestPermission();
+    }
+
     if (permission === 'granted') {
-      fcmToken = await fbMessaging.getToken({ vapidKey: VAPID_KEY });
-      console.log('FCM Token:', fcmToken);
-      // Save token to Supabase for this user
-      await saveFcmToken(fcmToken);
+      try {
+        fcmToken = await fbMessaging.getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });
+        if (fcmToken) {
+          console.log('FCM Token obtained');
+          await saveFcmToken(fcmToken);
+        }
+      } catch(tokenErr) {
+        console.log('Token error:', tokenErr);
+      }
+    } else {
+      console.log('Notification permission:', permission);
     }
 
     // Handle foreground messages
     fbMessaging.onMessage((payload) => {
-      console.log('Foreground message:', payload);
-      toast('🔔 ' + (payload.notification?.title || 'Новое уведомление') + ': ' + (payload.notification?.body || ''));
+      const title = payload.notification?.title || 'Виваче';
+      const body = payload.notification?.body || '';
+      toast('🔔 ' + title + (body ? ': ' + body : ''));
     });
   } catch(e) {
     console.log('Firebase init error:', e);
@@ -1911,32 +2047,54 @@ async function saveFcmToken(token) {
   }
 }
 
+// Send push notification via FCM
+async function sendPush(tokens, title, body, data) {
+  if (!tokens || !tokens.length) { console.log('No tokens to send to'); return 0; }
+  const SERVER_KEY = window.FCM_SERVER_KEY || '';
+  if (!SERVER_KEY) { console.log('No server key configured'); return 0; }
+  let sent = 0;
+  for (const token of tokens) {
+    try {
+      const res = await fetch('https://fcm.googleapis.com/fcm/send', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json','Authorization':'key=' + SERVER_KEY},
+        body: JSON.stringify({to: token, notification: {title, body, icon: '/logo.jpg'}, data: data || {}})
+      });
+      if (res.ok) sent++;
+    } catch(e) { console.log('Push error:', e); }
+  }
+  return sent;
+}
+
 // Send notification to all ensemble members (admin only)
 async function sendPushToEnsemble(ensembleId, title, body) {
   if (CU !== 'admin') return;
   const rows = await dbGetCached('ensembles', 'id=eq.' + ensembleId);
   if (!rows || !rows.length) return;
   const tokens = rows[0].fcm_tokens || [];
-  if (!tokens.length) { toast('Нет подписчиков на уведомления'); return; }
-
-  // Send via Firebase Cloud Messaging HTTP API
-  for (const token of tokens) {
-    try {
-      await fetch('https://fcm.googleapis.com/fcm/send', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'key=YOUR_SERVER_KEY'
-        },
-        body: JSON.stringify({
-          to: token,
-          notification: { title, body },
-          data: { ensembleId }
-        })
-      });
-    } catch(e) { console.log('Push send error:', e); }
+  if (!tokens.length) {
+    console.log('No subscribers yet for ensemble', ensembleId);
+    return;
   }
-  toast('Уведомления отправлены ✓');
+  const sent = await sendPush(tokens, title, body, {ensembleId});
+  if (sent > 0) toast('Уведомления отправлены: ' + sent + ' чел. ✓');
+}
+
+// Send notification to ALL students and ensembles (for afisha)
+async function sendPushToAll(title, body) {
+  if (CU !== 'admin') return;
+  const [students, ensembles] = await Promise.all([
+    dbGetCached('students', 'order=created_at.asc'),
+    dbGetCached('ensembles', 'order=created_at.asc')
+  ]);
+  const allTokens = [];
+  (students||[]).forEach(s => (s.fcm_tokens||[]).forEach(t => allTokens.push(t)));
+  (ensembles||[]).forEach(e => (e.fcm_tokens||[]).forEach(t => allTokens.push(t)));
+  // Deduplicate
+  const unique = [...new Set(allTokens)];
+  if (!unique.length) { toast('Пока нет подписчиков на уведомления'); return; }
+  const sent = await sendPush(unique, title, body, {type:'afisha'});
+  if (sent > 0) toast('Уведомления отправлены: ' + sent + ' чел. ✓');
 }
 
 // Auto-init when user logs in
