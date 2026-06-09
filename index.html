@@ -1838,12 +1838,6 @@ window.addEventListener('beforeinstallprompt', e => {
   document.body.appendChild(btn);
 });
 
-const _origUpdateNav = updateNav;
-function updateNav() {
-  _origUpdateNav();
-  if (CU && CU !== 'admin') setTimeout(showNotifPrompt, 2000);
-}
-
 init();
 
 </script>
