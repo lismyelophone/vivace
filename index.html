@@ -794,49 +794,152 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
 <div class="toast" id="toast"></div>
 <script>
 
-const SB = "https://damp-unit-8738.lismyelophone.workers.dev";
-const SK = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsbW15eWRwZ2lnZ3pxaWhwanh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4MDUzMzMsImV4cCI6MjA5MjM4MTMzM30.rD7W-_4v3tNVCS1l7L2cYPq3DZ-JVPUBR3h1PbdXDiI";
-const ADM_L = "admin", ADM_P = "vivace2024";
+// ═══════════════════════════════════════════
+// GitHub API Database Layer
+// Данные хранятся в db.json в репозитории GitHub
+// ═══════════════════════════════════════════
+const GITHUB_TOKEN = "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";
+const GITHUB_REPO = "lismyelophone/vivace";
+const DB_RAW_URL = "https://raw.githubusercontent.com/lismyelophone/vivace/main/db.json";
 
-async function q(table, method, body, filter) {
-  const url = SB + "/rest/v1/" + table + (filter ? "?" + filter : "");
-  const h = {"apikey": SK, "Authorization": "Bearer " + SK, "Content-Type": "application/json"};
-  if (method === "POST") h["Prefer"] = "return=representation";
-  const r = await fetch(url, {method, headers: h, body: body ? JSON.stringify(body) : null});
-  if (!r.ok) { console.error(await r.text()); return null; }
-  if (method === "DELETE" || r.status === 204) return true;
-  return r.json();
-}
-const dbGet = (t, f) => q(t, "GET", null, f);
-const dbPost = (t, b) => q(t, "POST", b);
-const dbPatch = (t, f, b) => q(t, "PATCH", b, f);
-const dbDel = (t, f) => q(t, "DELETE", null, f);
+// In-memory database
+let _db = null;
+let _dbSha = null;
 
-
-// ── CACHE SYSTEM (5 min TTL) ──
-const CACHE = {};
-const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
-
-function cacheGet(key) {
-  const c = CACHE[key];
-  if (!c) return null;
-  if (Date.now() - c.ts > CACHE_TTL) { delete CACHE[key]; return null; }
-  return c.data;
-}
-function cacheSet(key, data) { CACHE[key] = {data, ts: Date.now()}; }
-function cacheInvalidate(pattern) {
-  Object.keys(CACHE).forEach(k => { if (k.includes(pattern)) delete CACHE[k]; });
+// Load DB from GitHub
+async function loadDB() {
+  if (_db) return _db;
+  try {
+    const r = await fetch(DB_RAW_URL + '?t=' + Date.now());
+    if (!r.ok) throw new Error('DB load failed: ' + r.status);
+    _db = await r.json();
+    return _db;
+  } catch(e) {
+    console.error('loadDB error:', e);
+    _db = {students:[], ensembles:[], events:[], settings:{about_photo:''}};
+    return _db;
+  }
 }
 
-// Cached DB get
+// Save DB to GitHub
+async function saveDB() {
+  if (!_db) return;
+  try {
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(_db))));
+    // Get current SHA
+    const shaRes = await fetch('https://api.github.com/repos/' + GITHUB_REPO + '/contents/db.json', {
+      headers: {'Authorization': 'token ' + GITHUB_TOKEN, 'Accept': 'application/vnd.github.v3+json'}
+    });
+    const shaData = await shaRes.json();
+    const sha = shaData.sha;
+    // Update file
+    await fetch('https://api.github.com/repos/' + GITHUB_REPO + '/contents/db.json', {
+      method: 'PUT',
+      headers: {'Authorization': 'token ' + GITHUB_TOKEN, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json'},
+      body: JSON.stringify({message: 'Update DB', content, sha})
+    });
+    console.log('DB saved to GitHub');
+  } catch(e) {
+    console.error('saveDB error:', e);
+    toast('Ошибка сохранения данных');
+  }
+}
+
+// ── DB query functions (mimic Supabase API) ──
+async function dbGet(table, filter) {
+  const db = await loadDB();
+  let items = [...(db[table] || [])];
+  if (!filter) return items;
+  // Parse simple filters: key=eq.value, key=eq.value&key2=eq.value2
+  const parts = filter.split('&');
+  for (const part of parts) {
+    if (part.startsWith('order=')) {
+      const [field, dir] = part.replace('order=','').split('.');
+      items.sort((a,b) => {
+        const av = a[field]||'', bv = b[field]||'';
+        return dir === 'desc' ? bv.localeCompare(av) : av.localeCompare(bv);
+      });
+    } else if (part.includes('=eq.')) {
+      const [key, val] = part.split('=eq.');
+      items = items.filter(item => String(item[key]||'') === decodeURIComponent(val));
+    }
+  }
+  return items;
+}
+
 async function dbGetCached(table, filter) {
-  const key = table + "?" + (filter||"");
-  const cached = cacheGet(key);
-  if (cached) return cached;
-  const data = await dbGet(table, filter);
-  if (data) cacheSet(key, data);
-  return data;
+  return dbGet(table, filter);
 }
+
+async function dbPost(table, body) {
+  const db = await loadDB();
+  if (!db[table]) db[table] = [];
+  body.created_at = body.created_at || new Date().toISOString();
+  db[table].push(body);
+  await saveDB();
+  return [body];
+}
+
+async function dbPatch(table, filter, body) {
+  const db = await loadDB();
+  const items = db[table] || [];
+  // Parse filter to find item
+  let id = null;
+  if (filter && filter.includes('id=eq.')) {
+    id = filter.split('id=eq.')[1];
+  } else if (filter && filter.includes('key=eq.')) {
+    const key = filter.split('key=eq.')[1];
+    const item = items.find(x => x.key === key);
+    if (item) Object.assign(item, body);
+    await saveDB();
+    return [item];
+  }
+  if (id) {
+    const item = items.find(x => String(x.id) === String(id));
+    if (item) Object.assign(item, body);
+  }
+  await saveDB();
+  return items;
+}
+
+async function dbDel(table, filter) {
+  const db = await loadDB();
+  if (!db[table]) return true;
+  let id = null;
+  if (filter && filter.includes('id=eq.')) {
+    id = filter.split('id=eq.')[1];
+  }
+  if (id) {
+    db[table] = db[table].filter(x => String(x.id) !== String(id));
+  }
+  await saveDB();
+  return true;
+}
+
+// Cache invalidation - no-op since we use in-memory DB now
+function cacheInvalidate(pattern) {
+  // Reset in-memory DB so next load fetches fresh
+  _db = null;
+}
+
+// Settings helpers
+async function getAboutPhoto() {
+  const db = await loadDB();
+  return db.settings?.about_photo || '';
+}
+
+async function setAboutPhoto(url) {
+  const db = await loadDB();
+  if (!db.settings) db.settings = {};
+  db.settings.about_photo = url;
+  await saveDB();
+}
+
+// Cache TTL - not needed but keep for compatibility
+const CACHE_TTL = 30 * 60 * 1000;
+const CACHE = {};
+function cacheGet(k) { return null; }
+function cacheSet(k, v) {}
 
 let CU = null, curSt = null, curEn = null, curSng = null, curSngCtx = null, prevSngPage = null;
 let pendAfImg = null, pendNewsImg = null, addSngCtx = null;
@@ -1363,7 +1466,7 @@ function handleAboutPhoto(event) {
   const r = new FileReader();
   r.onload = async e => {
     const url = e.target.result;
-    load(true); await dbPatch("settings", "key=eq.about_photo", {value: url}); load(false);
+    load(true); await setAboutPhoto(url); load(false);
     document.getElementById("about-photo-wrap").innerHTML = `<img src="${url}" alt="Педагог" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-lg)"><input type="file" id="about-photo-inp" accept="image/*" style="display:none" onchange="handleAboutPhoto(event)">`;
     toast("Фото обновлено");
   };
@@ -1643,11 +1746,11 @@ async function init() {
   }
 
   // Load about photo in background
-  dbGet("settings","key=eq.about_photo").then(ap => {
-    if (ap && ap.length && ap[0].value) {
+  getAboutPhoto().then(url => {
+    if (url) {
       const w = document.getElementById("about-photo-wrap");
       if (w) {
-        w.innerHTML = `<img src="${ap[0].value}" alt="Педагог" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-lg)"><input type="file" id="about-photo-inp" accept="image/*" style="display:none" onchange="handleAboutPhoto(event)">`;
+        w.innerHTML = `<img src="${url}" alt="Педагог" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-lg)"><input type="file" id="about-photo-inp" accept="image/*" style="display:none" onchange="handleAboutPhoto(event)">`;
       }
     }
   });
