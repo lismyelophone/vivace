@@ -465,6 +465,14 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
     <div class="block"><div class="block-title">📅 Мероприятия</div><div id="adm-afisha"></div></div>
 
     <div class="block">
+      <div class="block-title">🔑 Первичная настройка (только один раз)</div>
+      <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:.8rem">Если данные не сохраняются — введи bootstrap токен. Нужен только один раз.</p>
+      <div style="display:flex;gap:.5rem">
+        <input class="form-input" id="bootstrap-token-inp" type="password" placeholder="ghp_...">
+        <button class="btn btn-primary btn-sm" onclick="saveBootstrapToken()">Сохранить</button>
+      </div>
+    </div>
+    <div class="block">
       <div class="block-title">🔔 Push-уведомления</div>
       <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:.8rem">Для отправки уведомлений введи Server Key из Firebase → Project Settings → Cloud Messaging</p>
       <div style="display:flex;gap:.5rem">
@@ -799,8 +807,22 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
 // GitHub API Database Layer
 // Данные хранятся в db.json в репозитории GitHub
 // ═══════════════════════════════════════════
-// GitHub token
-let GITHUB_TOKEN = localStorage.getItem('gh_token') || atob("Z2hwX1VWVDZnNlYwcjc4Uk5RdVM4SklxenJLaHd2b1ZsSDQzZE9VYw==");
+// GitHub token - loaded from private config
+let GITHUB_TOKEN = localStorage.getItem('gh_token') || '';
+// Load token from private repo config on startup
+async function loadGhToken() {
+  if (GITHUB_TOKEN) return;
+  try {
+    const r = await fetch('https://api.github.com/repos/lismyelophone/vivace-db/contents/config.json', {
+      headers: {'Authorization': 'token ' + (localStorage.getItem('gh_token_bootstrap') || ''), 'Accept': 'application/vnd.github.v3+json'}
+    });
+    if (!r.ok) return;
+    const d = await r.json();
+    const cfg = JSON.parse(atob(d.content.replace(/\n/g,'')));
+    GITHUB_TOKEN = cfg.token;
+    localStorage.setItem('gh_token', GITHUB_TOKEN);
+  } catch(e) { console.log('Token load:', e); }
+}
 // Save for future use
 if (!localStorage.getItem('gh_token') && GITHUB_TOKEN) localStorage.setItem('gh_token', GITHUB_TOKEN);
 const GITHUB_REPO = "lismyelophone/vivace-db";
@@ -1740,6 +1762,17 @@ window.addEventListener('DOMContentLoaded', () => {
   if (saved) { window.FCM_SERVER_KEY = saved; }
 });
 
+
+function saveBootstrapToken() {
+  const t = document.getElementById('bootstrap-token-inp').value.trim();
+  if (!t) return;
+  localStorage.setItem('gh_token_bootstrap', t);
+  localStorage.setItem('gh_token', t);
+  GITHUB_TOKEN = t;
+  toast('Токен сохранён ✓');
+  document.getElementById('bootstrap-token-inp').value = '';
+}
+
 function saveFcmServerKey() {
   const key = document.getElementById('fcm-server-key').value.trim();
   if (!key) { toast('Введите Server Key'); return; }
@@ -1759,6 +1792,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 async function init() {
+  await loadGhToken();
   // Restore login - instant, no waiting
   const s = localStorage.getItem("vcu");
   if (s) try { CU = JSON.parse(s); } catch(e) {}
