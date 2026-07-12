@@ -464,6 +464,15 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
     </div>
     <div class="block"><div class="block-title">📅 Мероприятия</div><div id="adm-afisha"></div></div>
     <div class="block">
+      <div class="block-title">🔑 GitHub токен (для сохранения данных)</div>
+      <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:.8rem">Без токена данные не сохраняются. Введи токен один раз — он запомнится в браузере.</p>
+      <div style="display:flex;gap:.5rem;margin-bottom:.5rem">
+        <input class="form-input" id="gh-token-inp" type="password" placeholder="ghp_...">
+        <button class="btn btn-primary btn-sm" onclick="saveGhToken()">Сохранить</button>
+      </div>
+      <p id="gh-token-status" style="font-size:.78rem;color:var(--indigo-light)"></p>
+    </div>
+    <div class="block">
       <div class="block-title">🔔 Push-уведомления</div>
       <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:.8rem">Для отправки уведомлений введи Server Key из Firebase → Project Settings → Cloud Messaging</p>
       <div style="display:flex;gap:.5rem">
@@ -798,7 +807,9 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
 // GitHub API Database Layer
 // Данные хранятся в db.json в репозитории GitHub
 // ═══════════════════════════════════════════
-const GITHUB_TOKEN = "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";
+// GitHub token stored in localStorage for security (not in code)
+// Admin must set it once via the admin panel
+let GITHUB_TOKEN = localStorage.getItem('gh_token') || '';
 const GITHUB_REPO = "lismyelophone/vivace";
 const DB_RAW_URL = "https://raw.githubusercontent.com/lismyelophone/vivace/main/db.json";
 
@@ -810,39 +821,54 @@ let _dbSha = null;
 async function loadDB() {
   if (_db) return _db;
   try {
-    const r = await fetch(DB_RAW_URL + '?t=' + Date.now());
+    // Use raw URL with cache buster - works in Russia without VPN
+    const r = await fetch(DB_RAW_URL + '?t=' + Date.now(), {cache: 'no-store'});
     if (!r.ok) throw new Error('DB load failed: ' + r.status);
     _db = await r.json();
     return _db;
   } catch(e) {
     console.error('loadDB error:', e);
-    _db = {students:[], ensembles:[], events:[], settings:{about_photo:''}};
+    // Return empty DB so site still works
+    if (!_db) _db = {students:[], ensembles:[], events:[], settings:{about_photo:''}};
     return _db;
   }
 }
 
 // Save DB to GitHub
+let _savePending = false;
+let _saveTimer = null;
 async function saveDB() {
   if (!_db) return;
-  try {
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(_db))));
-    // Get current SHA
-    const shaRes = await fetch('https://api.github.com/repos/' + GITHUB_REPO + '/contents/db.json', {
-      headers: {'Authorization': 'token ' + GITHUB_TOKEN, 'Accept': 'application/vnd.github.v3+json'}
-    });
-    const shaData = await shaRes.json();
-    const sha = shaData.sha;
-    // Update file
-    await fetch('https://api.github.com/repos/' + GITHUB_REPO + '/contents/db.json', {
-      method: 'PUT',
-      headers: {'Authorization': 'token ' + GITHUB_TOKEN, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json'},
-      body: JSON.stringify({message: 'Update DB', content, sha})
-    });
-    console.log('DB saved to GitHub');
-  } catch(e) {
-    console.error('saveDB error:', e);
-    toast('Ошибка сохранения данных');
-  }
+  // Debounce - wait 500ms before saving to batch multiple changes
+  if (_saveTimer) clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(async () => {
+    try {
+      const content = btoa(unescape(encodeURIComponent(JSON.stringify(_db))));
+      // Get current SHA (always fresh to avoid conflicts)
+      const shaRes = await fetch('https://api.github.com/repos/' + GITHUB_REPO + '/contents/db.json', {
+        headers: {'Authorization': 'token ' + GITHUB_TOKEN, 'Accept': 'application/vnd.github.v3+json'}
+      });
+      if (!shaRes.ok) throw new Error('SHA fetch failed: ' + shaRes.status);
+      const shaData = await shaRes.json();
+      const sha = shaData.sha;
+      // Update file
+      const putRes = await fetch('https://api.github.com/repos/' + GITHUB_REPO + '/contents/db.json', {
+        method: 'PUT',
+        headers: {'Authorization': 'token ' + GITHUB_TOKEN, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json'},
+        body: JSON.stringify({message: 'Update DB', content, sha})
+      });
+      if (!putRes.ok) {
+        const err = await putRes.json();
+        throw new Error('Save failed: ' + JSON.stringify(err));
+      }
+      console.log('DB saved to GitHub ✓');
+    } catch(e) {
+      console.error('saveDB error:', e);
+      // Reset DB cache so next operation gets fresh data
+      _db = null;
+      toast('Ошибка сохранения: ' + e.message);
+    }
+  }, 500);
 }
 
 // ── DB query functions (mimic Supabase API) ──
@@ -941,6 +967,7 @@ const CACHE = {};
 function cacheGet(k) { return null; }
 function cacheSet(k, v) {}
 
+const ADM_L = "admin", ADM_P = "vivace2024";
 let CU = null, curSt = null, curEn = null, curSng = null, curSngCtx = null, prevSngPage = null;
 let pendAfImg = null, pendNewsImg = null, addSngCtx = null;
 
@@ -1696,6 +1723,24 @@ window.addEventListener('appinstalled', () => {
   if (btn) btn.style.display = 'none';
 });
 
+
+
+function saveGhToken() {
+  const token = document.getElementById('gh-token-inp').value.trim();
+  if (!token || !token.startsWith('ghp_')) { toast('Введи правильный токен (начинается с ghp_)'); return; }
+  GITHUB_TOKEN = token;
+  localStorage.setItem('gh_token', token);
+  document.getElementById('gh-token-status').textContent = '✓ Токен сохранён';
+  document.getElementById('gh-token-inp').value = '';
+  toast('Токен сохранён ✓');
+}
+// Load token on startup
+window.addEventListener('DOMContentLoaded', () => {
+  const t = localStorage.getItem('gh_token');
+  if (t) { GITHUB_TOKEN = t; console.log('GitHub token loaded'); }
+  const saved = localStorage.getItem('fcm_server_key');
+  if (saved) { window.FCM_SERVER_KEY = saved; }
+});
 
 function saveFcmServerKey() {
   const key = document.getElementById('fcm-server-key').value.trim();
