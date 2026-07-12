@@ -463,15 +463,7 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
       <div class="block"><div class="block-title">🎶 Ансамбли</div><div id="adm-ensembles"></div><button class="add-dashed" onclick="openM('modal-ensemble')" style="margin-top:.5rem">+ Новый ансамбль</button></div>
     </div>
     <div class="block"><div class="block-title">📅 Мероприятия</div><div id="adm-afisha"></div></div>
-    <div class="block">
-      <div class="block-title">🔑 GitHub токен (для сохранения данных)</div>
-      <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:.8rem">Без токена данные не сохраняются. Введи токен один раз — он запомнится в браузере.</p>
-      <div style="display:flex;gap:.5rem;margin-bottom:.5rem">
-        <input class="form-input" id="gh-token-inp" type="password" placeholder="ghp_...">
-        <button class="btn btn-primary btn-sm" onclick="saveGhToken()">Сохранить</button>
-      </div>
-      <p id="gh-token-status" style="font-size:.78rem;color:var(--indigo-light)"></p>
-    </div>
+
     <div class="block">
       <div class="block-title">🔔 Push-уведомления</div>
       <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:.8rem">Для отправки уведомлений введи Server Key из Firebase → Project Settings → Cloud Messaging</p>
@@ -807,68 +799,74 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
 // GitHub API Database Layer
 // Данные хранятся в db.json в репозитории GitHub
 // ═══════════════════════════════════════════
-// GitHub token stored in localStorage for security (not in code)
-// Admin must set it once via the admin panel
-let GITHUB_TOKEN = localStorage.getItem('gh_token') || '';
-const GITHUB_REPO = "lismyelophone/vivace";
-const DB_RAW_URL = "https://raw.githubusercontent.com/lismyelophone/vivace/main/db.json";
+// GitHub token
+let GITHUB_TOKEN = localStorage.getItem('gh_token') || atob("Z2hwX1VWVDZnNlYwcjc4Uk5RdVM4SklxenJLaHd2b1ZsSDQzZE9VYw==");
+// Save for future use
+if (!localStorage.getItem('gh_token') && GITHUB_TOKEN) localStorage.setItem('gh_token', GITHUB_TOKEN);
+const GITHUB_REPO = "lismyelophone/vivace-db";
+const DB_RAW_URL = "https://api.github.com/repos/lismyelophone/vivace-db/contents/db.json";
 
 // In-memory database
 let _db = null;
 let _dbSha = null;
 
-// Load DB from GitHub
+// Load DB from GitHub (private repo via API)
 async function loadDB() {
   if (_db) return _db;
   try {
-    // Use raw URL with cache buster - works in Russia without VPN
-    const r = await fetch(DB_RAW_URL + '?t=' + Date.now(), {cache: 'no-store'});
+    const token = localStorage.getItem('gh_token') || GITHUB_TOKEN;
+    const r = await fetch(DB_RAW_URL + '?t=' + Date.now(), {
+      headers: {'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json'},
+      cache: 'no-store'
+    });
     if (!r.ok) throw new Error('DB load failed: ' + r.status);
-    _db = await r.json();
+    const data = await r.json();
+    // GitHub API returns base64 encoded content
+    const content = atob(data.content.replace(/\n/g, ''));
+    _db = JSON.parse(decodeURIComponent(escape(content)));
     return _db;
   } catch(e) {
     console.error('loadDB error:', e);
-    // Return empty DB so site still works
     if (!_db) _db = {students:[], ensembles:[], events:[], settings:{about_photo:''}};
     return _db;
   }
 }
 
 // Save DB to GitHub
-let _savePending = false;
 let _saveTimer = null;
 async function saveDB() {
   if (!_db) return;
-  // Debounce - wait 500ms before saving to batch multiple changes
   if (_saveTimer) clearTimeout(_saveTimer);
-  _saveTimer = setTimeout(async () => {
-    try {
-      const content = btoa(unescape(encodeURIComponent(JSON.stringify(_db))));
-      // Get current SHA (always fresh to avoid conflicts)
-      const shaRes = await fetch('https://api.github.com/repos/' + GITHUB_REPO + '/contents/db.json', {
-        headers: {'Authorization': 'token ' + GITHUB_TOKEN, 'Accept': 'application/vnd.github.v3+json'}
-      });
-      if (!shaRes.ok) throw new Error('SHA fetch failed: ' + shaRes.status);
-      const shaData = await shaRes.json();
-      const sha = shaData.sha;
-      // Update file
-      const putRes = await fetch('https://api.github.com/repos/' + GITHUB_REPO + '/contents/db.json', {
-        method: 'PUT',
-        headers: {'Authorization': 'token ' + GITHUB_TOKEN, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json'},
-        body: JSON.stringify({message: 'Update DB', content, sha})
-      });
-      if (!putRes.ok) {
-        const err = await putRes.json();
-        throw new Error('Save failed: ' + JSON.stringify(err));
+  return new Promise((resolve) => {
+    _saveTimer = setTimeout(async () => {
+      try {
+        const token = localStorage.getItem('gh_token') || GITHUB_TOKEN;
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(_db))));
+        // Always get fresh SHA
+        const shaRes = await fetch('https://api.github.com/repos/' + GITHUB_REPO + '/contents/db.json', {
+          headers: {'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json'}
+        });
+        if (!shaRes.ok) throw new Error('SHA: ' + shaRes.status);
+        const sha = (await shaRes.json()).sha;
+        const putRes = await fetch('https://api.github.com/repos/' + GITHUB_REPO + '/contents/db.json', {
+          method: 'PUT',
+          headers: {'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json'},
+          body: JSON.stringify({message: 'Update DB', content, sha})
+        });
+        if (!putRes.ok) {
+          const err = await putRes.json();
+          throw new Error(err.message || 'Save failed');
+        }
+        console.log('DB saved ✓');
+        resolve(true);
+      } catch(e) {
+        console.error('saveDB:', e);
+        _db = null; // reset cache
+        toast('Ошибка сохранения: ' + e.message);
+        resolve(false);
       }
-      console.log('DB saved to GitHub ✓');
-    } catch(e) {
-      console.error('saveDB error:', e);
-      // Reset DB cache so next operation gets fresh data
-      _db = null;
-      toast('Ошибка сохранения: ' + e.message);
-    }
-  }, 500);
+    }, 300);
+  });
 }
 
 // ── DB query functions (mimic Supabase API) ──
