@@ -1128,8 +1128,25 @@ async function createSong() {
   if (!name) { toast("Введите название"); return; }
   const song = {id: "sng" + Date.now(), name, author, key, lyrics: "", original: null, originalLink: "", minus: null, notes: [], notesText: ""};
   load(true);
-  if (addSngCtx === "student" && curSt) { const r = await dbGetCached("students", "id=eq." + curSt); if (r && r[0]) { const songs = [...(Array.isArray(r[0].songs) ? r[0].songs : []), song]; await dbPatch("students", "id=eq." + curSt, {songs}); renderSongs("st-songs", songs, "student"); } }
-  else if (addSngCtx === "ensemble" && curEn) { const r = await dbGetCached("ensembles", "id=eq." + curEn); if (r && r[0]) { const songs = [...(Array.isArray(r[0].songs) ? r[0].songs : []), song]; await dbPatch("ensembles", "id=eq." + curEn, {songs}); renderSongs("en-songs", songs, "ensemble"); } }
+  if (addSngCtx === "student" && curSt) {
+    cacheInvalidate("students");
+    const r = await dbGet("students", "id=eq." + curSt);
+    if (r && r[0]) {
+      const songs = [...(Array.isArray(r[0].songs) ? r[0].songs : []), song];
+      await dbPatch("students", "id=eq." + curSt, {songs});
+      cacheInvalidate("students");
+      renderSongs("st-songs", songs, "student");
+    }
+  } else if (addSngCtx === "ensemble" && curEn) {
+    cacheInvalidate("ensembles");
+    const r = await dbGet("ensembles", "id=eq." + curEn);
+    if (r && r[0]) {
+      const songs = [...(Array.isArray(r[0].songs) ? r[0].songs : []), song];
+      await dbPatch("ensembles", "id=eq." + curEn, {songs});
+      cacheInvalidate("ensembles");
+      renderSongs("en-songs", songs, "ensemble");
+    }
+  }
   load(false); closeM("modal-add-song");
   ["sng-n","sng-a","sng-k"].forEach(id => document.getElementById(id).value = "");
   toast("Песня добавлена: " + name);
@@ -1485,13 +1502,13 @@ async function addVideoLink(ctx, inputId, nameId, listId) {
   document.getElementById(nameId).value = "";
   load(true);
   if (ctx === "student" && curSt) {
-    const r = await dbGetCached("students","id=eq."+curSt); if(!r||!r[0]) { load(false); return; }
+    cacheInvalidate("students"); const r = await dbGet("students","id=eq."+curSt); if(!r||!r[0]) { load(false); return; }
     const videoLinks = Array.isArray(r[0].videolinks) ? r[0].videolinks : [];
     videoLinks.push({url, name});
     cacheInvalidate("students"); await dbPatch("students","id=eq."+curSt,{videolinks:videoLinks});
     load(false); renderVideoLinks(listId, videoLinks, ctx, CU==="admin");
   } else if (ctx === "ensemble" && curEn) {
-    const r = await dbGetCached("ensembles","id=eq."+curEn); if(!r||!r[0]) { load(false); return; }
+    cacheInvalidate("ensembles"); const r = await dbGet("ensembles","id=eq."+curEn); if(!r||!r[0]) { load(false); return; }
     const videoLinks = Array.isArray(r[0].videolinks) ? r[0].videolinks : [];
     videoLinks.push({url, name});
     cacheInvalidate("ensembles"); await dbPatch("ensembles","id=eq."+curEn,{videolinks:videoLinks});
@@ -1503,14 +1520,14 @@ async function addVideoLink(ctx, inputId, nameId, listId) {
 async function delVideoLink(ctx, idx) {
   load(true);
   if (ctx === "student" && curSt) {
-    const r = await dbGetCached("students","id=eq."+curSt); if(!r||!r[0]) { load(false); return; }
+    cacheInvalidate("students"); const r = await dbGet("students","id=eq."+curSt); if(!r||!r[0]) { load(false); return; }
     const videoLinks = Array.isArray(r[0].videolinks) ? r[0].videolinks : [];
     videoLinks.splice(idx, 1);
     cacheInvalidate("students"); await dbPatch("students","id=eq."+curSt,{videolinks:videoLinks});
     load(false);
     renderVideoLinks("st-videolinks-list", videoLinks, ctx, CU==="admin");
   } else if (ctx === "ensemble" && curEn) {
-    const r = await dbGetCached("ensembles","id=eq."+curEn); if(!r||!r[0]) { load(false); return; }
+    cacheInvalidate("ensembles"); const r = await dbGet("ensembles","id=eq."+curEn); if(!r||!r[0]) { load(false); return; }
     const videoLinks = Array.isArray(r[0].videolinks) ? r[0].videolinks : [];
     videoLinks.splice(idx, 1);
     cacheInvalidate("ensembles"); await dbPatch("ensembles","id=eq."+curEn,{videolinks:videoLinks});
