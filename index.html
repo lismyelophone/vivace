@@ -772,10 +772,10 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
 
 const SB='https://rlmmyydpgiggzqihpjxt.supabase.co',SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsbW15eWRwZ2lnZ3pxaWhwanh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4MDUzMzMsImV4cCI6MjA5MjM4MTMzM30.rD7W-_4v3tNVCS1l7L2cYPq3DZ-JVPUBR3h1PbdXDiI';
 const CACHE={};
-const CACHE_TTL=30*60*1000;
+const CACHE_TTL=0;// Cache disabled for data consistency
 function cacheGet(k){const c=CACHE[k];if(!c)return null;if(Date.now()-c.ts>CACHE_TTL){delete CACHE[k];return null;}return c.data;}
 function cacheSet(k,d){CACHE[k]={data:d,ts:Date.now()};}
-function cacheInvalidate(p){Object.keys(CACHE).forEach(k=>{if(k.includes(p))delete CACHE[k];});}
+function cacheInvalidate(p){Object.keys(CACHE).forEach(k=>delete CACHE[k]);}
 async function q(table,method,body,filter){
   const url=SB+'/rest/v1/'+table+(filter?'?'+filter:'');
   const h={'apikey':SK,'Authorization':'Bearer '+SK,'Content-Type':'application/json'};
