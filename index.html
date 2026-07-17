@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Виваче — Музыкальная студия</title>
 <link rel="preconnect" href="https://rlmmyydpgiggzqihpjxt.supabase.co">
@@ -311,6 +311,40 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
 .contact-card p{font-size:0.82rem;color:var(--text-muted);margin-top:.15rem;word-break:break-all;}
 @media(max-width:700px){.contacts-horiz{grid-template-columns:1fr 1fr;}}
 @media(max-width:420px){.contacts-horiz{grid-template-columns:1fr;}}
+
+.hero-concert-photo{
+  position:relative;width:100%;min-height:85vh;
+  display:flex;align-items:flex-end;
+  overflow:hidden;
+}
+.hero-concert-photo > img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center top;
+}
+.hero-concert-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom, rgba(10,10,15,0.1) 0%, rgba(10,10,15,0.7) 60%, rgba(10,10,15,0.95) 100%);
+}
+.hero-concert-text{
+  position:relative;z-index:2;
+  max-width:1080px;margin:0 auto;width:100%;
+  padding:3rem 2rem 4rem;
+}
+.hero-concert-text .hero-overline{color:var(--rust-light);}
+.hero-concert-text .hero-h1{color:#fff;margin:.5rem 0;}
+@media(max-width:700px){
+  .hero-concert-photo{min-height:70vh;}
+  .hero-concert-text{padding:2rem 1rem 3rem;}
+}
+
+.collapsible-block{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:.8rem;overflow:hidden;}
+.collapsible-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.4rem;cursor:pointer;transition:background .2s;user-select:none;}
+.collapsible-header:hover{background:rgba(61,59,142,0.08);}
+.collapsible-title{font-family:var(--font-head);font-size:1.02rem;color:var(--indigo-light);display:flex;align-items:center;gap:.4rem;}
+.collapsible-arrow{color:var(--text-dim);font-size:.85rem;transition:transform .25s;flex-shrink:0;}
+.collapsible-header.open .collapsible-arrow{transform:rotate(180deg);}
+.collapsible-body{display:none;padding:0 1.4rem 1.2rem;}
+.collapsible-body.open{display:block;}
 </style>
 </head>
 <body>
@@ -414,14 +448,14 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
       </a>
       <div class="contact-card" style="cursor:default">
         <div class="contact-icon">📍</div>
-        <div><span class="contact-label">Адрес</span><p>ул. Греческая, 38, каб. 8</p></div>
+        <div><span class="contact-label">Адрес</span><p>Ростовская область, г. Таганрог, ул. Греческая, 38, каб. 8</p></div>
       </div>
     </div>
   </section>  <section id="map-section" class="section" style="padding-top:0">
     <span class="section-label">Как добраться</span>
     <h2 class="section-title">Мы на <em>карте</em></h2>
     <div class="section-line"></div>
-    <p style="color:var(--text-muted);font-size:.9rem;margin-bottom:1.5rem">ул. Греческая, 38, кабинет 8</p>
+    <p style="color:var(--text-muted);font-size:.9rem;margin-bottom:1.5rem">Ростовская область, г. Таганрог, Ростовская область, г. Таганрог, ул. Греческая, 38, каб. 8</p>
     <div style="border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);height:420px;">
       <div style="position:relative;width:100%;height:420px;">
       <iframe src="https://yandex.ru/map-widget/v1/?ll=38.942270,47.208866&z=16&pt=38.942270,47.208866,pm2rdm" width="100%" height="420" frameborder="0" allowfullscreen style="display:block;border-radius:var(--radius-lg)"></iframe>
@@ -431,7 +465,7 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
     </div>
     </div>
   </section>
-  <footer><p>© 2026 Музыкальная студия <span>Виваче</span> · ул. Греческая, 38, каб. 8 · +7 919 891 40 55</p></footer>
+  <footer><p>© 2026 Музыкальная студия <span>Виваче</span> · Ростовская область, г. Таганрог, ул. Греческая, 38, каб. 8 · +7 919 891 40 55</p></footer>
 </div>
 
 <div id="page-admin" class="page">
@@ -468,8 +502,12 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
     </div>
     <div class="cols2">
       <div>
-        <div class="block">
-          <div class="block-title">📚 Теория и материалы</div>
+        <div class="collapsible-block">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            <span class="collapsible-title">📚 Теория и материалы</span>
+            <span class="collapsible-arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
           <div class="theory-tb" id="st-theory-tb" style="display:none">
             <button class="t-btn" onclick="eCmd('bold')"><b>Ж</b></button>
             <button class="t-btn" onclick="eCmd('italic')"><i>К</i></button>
@@ -482,8 +520,13 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
           <div id="st-theory" class="theory-c" contenteditable="false" style="pointer-events:none"><p>Теория появится здесь...</p></div>
           <div class="save-ind" id="st-th-saved">✓ Сохранено</div>
         </div>
-        <div class="block">
-          <div class="block-title">🎬 Видео-ссылки</div>
+        </div>
+        <div class="collapsible-block">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            <span class="collapsible-title">🎬 Видео-ссылки</span>
+            <span class="collapsible-arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
           <p style="font-size:0.77rem;color:var(--text-dim);margin-bottom:.8rem">YouTube, RuTube, VK Видео и др.</p>
           <div id="st-videolinks-add" style="display:none">
             <div class="video-link-add">
@@ -496,8 +539,13 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
           </div>
           <div id="st-videolinks-list"></div>
         </div>
-        <div class="block">
-          <div class="block-title">🎼 Распевки</div>
+        </div>
+        <div class="collapsible-block">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            <span class="collapsible-title">🎼 Распевки</span>
+            <span class="collapsible-arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
           <div id="st-raspevki-up" style="display:none">
             <div class="upload-zone" onclick="document.getElementById('st-rasp-inp').click()">
               <input type="file" id="st-rasp-inp" multiple accept="audio/*" onchange="handleMedia(event,'st-raspevki-list','raspevki_student')">
@@ -514,13 +562,22 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
 <!-- Мои записи удалены --><div id="st-media-list" style="display:none"></div>
       </div>
       <div>
-        <div class="block">
-          <div class="block-title">🎼 Репертуар</div>
+        <div class="collapsible-block">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            <span class="collapsible-title">🎼 Репертуар</span>
+            <span class="collapsible-arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
           <div id="st-songs"></div>
           <div id="st-song-add" style="display:none"><button class="add-dashed" onclick="openAddSong('student')">+ Добавить песню</button></div>
         </div>
-        <div class="block">
-          <div class="block-title">💿 Студийные записи</div>
+        </div>
+        <div class="collapsible-block">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            <span class="collapsible-title">💿 Студийные записи</span>
+            <span class="collapsible-arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
           <div id="st-studio-up" style="display:none">
             <div class="upload-zone" onclick="document.getElementById('st-stu-inp').click()">
               <input type="file" id="st-stu-inp" multiple accept="audio/*,video/*" onchange="handleMedia(event,'st-studio-list','stu_student')">
@@ -529,6 +586,8 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
           </div>
           <div id="st-studio-list"></div>
           <div class="empty-s" id="st-stu-empty">Студийные записи появятся здесь 🎙</div>
+        </div>
+          </div>
         </div>
       </div>
     </div>
@@ -548,13 +607,22 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
     </div>
     <div class="cols2">
       <div>
-        <div class="block">
-          <div class="block-title">📰 Новости</div>
+        <div class="collapsible-block">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            <span class="collapsible-title">📰 Новости</span>
+            <span class="collapsible-arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
           <div id="en-news-list"></div>
           <div id="en-news-add" style="display:none"><button class="add-dashed" onclick="openM('modal-add-news')">+ Добавить новость</button></div>
         </div>
-        <div class="block">
-          <div class="block-title">🎬 Видео-ссылки</div>
+        </div>
+        <div class="collapsible-block">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            <span class="collapsible-title">🎬 Видео-ссылки</span>
+            <span class="collapsible-arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
           <p style="font-size:0.77rem;color:var(--text-dim);margin-bottom:.8rem">YouTube, RuTube, VK Видео и др.</p>
           <div id="en-videolinks-add" style="display:none">
             <div class="video-link-add">
@@ -567,8 +635,13 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
           </div>
           <div id="en-videolinks-list"></div>
         </div>
-        <div class="block">
-          <div class="block-title">🎵 Репетиции</div>
+        </div>
+        <div class="collapsible-block">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            <span class="collapsible-title">🎵 Репетиции</span>
+            <span class="collapsible-arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
           <div class="upload-zone" onclick="document.getElementById('en-med-inp').click()">
             <input type="file" id="en-med-inp" multiple accept="audio/*,video/*" onchange="handleMedia(event,'en-media-list','ensemble')">
             <div class="upload-icon">⬆</div><p>Загрузить аудио или видео</p>
@@ -582,13 +655,22 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
         </div>
       </div>
       <div>
-        <div class="block">
-          <div class="block-title">🎼 Репертуар</div>
+        <div class="collapsible-block">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            <span class="collapsible-title">🎼 Репертуар</span>
+            <span class="collapsible-arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
           <div id="en-songs"></div>
           <div id="en-song-add" style="display:none"><button class="add-dashed" onclick="openAddSong('ensemble')">+ Добавить песню</button></div>
         </div>
-        <div class="block">
-          <div class="block-title">💿 Студийные записи</div>
+        </div>
+        <div class="collapsible-block">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            <span class="collapsible-title">💿 Студийные записи</span>
+            <span class="collapsible-arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
           <div id="en-studio-up" style="display:none">
             <div class="upload-zone" onclick="document.getElementById('en-stu-inp').click()">
               <input type="file" id="en-stu-inp" multiple accept="audio/*,video/*" onchange="handleMedia(event,'en-studio-list','stu_ensemble')">
@@ -597,6 +679,8 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
           </div>
           <div id="en-studio-list"></div>
           <div class="empty-s" id="en-stu-empty">Студийные треки появятся здесь 🎵</div>
+        </div>
+          </div>
         </div>
       </div>
     </div>
@@ -678,6 +762,7 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
           <div id="notes-text-disp" class="theory-c" contenteditable="false" style="pointer-events:none;min-height:60px"><span style="color:var(--text-dim)">Заметки не добавлены</span></div>
           <div id="notes-text-tb" style="display:none;margin-top:.4rem"><button class="t-btn" onclick="saveNotesText()">💾 Сохранить</button></div>
         </div>
+      </div>
       </div>
     </div>
   </div>
@@ -1539,6 +1624,14 @@ async function delVideoLink(ctx, idx) {
 
 
 
+
+function toggleCollapsible(el) {
+  const header = el.closest('.collapsible-header');
+  const body = header.nextElementSibling;
+  header.classList.toggle('open');
+  body.classList.toggle('open');
+}
+
 async function init() {
   // Restore login - instant, no waiting
   const s = localStorage.getItem("vcu");
@@ -1739,7 +1832,41 @@ init();
       .ht-tag.hthot{border-color:rgba(196,82,26,0.4);}
       .ht-tag.hthot::after{content:"\2605";font-size:8px;color:var(--rust-light);position:absolute;top:2px;right:3px;}
       .ht-footer{text-align:center;font-size:10px;color:var(--text-dim);margin-top:40px;line-height:1.8;}
-    </style>
+    
+.hero-concert-photo{
+  position:relative;width:100%;min-height:85vh;
+  display:flex;align-items:flex-end;
+  overflow:hidden;
+}
+.hero-concert-photo > img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center top;
+}
+.hero-concert-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom, rgba(10,10,15,0.1) 0%, rgba(10,10,15,0.7) 60%, rgba(10,10,15,0.95) 100%);
+}
+.hero-concert-text{
+  position:relative;z-index:2;
+  max-width:1080px;margin:0 auto;width:100%;
+  padding:3rem 2rem 4rem;
+}
+.hero-concert-text .hero-overline{color:var(--rust-light);}
+.hero-concert-text .hero-h1{color:#fff;margin:.5rem 0;}
+@media(max-width:700px){
+  .hero-concert-photo{min-height:70vh;}
+  .hero-concert-text{padding:2rem 1rem 3rem;}
+}
+
+.collapsible-block{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:.8rem;overflow:hidden;}
+.collapsible-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.4rem;cursor:pointer;transition:background .2s;user-select:none;}
+.collapsible-header:hover{background:rgba(61,59,142,0.08);}
+.collapsible-title{font-family:var(--font-head);font-size:1.02rem;color:var(--indigo-light);display:flex;align-items:center;gap:.4rem;}
+.collapsible-arrow{color:var(--text-dim);font-size:.85rem;transition:transform .25s;flex-shrink:0;}
+.collapsible-header.open .collapsible-arrow{transform:rotate(180deg);}
+.collapsible-body{display:none;padding:0 1.4rem 1.2rem;}
+.collapsible-body.open{display:block;}
+</style>
     <div class="ht-header">
       <span class="ht-studio-label">Музыкальная студия Виваче</span>
       <h1 class="ht-h1">Хэштеги <em>&amp;</em> ключевые слова</h1>
