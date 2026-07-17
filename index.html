@@ -314,7 +314,7 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
 
 .hero-concert-photo{
   position:relative;width:100%;min-height:85vh;
-  display:flex;align-items:flex-end;
+  display:flex;align-items:flex-start;
   overflow:hidden;
 }
 .hero-concert-photo > img{
@@ -323,12 +323,12 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
 }
 .hero-concert-overlay{
   position:absolute;inset:0;
-  background:linear-gradient(to bottom, rgba(10,10,15,0.1) 0%, rgba(10,10,15,0.7) 60%, rgba(10,10,15,0.95) 100%);
+  background:linear-gradient(to bottom, rgba(10,10,15,0.2) 0%, rgba(10,10,15,0.4) 40%, rgba(10,10,15,0.85) 80%, rgba(10,10,15,0.97) 100%);
 }
 .hero-concert-text{
   position:relative;z-index:2;
   max-width:1080px;margin:0 auto;width:100%;
-  padding:3rem 2rem 4rem;
+  padding:5rem 2rem 2rem;
 }
 .hero-concert-text .hero-overline{color:var(--rust-light);}
 .hero-concert-text .hero-h1{color:#fff;margin:.5rem 0;}
@@ -376,28 +376,26 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
     <p class="hero-sub">Виваче — пространство, где рождается творчество.</p>
     <div class="hero-cta">
   </section>
-  <section id="about" class="section">
-    <span class="section-label">Педагог</span>
-    <h2 class="section-title">О <em>студии</em></h2>
-    <div class="section-line"></div>
-    <div class="about-grid">
-      <div class="about-photo" id="about-photo-wrap" onclick="triggerAboutPhoto()">
-        <div class="about-photo-ph"><span style="font-size:3rem">🎤</span><p style="font-size:.78rem">Фото педагога</p></div>
-        <input type="file" id="about-photo-inp" accept="image/*" style="display:none" onchange="handleAboutPhoto(event)">
-      </div>
-      <div class="about-text">
-        <p style="font-size:1.1rem;color:var(--text);font-weight:400;margin-bottom:1.2rem">🎵 Музыкальная студия Vivace – твоя дверь в мир музыки! 🎶</p>
-        <p>Обучение для всех возрастов — дети от 4 лет и взрослые. Индивидуальные уроки вокала, ансамбли, сольфеджио и музыкальное развитие для малышей.</p>
-        <p>Гибкий график — занятия под твой ритм жизни. Профессиональное оборудование для записи — ваши любимые песни на уровне студийного продакшна.</p>
+  <section id="about">
+    <div class="hero-concert-photo">
+      <img src="https://res.cloudinary.com/dgfjaegpd/image/upload/v1784286895/H7WCk-TdoJg_tsfczc.jpg" alt="Студия Виваче на сцене" loading="lazy">
+      <div class="hero-concert-overlay"></div>
+      <div class="hero-concert-text">
+        <span class="hero-overline">Музыкальная студия Vivace</span>
+        <h1 class="hero-h1">Приходи таким<br><em>какой ты есть</em></h1>
+        <p style="font-size:1rem;color:rgba(255,255,255,0.85);margin:.8rem 0 1.2rem;font-weight:300;line-height:1.7;max-width:520px">Виваче — пространство, где рождается творчество.</p>
         <div class="about-tags">
           <span class="tag">Эстрадный вокал</span><span class="tag">Постановка голоса</span>
-          <span class="tag">Ансамбль</span><span class="tag">Сольфеджио</span>
-          <span class="tag tag-rust">Дети от 4 лет</span><span class="tag tag-rust">Студийная запись</span>
-          <span class="tag">Гибкий график</span><span class="tag">Сценическое движение</span>
+          <span class="tag">Ансамбль</span><span class="tag tag-rust">Дети от 4 лет</span>
+          <span class="tag tag-rust">Студийная запись</span><span class="tag">Сольфеджио</span>
         </div>
       </div>
     </div>
+    <div style="display:none">
+      <div id="about-photo-wrap"><input type="file" id="about-photo-inp" accept="image/*" style="display:none" onchange="handleAboutPhoto(event)"></div>
+    </div>
   </section>
+
   <section id="afisha" class="section" style="padding-top:0">
     <span class="section-label">Мероприятия</span>
     <h2 class="section-title">Афиша <em>событий</em></h2>
@@ -1835,7 +1833,7 @@ init();
     
 .hero-concert-photo{
   position:relative;width:100%;min-height:85vh;
-  display:flex;align-items:flex-end;
+  display:flex;align-items:flex-start;
   overflow:hidden;
 }
 .hero-concert-photo > img{
@@ -1844,12 +1842,12 @@ init();
 }
 .hero-concert-overlay{
   position:absolute;inset:0;
-  background:linear-gradient(to bottom, rgba(10,10,15,0.1) 0%, rgba(10,10,15,0.7) 60%, rgba(10,10,15,0.95) 100%);
+  background:linear-gradient(to bottom, rgba(10,10,15,0.2) 0%, rgba(10,10,15,0.4) 40%, rgba(10,10,15,0.85) 80%, rgba(10,10,15,0.97) 100%);
 }
 .hero-concert-text{
   position:relative;z-index:2;
   max-width:1080px;margin:0 auto;width:100%;
-  padding:3rem 2rem 4rem;
+  padding:5rem 2rem 2rem;
 }
 .hero-concert-text .hero-overline{color:var(--rust-light);}
 .hero-concert-text .hero-h1{color:#fff;margin:.5rem 0;}
