@@ -251,16 +251,8 @@ footer span{color:var(--indigo-light);}
 .video-link-add{display:flex;gap:.5rem;margin-bottom:.8rem;}
 .video-link-add input{flex:1;}
 
-.hero-about{
-  position:relative;overflow:hidden;
-  padding:5rem 2rem 4rem;
-  background:var(--bg);
-}
-.hero-about-inner{
-  max-width:1080px;margin:0 auto;
-  display:grid;grid-template-columns:340px 1fr;
-  gap:4rem;align-items:center;
-}
+
+
 .hero-about-photo{
   aspect-ratio:1/1;
   border-radius:var(--radius-lg);
@@ -312,29 +304,15 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
 @media(max-width:700px){.contacts-horiz{grid-template-columns:1fr 1fr;}}
 @media(max-width:420px){.contacts-horiz{grid-template-columns:1fr;}}
 
-.hero-concert-photo{
-  position:relative;width:100%;min-height:85vh;
-  display:flex;align-items:flex-start;
-  overflow:hidden;
-}
-.hero-concert-photo > img{
-  position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;object-position:center top;
-}
-.hero-concert-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(to bottom, rgba(10,10,15,0.2) 0%, rgba(10,10,15,0.4) 40%, rgba(10,10,15,0.85) 80%, rgba(10,10,15,0.97) 100%);
-}
-.hero-concert-text{
-  position:relative;z-index:2;
-  max-width:1080px;margin:0 auto;width:100%;
-  padding:5rem 2rem 2rem;
-}
+
+
+
+
 .hero-concert-text .hero-overline{color:var(--rust-light);}
 .hero-concert-text .hero-h1{color:#fff;margin:.5rem 0;}
 @media(max-width:700px){
-  .hero-concert-photo{min-height:70vh;}
-  .hero-concert-text{padding:2rem 1rem 3rem;}
+  /* old */.hero-concert-photo-old{min-height:70vh;}
+  
 }
 
 .collapsible-block{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:.8rem;overflow:hidden;}
@@ -345,6 +323,138 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
 .collapsible-header.open .collapsible-arrow{transform:rotate(180deg);}
 .collapsible-body{display:none;padding:0 1.4rem 1.2rem;}
 .collapsible-body.open{display:block;}
+
+/* old */.hero-concert-photo-old{position:relative;width:100%;min-height:88vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+
+
+
+.hero-concert-text .hero-overline{color:var(--rust-light);display:block;margin-bottom:.8rem;}
+.hero-h1{font-family:var(--font-head);font-size:clamp(2.5rem,6vw,5rem);font-weight:600;line-height:1.1;color:#fff;white-space:nowrap;}
+.hero-h1 em{color:var(--indigo-light);font-style:italic;}
+@media(max-width:700px){/* old */.hero-concert-photo-old{min-height:70vh;}.hero-h1{white-space:normal;font-size:2.5rem;}}
+.hero-banner{position:relative;width:100%;min-height:88vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.hero-banner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;}
+.hero-banner-overlay{position:absolute;inset:0;background:rgba(10,10,15,0.55);}
+.hero-banner-text{position:relative;z-index:2;text-align:center;padding:2rem;max-width:700px;}
+.hero-banner-text .hero-overline{color:var(--rust-light);display:block;margin-bottom:1rem;}
+.hero-banner-text .hero-h1{color:#fff;font-size:clamp(2.4rem,6vw,4.5rem);white-space:nowrap;}
+.hero-banner-text .hero-h1 em{color:var(--indigo-light);}
+.hero-sub-text{font-size:1.1rem;color:rgba(255,255,255,0.8);margin-top:1rem;font-weight:300;}
+@media(max-width:700px){.hero-banner{min-height:65vh;}.hero-banner-text .hero-h1{white-space:normal;font-size:2.2rem;}}
+.hero-concert-section{position:relative;width:100%;min-height:88vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.hero-concert-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;}
+
+
+.hero-concert-text .hero-overline{color:var(--rust-light);display:block;margin-bottom:.8rem;}
+.hero-h1{font-family:var(--font-head);font-size:clamp(2.5rem,6vw,5rem);font-weight:600;line-height:1.1;color:#fff;margin-bottom:1rem;}
+.hero-h1 em{color:var(--indigo-light);font-style:italic;}
+.hero-sub-text{font-size:1.1rem;color:rgba(255,255,255,0.8);font-weight:300;}
+@media(max-width:700px){.hero-concert-section{min-height:70vh;}.hero-h1{font-size:2.2rem;}}
+
+.hero-photo-section{position:relative;width:100%;min-height:88vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.hero-photo-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;}
+.hero-photo-overlay{position:absolute;inset:0;background:rgba(10,10,15,0.55);}
+.hero-photo-content{position:relative;z-index:2;text-align:center;padding:2rem;max-width:800px;}
+.hero-photo-content .hero-overline{color:var(--rust-light);}
+.hero-photo-content .hero-h1{color:#fff;font-size:clamp(2rem,5vw,3.8rem);white-space:nowrap;}
+.hero-photo-content .hero-h1 em{color:var(--indigo-light);}
+.hero-sub-text{font-size:1.1rem;color:rgba(255,255,255,0.8);margin-top:.8rem;font-weight:300;}
+.about-grid{display:grid;grid-template-columns:1fr 1.8fr;gap:4rem;align-items:center;}
+.about-photo{aspect-ratio:3/4;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:var(--bg-card);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.about-photo img{width:100%;height:100%;object-fit:cover;}
+.about-photo-ph{display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--text-dim);}
+.about-text p{color:var(--text-muted);margin-bottom:.9rem;font-weight:300;font-size:0.9rem;}
+@media(max-width:700px){
+  .hero-photo-section{min-height:70vh;}
+  .hero-photo-content .hero-h1{white-space:normal;font-size:2rem;}
+  .about-grid{grid-template-columns:1fr;}
+}
+
+.hero-section{
+  position:relative;
+  min-height:88vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+.hero-bg-photo{
+  position:absolute;
+  inset:0;
+}
+.hero-bg-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
+}
+.hero-bg-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(10,10,15,0.55);
+}
+.hero-content{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  padding:3rem 2rem;
+  max-width:900px;
+}
+.hero-content .hero-overline{
+  color:var(--rust-light);
+  margin-bottom:1.2rem;
+  display:block;
+}
+.hero-content .hero-h1{
+  font-size:clamp(2.5rem,6vw,5rem);
+  color:#fff;
+  text-shadow:0 2px 20px rgba(0,0,0,0.5);
+  margin-bottom:1rem;
+}
+.hero-content .hero-h1 em{
+  color:var(--indigo-light);
+  font-style:italic;
+}
+.hero-content .hero-sub{
+  font-size:1.1rem;
+  color:rgba(255,255,255,0.85);
+  font-weight:300;
+}
+.about-grid{display:grid;grid-template-columns:1fr 1.8fr;gap:4rem;align-items:center;}
+.about-photo{aspect-ratio:3/4;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:var(--bg-card);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.about-photo img{width:100%;height:100%;object-fit:cover;}
+.about-photo-ph{display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--text-dim);}
+.about-text p{color:var(--text-muted);margin-bottom:.9rem;font-weight:300;font-size:0.9rem;}
+@media(max-width:700px){
+  .hero-section{min-height:70vh;}
+  .hero-content .hero-h1{font-size:2.2rem;}
+  .about-grid{grid-template-columns:1fr;}
+}
+
+.hero-photo{position:relative;min-height:90vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.hero-photo-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;}
+.hero-photo-overlay{position:absolute;inset:0;background:rgba(10,10,15,0.55);}
+.hero-photo-content{position:relative;z-index:2;text-align:center;padding:2rem;max-width:800px;margin:0 auto;}
+.hero-photo-content .hero-overline{color:var(--rust-light);margin-bottom:1rem;display:block;}
+.hero-photo-h1{font-family:var(--font-head);font-size:clamp(2.5rem,6vw,5rem);font-weight:600;color:#fff;line-height:1.1;margin-bottom:1rem;}
+.hero-photo-content .hero-sub{font-size:1.1rem;color:rgba(255,255,255,0.85);font-weight:300;}
+@media(max-width:700px){.hero-photo{min-height:70vh;}.hero-photo-h1{font-size:2.2rem;}}
+
+.hero-photo-section{position:relative;width:100%;min-height:88vh;overflow:hidden;}
+.hero-concert-photo{position:relative;width:100%;height:88vh;display:flex;align-items:center;justify-content:center;}
+.hero-concert-photo > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;}
+.hero-concert-overlay{position:absolute;inset:0;background:rgba(10,10,15,0.55);}
+.hero-concert-text{position:relative;z-index:2;max-width:900px;margin:0 auto;width:100%;padding:2rem;text-align:center;}
+.hero-concert-text .hero-overline{color:var(--rust-light);margin-bottom:.8rem;display:block;}
+.hero-concert-text .hero-h1{color:#fff;font-size:clamp(2.4rem,6vw,5rem);}
+.hero-concert-text .hero-h1 em{color:var(--indigo-light);font-style:italic;}
+.about-grid{display:grid;grid-template-columns:1fr 1.8fr;gap:4rem;align-items:center;}
+.about-photo{aspect-ratio:3/4;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:var(--bg-card);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.about-photo img{width:100%;height:100%;object-fit:cover;}
+.about-photo-ph{display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--text-dim);}
+.about-text p{color:var(--text-muted);margin-bottom:.9rem;font-weight:300;font-size:0.9rem;}
+@media(max-width:800px){.hero-concert-photo{height:70vh;}.about-grid{grid-template-columns:1fr;}}
+@media(max-width:700px){.hero-concert-text{padding:1.5rem;}.hero-concert-text .hero-h1{font-size:2.2rem;}}
 </style>
 </head>
 <body>
@@ -357,6 +467,7 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
   <nav><div class="nav-links">
     <a href="#about" onclick="goHome()">О студии</a>
     <a href="#services" onclick="goHome()">Услуги</a>
+    <a href="#about" onclick="goHome()">О студии</a>
     <a href="#afisha" onclick="goHome()">Афиша</a>
     <a href="#contacts" onclick="goHome()">Контакты</a>
     <div id="nav-guest"><button class="nav-btn nav-btn-login" onclick="openM('modal-login')">Войти</button></div>
@@ -369,30 +480,13 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
 </header>
 
 <div id="page-home" class="page active">
-  <section class="hero">
-    <div class="hero-bg"></div><div class="hero-ring"></div><div class="hero-ring2"></div>
-    <p class="hero-overline">Музыкальная студия Vivace</p>
-    <h1>Приходи таким<br><em>какой ты есть</em></h1>
-    <p class="hero-sub">Виваче — пространство, где рождается творчество.</p>
-    <div class="hero-cta">
-  </section>
-  <section id="about">
-    <div class="hero-concert-photo">
-      <img src="https://res.cloudinary.com/dgfjaegpd/image/upload/v1784286895/H7WCk-TdoJg_tsfczc.jpg" alt="Студия Виваче на сцене" loading="lazy">
-      <div class="hero-concert-overlay"></div>
-      <div class="hero-concert-text">
-        <span class="hero-overline">Музыкальная студия Vivace</span>
-        <h1 class="hero-h1">Приходи таким<br><em>какой ты есть</em></h1>
-        <p style="font-size:1rem;color:rgba(255,255,255,0.85);margin:.8rem 0 1.2rem;font-weight:300;line-height:1.7;max-width:520px">Виваче — пространство, где рождается творчество.</p>
-        <div class="about-tags">
-          <span class="tag">Эстрадный вокал</span><span class="tag">Постановка голоса</span>
-          <span class="tag">Ансамбль</span><span class="tag tag-rust">Дети от 4 лет</span>
-          <span class="tag tag-rust">Студийная запись</span><span class="tag">Сольфеджио</span>
-        </div>
-      </div>
-    </div>
-    <div style="display:none">
-      <div id="about-photo-wrap"><input type="file" id="about-photo-inp" accept="image/*" style="display:none" onchange="handleAboutPhoto(event)"></div>
+  <section class="hero-photo">
+    <img src="https://res.cloudinary.com/dgfjaegpd/image/upload/v1784286895/H7WCk-TdoJg_tsfczc.jpg" alt="Студия Виваче на сцене" class="hero-photo-bg">
+    <div class="hero-photo-overlay"></div>
+    <div class="hero-photo-content">
+      <p class="hero-overline">Музыкальная студия Vivace</p>
+      <h1 class="hero-photo-h1">Приходи таким, какой ты есть</h1>
+      <p class="hero-sub">Виваче — пространство, где рождается творчество.</p>
     </div>
   </section>
 
@@ -1831,29 +1925,19 @@ init();
       .ht-tag.hthot::after{content:"\2605";font-size:8px;color:var(--rust-light);position:absolute;top:2px;right:3px;}
       .ht-footer{text-align:center;font-size:10px;color:var(--text-dim);margin-top:40px;line-height:1.8;}
     
-.hero-concert-photo{
+/* old */.hero-concert-photo-old{
   position:relative;width:100%;min-height:85vh;
   display:flex;align-items:flex-start;
   overflow:hidden;
 }
-.hero-concert-photo > img{
-  position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;object-position:center top;
-}
-.hero-concert-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(to bottom, rgba(10,10,15,0.2) 0%, rgba(10,10,15,0.4) 40%, rgba(10,10,15,0.85) 80%, rgba(10,10,15,0.97) 100%);
-}
-.hero-concert-text{
-  position:relative;z-index:2;
-  max-width:1080px;margin:0 auto;width:100%;
-  padding:5rem 2rem 2rem;
-}
+
+
+
 .hero-concert-text .hero-overline{color:var(--rust-light);}
 .hero-concert-text .hero-h1{color:#fff;margin:.5rem 0;}
 @media(max-width:700px){
-  .hero-concert-photo{min-height:70vh;}
-  .hero-concert-text{padding:2rem 1rem 3rem;}
+  /* old */.hero-concert-photo-old{min-height:70vh;}
+  
 }
 
 .collapsible-block{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:.8rem;overflow:hidden;}
@@ -1864,6 +1948,138 @@ init();
 .collapsible-header.open .collapsible-arrow{transform:rotate(180deg);}
 .collapsible-body{display:none;padding:0 1.4rem 1.2rem;}
 .collapsible-body.open{display:block;}
+
+/* old */.hero-concert-photo-old{position:relative;width:100%;min-height:88vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+
+
+
+.hero-concert-text .hero-overline{color:var(--rust-light);display:block;margin-bottom:.8rem;}
+.hero-h1{font-family:var(--font-head);font-size:clamp(2.5rem,6vw,5rem);font-weight:600;line-height:1.1;color:#fff;white-space:nowrap;}
+.hero-h1 em{color:var(--indigo-light);font-style:italic;}
+@media(max-width:700px){/* old */.hero-concert-photo-old{min-height:70vh;}.hero-h1{white-space:normal;font-size:2.5rem;}}
+.hero-banner{position:relative;width:100%;min-height:88vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.hero-banner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;}
+.hero-banner-overlay{position:absolute;inset:0;background:rgba(10,10,15,0.55);}
+.hero-banner-text{position:relative;z-index:2;text-align:center;padding:2rem;max-width:700px;}
+.hero-banner-text .hero-overline{color:var(--rust-light);display:block;margin-bottom:1rem;}
+.hero-banner-text .hero-h1{color:#fff;font-size:clamp(2.4rem,6vw,4.5rem);white-space:nowrap;}
+.hero-banner-text .hero-h1 em{color:var(--indigo-light);}
+.hero-sub-text{font-size:1.1rem;color:rgba(255,255,255,0.8);margin-top:1rem;font-weight:300;}
+@media(max-width:700px){.hero-banner{min-height:65vh;}.hero-banner-text .hero-h1{white-space:normal;font-size:2.2rem;}}
+.hero-concert-section{position:relative;width:100%;min-height:88vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.hero-concert-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;}
+
+
+.hero-concert-text .hero-overline{color:var(--rust-light);display:block;margin-bottom:.8rem;}
+.hero-h1{font-family:var(--font-head);font-size:clamp(2.5rem,6vw,5rem);font-weight:600;line-height:1.1;color:#fff;margin-bottom:1rem;}
+.hero-h1 em{color:var(--indigo-light);font-style:italic;}
+.hero-sub-text{font-size:1.1rem;color:rgba(255,255,255,0.8);font-weight:300;}
+@media(max-width:700px){.hero-concert-section{min-height:70vh;}.hero-h1{font-size:2.2rem;}}
+
+.hero-photo-section{position:relative;width:100%;min-height:88vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.hero-photo-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;}
+.hero-photo-overlay{position:absolute;inset:0;background:rgba(10,10,15,0.55);}
+.hero-photo-content{position:relative;z-index:2;text-align:center;padding:2rem;max-width:800px;}
+.hero-photo-content .hero-overline{color:var(--rust-light);}
+.hero-photo-content .hero-h1{color:#fff;font-size:clamp(2rem,5vw,3.8rem);white-space:nowrap;}
+.hero-photo-content .hero-h1 em{color:var(--indigo-light);}
+.hero-sub-text{font-size:1.1rem;color:rgba(255,255,255,0.8);margin-top:.8rem;font-weight:300;}
+.about-grid{display:grid;grid-template-columns:1fr 1.8fr;gap:4rem;align-items:center;}
+.about-photo{aspect-ratio:3/4;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:var(--bg-card);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.about-photo img{width:100%;height:100%;object-fit:cover;}
+.about-photo-ph{display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--text-dim);}
+.about-text p{color:var(--text-muted);margin-bottom:.9rem;font-weight:300;font-size:0.9rem;}
+@media(max-width:700px){
+  .hero-photo-section{min-height:70vh;}
+  .hero-photo-content .hero-h1{white-space:normal;font-size:2rem;}
+  .about-grid{grid-template-columns:1fr;}
+}
+
+.hero-section{
+  position:relative;
+  min-height:88vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+.hero-bg-photo{
+  position:absolute;
+  inset:0;
+}
+.hero-bg-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
+}
+.hero-bg-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(10,10,15,0.55);
+}
+.hero-content{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  padding:3rem 2rem;
+  max-width:900px;
+}
+.hero-content .hero-overline{
+  color:var(--rust-light);
+  margin-bottom:1.2rem;
+  display:block;
+}
+.hero-content .hero-h1{
+  font-size:clamp(2.5rem,6vw,5rem);
+  color:#fff;
+  text-shadow:0 2px 20px rgba(0,0,0,0.5);
+  margin-bottom:1rem;
+}
+.hero-content .hero-h1 em{
+  color:var(--indigo-light);
+  font-style:italic;
+}
+.hero-content .hero-sub{
+  font-size:1.1rem;
+  color:rgba(255,255,255,0.85);
+  font-weight:300;
+}
+.about-grid{display:grid;grid-template-columns:1fr 1.8fr;gap:4rem;align-items:center;}
+.about-photo{aspect-ratio:3/4;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:var(--bg-card);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.about-photo img{width:100%;height:100%;object-fit:cover;}
+.about-photo-ph{display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--text-dim);}
+.about-text p{color:var(--text-muted);margin-bottom:.9rem;font-weight:300;font-size:0.9rem;}
+@media(max-width:700px){
+  .hero-section{min-height:70vh;}
+  .hero-content .hero-h1{font-size:2.2rem;}
+  .about-grid{grid-template-columns:1fr;}
+}
+
+.hero-photo{position:relative;min-height:90vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.hero-photo-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;}
+.hero-photo-overlay{position:absolute;inset:0;background:rgba(10,10,15,0.55);}
+.hero-photo-content{position:relative;z-index:2;text-align:center;padding:2rem;max-width:800px;margin:0 auto;}
+.hero-photo-content .hero-overline{color:var(--rust-light);margin-bottom:1rem;display:block;}
+.hero-photo-h1{font-family:var(--font-head);font-size:clamp(2.5rem,6vw,5rem);font-weight:600;color:#fff;line-height:1.1;margin-bottom:1rem;}
+.hero-photo-content .hero-sub{font-size:1.1rem;color:rgba(255,255,255,0.85);font-weight:300;}
+@media(max-width:700px){.hero-photo{min-height:70vh;}.hero-photo-h1{font-size:2.2rem;}}
+
+.hero-photo-section{position:relative;width:100%;min-height:88vh;overflow:hidden;}
+.hero-concert-photo{position:relative;width:100%;height:88vh;display:flex;align-items:center;justify-content:center;}
+.hero-concert-photo > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;}
+.hero-concert-overlay{position:absolute;inset:0;background:rgba(10,10,15,0.55);}
+.hero-concert-text{position:relative;z-index:2;max-width:900px;margin:0 auto;width:100%;padding:2rem;text-align:center;}
+.hero-concert-text .hero-overline{color:var(--rust-light);margin-bottom:.8rem;display:block;}
+.hero-concert-text .hero-h1{color:#fff;font-size:clamp(2.4rem,6vw,5rem);}
+.hero-concert-text .hero-h1 em{color:var(--indigo-light);font-style:italic;}
+.about-grid{display:grid;grid-template-columns:1fr 1.8fr;gap:4rem;align-items:center;}
+.about-photo{aspect-ratio:3/4;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:var(--bg-card);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.about-photo img{width:100%;height:100%;object-fit:cover;}
+.about-photo-ph{display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--text-dim);}
+.about-text p{color:var(--text-muted);margin-bottom:.9rem;font-weight:300;font-size:0.9rem;}
+@media(max-width:800px){.hero-concert-photo{height:70vh;}.about-grid{grid-template-columns:1fr;}}
+@media(max-width:700px){.hero-concert-text{padding:1.5rem;}.hero-concert-text .hero-h1{font-size:2.2rem;}}
 </style>
     <div class="ht-header">
       <span class="ht-studio-label">Музыкальная студия Виваче</span>
@@ -1956,4 +2172,75 @@ init();
 
 
 </body>
-</html>
+</html  <section id="about" style="padding:0">
+    <div class="hero-concert-photo">
+      <img src="https://res.cloudinary.com/dgfjaegpd/image/upload/v1784286895/H7WCk-TdoJg_tsfczc.jpg" alt="Студия Виваче на сцене" loading="lazy">
+      <div class="hero-concert-overlay"></div>
+      <div class="hero-concert-text">
+        <span class="hero-overline">Музыкальная студия Vivace</span>
+        <h1 class="hero-h1">Приходи таким, какой ты есть</h1>
+        <p style="font-size:1rem;color:rgba(255,255,255,0.85);margin:.8rem 0 0;font-weight:300;line-height:1.7">Виваче — пространство, где рождается творчество.</p>
+      </div>
+    </div>
+    <div style="display:none">
+      <div id="about-photo-wrap"><input type="file" id="about-photo-inp" accept="image/*" style="display:none" onchange="handleAboutPhoto(event)"></div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:3rem">
+    <span class="section-label">О нас</span>
+    <h2 class="section-title">О <em>студии</em></h2>
+    <div class="section-line"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start">
+      <div>
+        <p style="color:var(--text-muted);margin-bottom:.9rem;font-weight:300;font-size:0.95rem">Студия <strong style="color:var(--text)">«Виваче»</strong> — творческое пространство для тех, кто хочет петь красиво, уверенно и с душой.</p>
+        <p style="color:var(--text-muted);margin-bottom:.9rem;font-weight:300;font-size:0.95rem">Работаем с учениками любого возраста. Каждый получает индивидуальный подход, подобранный репертуар и возможность выступить на сцене.</p>
+        <p style="color:var(--text-muted);font-weight:300;font-size:0.95rem">Профессиональное оборудование для записи — ваши любимые песни звучат на уровне студийного продакшна.</p>
+      </div>
+      <div>
+        <div class="about-tags">
+          <span class="tag">Эстрадный вокал</span><span class="tag">Постановка голоса</span>
+          <span class="tag">Ансамбль</span><span class="tag tag-rust">Дети от 4 лет</span>
+          <span class="tag tag-rust">Студийная запись</span><span class="tag">Сольфеджио</span>
+          <span class="tag">Гибкий график</span><span class="tag">Сценическое движение</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero-photo-section">
+    <div class="hero-concert-photo">
+      <img src="https://res.cloudinary.com/dgfjaegpd/image/upload/v1784286895/H7WCk-TdoJg_tsfczc.jpg" alt="Студия Виваче на сцене" loading="lazy">
+      <div class="hero-concert-overlay"></div>
+      <div class="hero-concert-text">
+        <span class="hero-overline">Музыкальная студия Vivace</span>
+        <h1 class="hero-h1">Приходи таким какой ты есть</h1>
+        <p style="font-size:1rem;color:rgba(255,255,255,0.8);margin:.8rem 0 0;font-weight:300;">Виваче — пространство, где рождается творчество.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="section">
+    <span class="section-label">Педагог</span>
+    <h2 class="section-title">О <em>студии</em></h2>
+    <div class="section-line"></div>
+    <div class="about-grid">
+      <div class="about-photo" id="about-photo-wrap" onclick="triggerAboutPhoto()">
+        <div class="about-photo-ph"><span style="font-size:3rem">🎤</span><p style="font-size:.78rem">Фото педагога</p></div>
+        <input type="file" id="about-photo-inp" accept="image/*" style="display:none" onchange="handleAboutPhoto(event)">
+      </div>
+      <div class="about-text">
+        <p style="font-size:1.05rem;color:var(--text);font-weight:400;margin-bottom:1rem">🎵 Музыкальная студия Vivace — твоя дверь в мир музыки! 🎶</p>
+        <p>Обучение для всех возрастов — дети от 4 лет и взрослые. Индивидуальные уроки вокала, ансамбли, сольфеджио и музыкальное развитие для малышей.</p>
+        <p>Гибкий график — занятия под твой ритм жизни. Профессиональное оборудование для записи.</p>
+        <div class="about-tags">
+          <span class="tag">Эстрадный вокал</span><span class="tag">Постановка голоса</span>
+          <span class="tag">Ансамбль</span><span class="tag">Сольфеджио</span>
+          <span class="tag tag-rust">Дети от 4 лет</span><span class="tag tag-rust">Студийная запись</span>
+          <span class="tag">Гибкий график</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+>
