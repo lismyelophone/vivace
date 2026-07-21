@@ -314,7 +314,7 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
 
 .hero-concert-photo{
   position:relative;width:100%;min-height:85vh;
-  display:flex;align-items:flex-start;
+  display:flex;align-items:center;justify-content:center;
   overflow:hidden;
 }
 .hero-concert-photo > img{
@@ -323,18 +323,21 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
 }
 .hero-concert-overlay{
   position:absolute;inset:0;
-  background:linear-gradient(to bottom, rgba(10,10,15,0.2) 0%, rgba(10,10,15,0.4) 40%, rgba(10,10,15,0.85) 80%, rgba(10,10,15,0.97) 100%);
+  background:linear-gradient(to bottom, rgba(10,10,15,0.45) 0%, rgba(10,10,15,0.55) 40%, rgba(10,10,15,0.88) 80%, rgba(10,10,15,0.98) 100%);
 }
 .hero-concert-text{
   position:relative;z-index:2;
-  max-width:1080px;margin:0 auto;width:100%;
-  padding:5rem 2rem 2rem;
+  max-width:900px;margin:0 auto;width:100%;
+  padding:2rem 2rem;
+  text-align:center;
+  display:flex;flex-direction:column;align-items:center;
 }
 .hero-concert-text .hero-overline{color:var(--rust-light);}
-.hero-concert-text .hero-h1{color:#fff;margin:.5rem 0;}
+.hero-concert-text .hero-h1{color:#fff;margin:.5rem 0;font-size:clamp(1.7rem,4.4vw,3.3rem);white-space:nowrap;}
 @media(max-width:700px){
   .hero-concert-photo{min-height:70vh;}
-  .hero-concert-text{padding:2rem 1rem 3rem;}
+  .hero-concert-text{padding:1.5rem 1rem;}
+  .hero-concert-text .hero-h1{font-size:clamp(1.35rem,6.2vw,2.2rem);}
 }
 
 .collapsible-block{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:.8rem;overflow:hidden;}
@@ -369,30 +372,33 @@ a.contact-card:hover{border-color:var(--border-hover);transform:translateY(-2px)
 </header>
 
 <div id="page-home" class="page active">
-  <section class="hero">
-    <div class="hero-bg"></div><div class="hero-ring"></div><div class="hero-ring2"></div>
-    <p class="hero-overline">Музыкальная студия Vivace</p>
-    <h1>Приходи таким<br><em>какой ты есть</em></h1>
-    <p class="hero-sub">Виваче — пространство, где рождается творчество.</p>
-    <div class="hero-cta">
+  <section class="hero-concert-photo">
+    <img src="https://res.cloudinary.com/dgfjaegpd/image/upload/v1784286895/H7WCk-TdoJg_tsfczc.jpg" alt="Студия Виваче на сцене" loading="lazy">
+    <div class="hero-concert-overlay"></div>
+    <div class="hero-concert-text">
+      <p class="hero-overline">Музыкальная студия Vivace</p>
+      <h1 class="hero-h1">Приходи таким <em>какой ты есть</em></h1>
+      <p style="font-size:1rem;color:rgba(255,255,255,0.85);margin:.8rem auto 0;font-weight:300;line-height:1.7;max-width:520px">Виваче — пространство, где рождается творчество.</p>
+    </div>
   </section>
-  <section id="about">
-    <div class="hero-concert-photo">
-      <img src="https://res.cloudinary.com/dgfjaegpd/image/upload/v1784286895/H7WCk-TdoJg_tsfczc.jpg" alt="Студия Виваче на сцене" loading="lazy">
-      <div class="hero-concert-overlay"></div>
-      <div class="hero-concert-text">
-        <span class="hero-overline">Музыкальная студия Vivace</span>
-        <h1 class="hero-h1">Приходи таким<br><em>какой ты есть</em></h1>
-        <p style="font-size:1rem;color:rgba(255,255,255,0.85);margin:.8rem 0 1.2rem;font-weight:300;line-height:1.7;max-width:520px">Виваче — пространство, где рождается творчество.</p>
+
+  <section id="about" class="hero-about">
+    <span class="section-label" style="text-align:center;display:block">О студии</span>
+    <div class="hero-about-inner">
+      <div class="hero-about-photo" id="about-photo-wrap">
+        <div class="about-photo-ph"><span style="font-size:1.6rem">🎤</span><span>Фото педагога</span></div>
+        <input type="file" id="about-photo-inp" accept="image/*" style="display:none" onchange="handleAboutPhoto(event)">
+      </div>
+      <div class="hero-about-text about-text">
+        <p>Студия «Виваче» — творческое пространство для тех, кто хочет петь красиво, уверенно и с душой.</p>
+        <p>Работаем с учениками любого возраста. Каждый получает индивидуальный подход, подобранный репертуар и возможность выступить на сцене.</p>
+        <p>Профессиональное оборудование для записи — ваши любимые песни звучат на уровне студийного продакшна.</p>
         <div class="about-tags">
           <span class="tag">Эстрадный вокал</span><span class="tag">Постановка голоса</span>
           <span class="tag">Ансамбль</span><span class="tag tag-rust">Дети от 4 лет</span>
           <span class="tag tag-rust">Студийная запись</span><span class="tag">Сольфеджио</span>
         </div>
       </div>
-    </div>
-    <div style="display:none">
-      <div id="about-photo-wrap"><input type="file" id="about-photo-inp" accept="image/*" style="display:none" onchange="handleAboutPhoto(event)"></div>
     </div>
   </section>
 
@@ -1830,41 +1836,7 @@ init();
       .ht-tag.hthot{border-color:rgba(196,82,26,0.4);}
       .ht-tag.hthot::after{content:"\2605";font-size:8px;color:var(--rust-light);position:absolute;top:2px;right:3px;}
       .ht-footer{text-align:center;font-size:10px;color:var(--text-dim);margin-top:40px;line-height:1.8;}
-    
-.hero-concert-photo{
-  position:relative;width:100%;min-height:85vh;
-  display:flex;align-items:flex-start;
-  overflow:hidden;
-}
-.hero-concert-photo > img{
-  position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;object-position:center top;
-}
-.hero-concert-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(to bottom, rgba(10,10,15,0.2) 0%, rgba(10,10,15,0.4) 40%, rgba(10,10,15,0.85) 80%, rgba(10,10,15,0.97) 100%);
-}
-.hero-concert-text{
-  position:relative;z-index:2;
-  max-width:1080px;margin:0 auto;width:100%;
-  padding:5rem 2rem 2rem;
-}
-.hero-concert-text .hero-overline{color:var(--rust-light);}
-.hero-concert-text .hero-h1{color:#fff;margin:.5rem 0;}
-@media(max-width:700px){
-  .hero-concert-photo{min-height:70vh;}
-  .hero-concert-text{padding:2rem 1rem 3rem;}
-}
-
-.collapsible-block{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:.8rem;overflow:hidden;}
-.collapsible-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.4rem;cursor:pointer;transition:background .2s;user-select:none;}
-.collapsible-header:hover{background:rgba(61,59,142,0.08);}
-.collapsible-title{font-family:var(--font-head);font-size:1.02rem;color:var(--indigo-light);display:flex;align-items:center;gap:.4rem;}
-.collapsible-arrow{color:var(--text-dim);font-size:.85rem;transition:transform .25s;flex-shrink:0;}
-.collapsible-header.open .collapsible-arrow{transform:rotate(180deg);}
-.collapsible-body{display:none;padding:0 1.4rem 1.2rem;}
-.collapsible-body.open{display:block;}
-</style>
+    </style>
     <div class="ht-header">
       <span class="ht-studio-label">Музыкальная студия Виваче</span>
       <h1 class="ht-h1">Хэштеги <em>&amp;</em> ключевые слова</h1>
